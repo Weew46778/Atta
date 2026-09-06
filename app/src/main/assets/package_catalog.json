@@ -7,7 +7,15 @@
     "url": "https://github.com/EssentialsX/Essentials",
     "description": "دستورات پایه، خانه، اسپان، اقتصاد و teleport برای سرور. بسیار پرکاربرد.",
     "source": "GitHub",
-    "downloadUrl": "https://github.com/EssentialsX/Essentials/releases/download/2.22.0/EssentialsX-2.22.0.jar"
+    "downloadUrl": "https://github.com/EssentialsX/Essentials/releases/download/2.22.0/EssentialsX-2.22.0.jar",
+    "apiType": "github",
+    "apiOwner": "EssentialsX",
+    "apiRepo": "Essentials",
+    "apiSlug": "",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "luckperms",
@@ -17,7 +25,15 @@
     "url": "https://luckperms.net/download",
     "description": "مدیریت مجوز و گروهبندی پیشرفته کاربران.",
     "source": "Official",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "luckperms",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "worldedit",
@@ -27,7 +43,15 @@
     "url": "https://enginehub.org/worldedit",
     "description": "ویرایش سریع سازهها، کپی/پیست، جایگذاری بلاک.",
     "source": "EngineHub",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "worldedit",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "worldguard",
@@ -37,7 +61,15 @@
     "url": "https://enginehub.org/worldguard",
     "description": "محافظت مناطق و جلوگیری از خرابی و گریف.",
     "source": "EngineHub",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "worldguard",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "vault",
@@ -47,7 +79,15 @@
     "url": "https://github.com/MilkBowl/Vault",
     "description": "پل اقتصاد بین پلاگینهای مختلف.",
     "source": "GitHub",
-    "downloadUrl": "https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar"
+    "downloadUrl": "https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar",
+    "apiType": "github",
+    "apiOwner": "MilkBowl",
+    "apiRepo": "Vault",
+    "apiSlug": "",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "fabricapi",
@@ -57,7 +97,15 @@
     "url": "https://modrinth.com/mod/fabric-api",
     "description": "پایه اکثر مادهای Fabric.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "fabric-api",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "sodium",
@@ -67,7 +115,15 @@
     "url": "https://modrinth.com/mod/sodium",
     "description": "بهبود شدید کارایی و فریمریت کلاین.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "sodium",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "lithium",
@@ -77,7 +133,15 @@
     "url": "https://modrinth.com/mod/lithium",
     "description": "بهینهسازی منطق سرور برای سرویسدهی بیشتر.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "lithium",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "jei",
@@ -87,7 +151,15 @@
     "url": "https://modrinth.com/mod/jei",
     "description": "نمایش همه آیتمها و دستورهای ساخت.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "jei",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "create",
@@ -97,7 +169,15 @@
     "url": "https://modrinth.com/mod/create",
     "description": "مکانیک چرخدنده، تسمه و ماشینهای صنعتی.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "create",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "bettermc",
@@ -107,7 +187,14 @@
     "url": "https://www.curseforge.com/minecraft/modpacks/better-mc",
     "description": "مودپک معروف با انواع ماد بهینه و متعادل.",
     "source": "CurseForge",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "none",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "",
+    "compatiblePrefixes": [
+      "1.21"
+    ]
   },
   {
     "id": "atm9",
@@ -117,7 +204,14 @@
     "url": "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9",
     "description": "مودپک بزرگ و پرمحتوا برای سختگیرها.",
     "source": "CurseForge",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "none",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "",
+    "compatiblePrefixes": [
+      "1.21"
+    ]
   },
   {
     "id": "complementary",
@@ -127,7 +221,15 @@
     "url": "https://modrinth.com/shader/complementary-reimagined",
     "description": "شیدر پرطرفدار، نوری زیبا و روان.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "complementary-reimagined",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "bslshaders",
@@ -137,7 +239,15 @@
     "url": "https://modrinth.com/shader/bsl-shaders",
     "description": "شیدر کلاسیک با کیفیت بالا.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "bsl-shaders",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "sildurs",
@@ -147,7 +257,15 @@
     "url": "https://modrinth.com/shader/sildurs-vibrant-shaders",
     "description": "شیدر با حالتهای مختلف و قابل تنظیم.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "sildurs-vibrant-shaders",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "faithful",
@@ -157,7 +275,14 @@
     "url": "https://faithfulpack.net/download",
     "description": "تکستچر وفادار به حالت اصلی با رزولوشن 32x.",
     "source": "faithfulpack.net",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "none",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "",
+    "compatiblePrefixes": [
+      "1.21"
+    ]
   },
   {
     "id": "barebones",
@@ -167,7 +292,15 @@
     "url": "https://modrinth.com/resourcepack/bare-bones",
     "description": "تکستچر مینیمال و تمیز.",
     "source": "Modrinth",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "modrinth",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "bare-bones",
+    "compatiblePrefixes": [
+      "1.20",
+      "1.21"
+    ]
   },
   {
     "id": "vanillatweaks",
@@ -177,6 +310,13 @@
     "url": "https://vanillatweaks.net",
     "description": "مجموعه تغییرات ظریف و کاربردی.",
     "source": "vanillatweaks.net",
-    "downloadUrl": ""
+    "downloadUrl": "",
+    "apiType": "none",
+    "apiOwner": "",
+    "apiRepo": "",
+    "apiSlug": "",
+    "compatiblePrefixes": [
+      "1.21"
+    ]
   }
 ]

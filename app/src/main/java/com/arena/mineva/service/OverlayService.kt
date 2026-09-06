@@ -25,11 +25,21 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
+import com.arena.mineva.AppPrefs
 import com.arena.mineva.MainActivity
 import com.arena.mineva.Ui
 import com.arena.mineva.assistant.TextToSpeechManager
+import com.arena.mineva.server.BedrockCommandBuilder
+import com.arena.mineva.server.ServerConfig
+import com.arena.mineva.server.ServerTarget
+import com.arena.mineva.server.SshClient
 import com.arena.mineva.system.DeviceMonitor
 import kotlin.math.abs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 /**
  * In-game assistant overlay. Slide the thin left-edge line to the right to reveal vertical
@@ -41,6 +51,7 @@ class OverlayService : Service() {
     private lateinit var tts: TextToSpeechManager
     private val handler = Handler(Looper.getMainLooper())
     private val autoHide = Runnable { collapsePanel() }
+    private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
     private var activityPaused = false
     private var opened = false
@@ -274,24 +285,44 @@ class OverlayService : Service() {
 
     private fun buildToolsTab(c: ViewGroup) {
         c.addView(tabHeader("ابزارهای سریع"))
-        c.addView(actionRow("⚔ اسلحه", "🛡 سپر", "🥄 خوراک"))
-        c.addView(actionRow("🔥 مشعل/دکل", "💎 یاقوت", "🌟 enchant"))
-        c.addView(Ui.text(this, "در نسخه بعدی این دکمهها به API/دستوری به سرور یا بازی واقعی متصل میشوند.", 12f, 0xFF9FB2C2.toInt()))
+        c.addView(commandRow(
+            "⚔ شمشیر نتریت",
+            BedrockCommandBuilder.giveNetheriteSword(BedrockCommandBuilder.Edition.BEDROCK)
+        ))
+        c.addView(commandRow(
+            "🛡 سپر نتریت",
+            BedrockCommandBuilder.giveProtectedChestplate(BedrockCommandBuilder.Edition.BEDROCK)
+        ))
+        c.addView(commandRow(
+            "🥚 اژدها (تخم اسپان)",
+            BedrockCommandBuilder.giveSpawnEgg("ender_dragon", BedrockCommandBuilder.Edition.BEDROCK)
+        ))
+        c.addView(Ui.text(this, "دستور برای سرور بدراک ساخته میشود؛ روی پنل کنسول سرور اجرا یا در کلیپبورد کپی میشود. (اینجکشن مستقیم داخل کلاینت بدراک با API عمومی ممکن نیست)", 11f, 0xFF9FB2C2.toInt()))
     }
 
     private fun buildStructuresTab(c: ViewGroup) {
         c.addView(tabHeader("سازه و ردستون"))
-        c.addView(copyRow("کشاورزی خودکار", buildWheatFarm()))
-        c.addView(copyRow("آهنخودکار", buildIronFarm()))
-        c.addView(copyRow("فارم تجربه", buildXpFarm()))
-        c.addView(Ui.text(this, "با زدن دکمه، طرح سادهٔ سازه به بخش کپی میشود تا بعداً به ماکرو/دستیار بدهم.", 12f, 0xFF9FB2C2.toInt()))
+        c.addView(commandRow("کشاورزی خودکار", buildWheatFarm()))
+        c.addView(commandRow("آهنخودکار", buildIronFarm()))
+        c.addView(commandRow("فارم تجربه", buildXpFarm()))
+        c.addView(Ui.text(this, "طرح سازه به کلیپبورد کپی میشود یا از طریق کنسول سرور به بازیکن نمایش داده میشود.", 12f, 0xFF9FB2C2.toInt()))
     }
 
     private fun buildWeaponsTab(c: ViewGroup) {
         c.addView(tabHeader("سفارش وسایل ویژه"))
-        c.addView(copyRow("شمشیر نتریت + قلاب", "give @p netherite_sword 1 0 {\"Enchantments\":[{\"id\":\"sharpness\",\"lvl\":10}]}"))
-        c.addView(copyRow("کمان بیپایان", "give @p bow 1 0 {\"Enchantments\":[{\"id\":\"infinity\",\"lvl\":1},{\"id\":\"power\",\"lvl\":10}]}"))
-        c.addView(copyRow("زره محافظ", "give @p diamond_chestplate 1 0 {\"Enchantments\":[{\"id\":\"protection\",\"lvl\":10}]}"))
+        c.addView(commandRow(
+            "شمشیر نتریت + تیز",
+            BedrockCommandBuilder.giveNetheriteSword(BedrockCommandBuilder.Edition.BEDROCK, enchants = listOf("sharpness", "unbreaking", "looting"))
+        ))
+        c.addView(commandRow(
+            "کمان بیپایان",
+            "give @p bow 1 0 {\"ench\":[{\"id\":\"infinity\",\"lvl\":1},{\"id\":\"power\",\"lvl\":10}]}"
+        ))
+        c.addView(commandRow(
+            "زره محافظ",
+            BedrockCommandBuilder.giveProtectedChestplate(BedrockCommandBuilder.Edition.BEDROCK)
+        ))
+        c.addView(Ui.text(this, "دستورات با قواعد بدراک ساخته شدهاند و برای اجرا باید اپراتور/پایت روی سرور داشته باشی.", 12f, 0xFF9FB2C2.toInt()))
     }
 
     private fun buildAssistantTab(c: ViewGroup) {
@@ -309,7 +340,7 @@ class OverlayService : Service() {
                 startActivity(i)
             }
         )
-        c.addView(Ui.text(this, "دستور و ماموریت واقعی به سرور/بازی در نسخه بعدی اضافه میشود.", 12f, 0xFF9FB2C2.toInt()))
+        c.addView(Ui.text(this, "اگر سرور VPS با کلید SSH ذخیرهشده فعال باشد، دستورها از همینجا به کنسول سرور ارسال میشوند.", 12f, 0xFF9FB2C2.toInt()))
     }
 
     private fun buildHealthTab(c: ViewGroup) {
@@ -331,29 +362,53 @@ class OverlayService : Service() {
 
     private fun tabHeader(title: String): TextView = Ui.text(this, title, 18f, Color.WHITE, bold = true)
 
-    private fun actionRow(a: String, b: String, d: String): TextView {
-        return Ui.text(
-            this,
-            "🔹 $a   •   $b   •   $d\n   (پیشنمایش — اتصال واقعی در نسخه بعد)",
-            13f,
-            0xFF9FB2C2.toInt()
-        ).apply {
+    private fun commandRow(title: String, command: String): TextView {
+        return Ui.text(this, "$title:\n$command", 12f, 0xFFD8E3EC.toInt()).apply {
             setOnClickListener {
                 vibrate(20)
-                tts.speak("ابزار $a. اتصال واقعی در نسخه بعدی فعال میشود.")
+                copyToClipboard(command)
+                val sent = trySendToServerConsole(command)
+                tts.speak(
+                    if (sent)
+                        "$title در کلیپبورد کپی شد و در صورت اتصال SSH به کنسول سرور نیز ارسال شد."
+                    else
+                        "$title در کلیپبورد کپی شد."
+                )
             }
         }
     }
 
-    private fun copyRow(title: String, command: String): TextView =
-        Ui.text(this, "$title:\n$command", 12f, 0xFFD8E3EC.toInt()).apply {
-            setOnClickListener {
-                vibrate(20)
-                val cm = getSystemService(android.content.ClipboardManager::class.java)
-                cm.setPrimaryClip(android.content.ClipData.newPlainText("mineava", command))
-                tts.speak("$title در کلیپبورد کپی شد.")
+    private fun copyToClipboard(command: String) {
+        val cm = getSystemService(android.content.ClipboardManager::class.java)
+        cm.setPrimaryClip(android.content.ClipData.newPlainText("mineava", command))
+    }
+
+    private fun trySendToServerConsole(command: String): Boolean {
+        val config = ServerConfig.fromJson(AppPrefs.lastServerConfigJson)
+            ?: return false
+        if (config.target != ServerTarget.VPS || config.host.isBlank() || config.sshKeyPath.isBlank()) {
+            return false
+        }
+        runCatching {
+            scope.launch {
+                runCatching {
+                    val ssh = SshClient()
+                    val session = ssh.connect(
+                        host = config.host,
+                        user = config.user,
+                        password = null,
+                        keyPath = config.sshKeyPath.ifBlank { null },
+                        keyPassphrase = null,
+                        port = config.sshPort
+                    )
+                    val quoted = "'" + command.replace("'", "'\\''") + "'"
+                    ssh.exec(session, "tmux send-keys -t MineAvaServer $quoted Enter")
+                    session.disconnect()
+                }
             }
         }
+        return true
+    }
 
     private fun buildWheatFarm(): String = """
         ساخت فارم گندم ساده (1x1 کارت):
@@ -428,6 +483,7 @@ class OverlayService : Service() {
     }
 
     override fun onDestroy() {
+        scope.cancel()
         handler.removeCallbacksAndMessages(null)
         panelParams?.let { windowManager.removeView(panelRoot) }
         handleParams?.let { windowManager.removeView(handleView) }

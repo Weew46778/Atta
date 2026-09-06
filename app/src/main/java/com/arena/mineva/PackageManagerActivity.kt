@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.CatalogItem
 import com.arena.mineva.server.PackageCatalog
+import com.arena.mineva.server.PackageCatalogUpdater
 import com.arena.mineva.server.PackageDeployer
 import com.arena.mineva.server.PackageLinkValidator
 import com.arena.mineva.server.ServerConfig
@@ -48,6 +49,11 @@ class PackageManagerActivity : AppCompatActivity() {
                 13f,
                 0xFF9FB2C2.toInt()
             )
+        )
+        root.addView(
+            Ui.button(this, "🔄 به‌روزرسانی خودکار فهرست + چک سازگاری", 0xFF2E9BFF.toInt(), 48f) {
+                refreshCatalog()
+            }
         )
         remoteSection = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         root.addView(remoteSection)
@@ -129,6 +135,25 @@ class PackageManagerActivity : AppCompatActivity() {
         body.addView(row)
     }
 
+    private fun refreshCatalog() {
+        val version = serverConfig?.version ?: "1.21"
+        appendProgress("در حال به‌روزرسانی فهرست و چک سازگاری...")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val result = PackageCatalogUpdater.updateAll(
+                this@PackageManagerActivity,
+                serverVersion = version,
+                limit = 20,
+                onProgress = { s -> withContext(Dispatchers.Main) { appendProgress(s) } }
+            )
+            withContext(Dispatchers.Main) {
+                catalog.reload()
+                appendProgress(result.summary())
+                tts.speak("فهرست پکیج‌ها به‌روز شد. ${result.updated.size} مورد جدید.")
+                refreshList()
+            }
+        }
+    }
+
     private fun refreshList() {
         body.removeAllViews()
         renderCategoryButtons()
@@ -153,8 +178,20 @@ class PackageManagerActivity : AppCompatActivity() {
         card.addView(Ui.text(this, "${item.name}  ${item.version}", 15f, 0xFFF1F5F9.toInt(), bold = true))
         card.addView(Ui.text(this, item.description, 12f, 0xFF9FB2C2.toInt()))
 
+        val targetVersion = serverConfig?.version ?: "1.21"
+        val compat = item.isCompatibleWith(targetVersion)
+        card.addView(
+            Ui.text(
+                this,
+                if (compat) "✓ سازگار با نسخه سرور: ${targetVersion}" else "✖ ممکن است با نسخه سرور ناسازگار باشد",
+                12f,
+                if (compat) 0xFF35D07F.toInt() else 0xFFC97C22.toInt(),
+                bold = true
+            )
+        )
+
         val linkLine = if (item.hasDirectDownload()) {
-            "📥 لینک مستقیم: ${item.downloadUrl}"
+            "📥 لینک مستقیم: ${item.downloadUrl.take(80)}"
         } else {
             "📄 فقط مرجع (لینک مستقیم ثبت نشده): ${item.url}"
         }

@@ -29,6 +29,18 @@ object AppPrefs {
         get() = get().getString("gemini_api_key", "") ?: ""
         set(value) = get().edit().putString("gemini_api_key", value).apply()
 
+    var selectedPersianVoice: String
+        get() = get().getString("selected_persian_voice", "") ?: ""
+        set(value) = get().edit().putString("selected_persian_voice", value).apply()
+
+    var preferFemaleVoice: Boolean
+        get() = get().getBoolean("prefer_female_voice", true)
+        set(value) = get().edit().putBoolean("prefer_female_voice", value).apply()
+
+    var speechRate: Float
+        get() = get().getFloat("speech_rate", 0.92f)
+        set(value) = get().edit().putFloat("speech_rate", value).apply()
+
     var homeServerTarget: String
         get() = get().getString("server_target", "") ?: ""
         set(value) = get().edit().putString("server_target", value).apply()

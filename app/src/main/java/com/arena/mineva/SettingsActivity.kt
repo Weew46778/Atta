@@ -59,6 +59,11 @@ class SettingsActivity : AppCompatActivity() {
             }
         )
         root.addView(
+            Ui.button(this, "🎙 تنظیمات صوتی (صدای فارسی/زن)", 0xFF35D07F.toInt(), 48f) {
+                startActivity(android.content.Intent(this, VoiceSettingsActivity::class.java))
+            }
+        )
+        root.addView(
             Ui.button(this, "📚 مطالب یادگرفته (دایرةالمعارف شخصی)", 0xFF7D4DB1.toInt(), 48f) {
                 val count = KnowledgeRepository(this).learnedCount()
                 tts.speak("تا حالا $count مطلب را یاد گرفتهام. هر بار که پاسخ آنلاین بدهی، همینجا ذخیره میشود.")

@@ -40,6 +40,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".VoiceSettingsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".DeviceHealthActivity"
             android:exported="false" />
 

@@ -3,15 +3,18 @@ package com.arena.mineva.assistant
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.speech.tts.Voice
+import com.arena.mineva.AppPrefs
 import java.util.Locale
 
 /**
- * Persian female-voice TTS wrapper.
+ * Persian TTS wrapper.
  *
- * Android's TextToSpeech picks the device's installed engine. If a Persian voice is not
- * available the manager falls back gracefully and exposes [persianVoiceAvailable].
- * Bundling a proprietary TTS engine inside the APK is a licensing/size decision that is
- * intentionally left to a later build; this first version uses the system engine.
+ * Android's TextToSpeech picks the device's installed engine. This manager is a bit smarter:
+ * it prefers a female Persian voice when one is available (based on voice metadata / gender
+ * / name / gender hint) and lets the user inspect and install Persian voice data from the
+ * Voice Settings screen. A fully embedded proprietary engine is a separate licensing/size
+ * decision; this layer is where it would be plugged in later.
  */
 class TextToSpeechManager(private val context: Context) {
 
@@ -20,12 +23,30 @@ class TextToSpeechManager(private val context: Context) {
         private set
     var persianVoiceAvailable: Boolean = false
         private set
+    var femalePersianSelected: Boolean = false
+        private set
+
+    var preferFemale: Boolean
+        get() = AppPrefs.preferFemaleVoice
+        set(value) {
+            AppPrefs.preferFemaleVoice = value
+            configurePersian()
+        }
+    var speechRate: Float
+        get() = AppPrefs.speechRate
+        set(value) {
+            AppPrefs.speechRate = value
+            tts?.setSpeechRate(value)
+        }
 
     fun init(onReady: () -> Unit) {
         tts = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 ready = true
                 persianVoiceAvailable = configurePersian()
+                onReady()
+            } else {
+                ready = false
                 onReady()
             }
         }
@@ -42,12 +63,40 @@ class TextToSpeechManager(private val context: Context) {
         val engine = tts ?: return false
         val fa = Locale("fa", "IR")
         val result = engine.setLanguage(fa)
-        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-            val fallback = engine.setLanguage(Locale("fa"))
-            return fallback != TextToSpeech.LANG_MISSING_DATA && fallback != TextToSpeech.LANG_NOT_SUPPORTED
+        val supported = result != TextToSpeech.LANG_MISSING_DATA && result != TextToSpeech.LANG_NOT_SUPPORTED
+
+        val saved = AppPrefs.selectedPersianVoice
+        val voices = availableVoices().filter { it.locale.language.equals("fa", ignoreCase = true) }
+
+        val chosen = when {
+            saved.isNotBlank() -> voices.firstOrNull { it.name == saved }
+            preferFemale -> voices.firstOrNull { voice ->
+                val name = (voice.name ?: "").lowercase()
+                name.contains("female") || name.contains("زهرا") ||
+                    name.contains("zahra") || name.contains("ara")
+            }
+            else -> voices.firstOrNull()
         }
-        return true
+        if (chosen != null) {
+            engine.voice = chosen
+            femalePersianSelected = (chosen.name ?: "").lowercase().contains("female") ||
+                (chosen.name ?: "").contains("زهرا") || (chosen.name ?: "").contains("زرین")
+        }
+        engine.setSpeechRate(speechRate)
+        return supported
     }
+
+    fun setVoice(voice: Voice) {
+        tts?.voice = voice
+    }
+
+    fun availableVoices(): List<Voice> {
+        val engine = tts ?: return emptyList()
+        return runCatching { engine.voices?.toList() }.getOrDefault(emptyList())
+    }
+
+    fun persianVoices(): List<Voice> =
+        availableVoices().filter { it.locale.language.equals("fa", ignoreCase = true) }
 
     fun speak(text: String, interrupt: Boolean = true) {
         val engine = tts ?: return
@@ -58,9 +107,7 @@ class TextToSpeechManager(private val context: Context) {
 
     fun getAvailableLanguages(): List<String> {
         val engine = tts ?: return emptyList()
-        return runCatching {
-            engine.availableLanguages.map { it.displayName }
-        }.getOrDefault(emptyList())
+        return runCatching { engine.availableLanguages.map { it.displayName } }.getOrDefault(emptyList())
     }
 
     fun stop() {
