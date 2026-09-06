@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.OnDeviceServerManager
 import com.arena.mineva.server.ServerConfig
+import com.arena.mineva.server.ServerProfileStore
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.SshClient
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +50,7 @@ class CloudLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         tts.init { tts.speak("صفحهٔ لاگ پیشرفتهٔ سرور باز شد.") }
 
-        config = ServerConfig.fromJson(AppPrefs.lastServerConfigJson) ?: ServerConfig()
+        config = ServerProfileStore.activeConfig() ?: ServerConfig()
 
         val root = Ui.fill(this)
         root.addView(Ui.text(this, "🌐 لاگ و کنسول ابری سرور", 22f, 0xFF2E9BFF.toInt(), bold = true))

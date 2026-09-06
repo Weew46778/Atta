@@ -66,6 +66,14 @@ object AppPrefs {
         get() = get().getString("last_server_config_json", "") ?: ""
         set(value) = get().edit().putString("last_server_config_json", value).apply()
 
+    var serverProfilesJson: String
+        get() = get().getString("server_profiles_json", "[]") ?: "[]"
+        set(value) = get().edit().putString("server_profiles_json", value).apply()
+
+    var activeServerProfileId: String
+        get() = get().getString("active_server_profile_id", "") ?: ""
+        set(value) = get().edit().putString("active_server_profile_id", value).apply()
+
     fun removePackage(name: String) {
         get().edit().remove("pkg_$name").apply()
     }

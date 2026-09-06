@@ -68,6 +68,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".ServerDashboardActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ServerWizardActivity"
             android:exported="false" />
 

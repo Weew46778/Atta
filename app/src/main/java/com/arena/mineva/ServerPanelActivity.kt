@@ -16,6 +16,7 @@ import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.OnDeviceServerManager
 import com.arena.mineva.server.RconClient
 import com.arena.mineva.server.ServerConfig
+import com.arena.mineva.server.ServerProfileStore
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.SshClient
 import com.arena.mineva.system.DeviceMonitor
@@ -46,7 +47,7 @@ class ServerPanelActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         tts.init { tts.speak("پنل حرفه‌ای سرور باز شد.") }
 
-        config = ServerConfig.fromJson(AppPrefs.lastServerConfigJson) ?: ServerConfig()
+        config = ServerProfileStore.activeConfig() ?: ServerConfig()
 
         val scroll = ScrollView(this)
         val root = Ui.fill(this)

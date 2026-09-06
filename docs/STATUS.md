@@ -139,6 +139,16 @@
    - دکمه در تنظیمات صوتی: «بررسی کاتالوگ» و «دانلود از لینک».
    - `tools/render_voice_pack_from_piper.py`: رندر WAV فارسی با مدل open-source Piper و ساخت ZIP واقعی.
 
+
+10. **پیشخوان چندسروره** (`ServerDashboardActivity`, `server/ServerProfileStore.kt`)
+   - ذخیره/فعال/چند/حذف چند پروفایل (Local/VPS, Java/Bedrock/Hybrid).
+   - پنل‌ها و لاگ از پروفایل فعال استفاده می‌کنند.
+   - ویزارد ساخت سرور هر سرور جدید را به پیشخوان اضافه و فعال می‌کند.
+
+10b. **بسته‌بندی JRE موبایل** (`tools/make_jre_pack.py`, `docs/JRE_GUIDE.md`)
+   - تبدیل JRE دارای `bin/java` به ZIP قابل نصب در MineAva.
+   - راهنمای کامل برای ساخت/استفاده JRE و `server.jar`.
+
 ## چیزهایی که عمداً به «پیشخوان/بعدی» گذاشتم
 
 - **اجرای واقعی سرور روی خود گوشی**: نیاز به Bedrock Server runtime داخل اپ دارد.

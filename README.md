@@ -28,6 +28,8 @@ MVP اول یک اپ اندروید بومی (Kotlin + Android Views) برای:
 - **ارسال واقعی فرمان با RCON** (`RconClient`): پروتکل RCON استاندارد برای Bedrock/Java بهجای فقط کلیپبورد
 - **دانلود/بروزرسانی بستهٔ صوتی آنلاین** (`VoicePackDownloader`): بررسی کاتالوگ + دانلود و نصب ZIP از لینک مستقیم
 - **تولید بستهٔ صوتی واقعی**: `tools/render_voice_pack_from_piper.py` برای رندر WAVهای فارسی open-source
+- **پیشخوان چندسروره** (`ServerDashboardActivity`): پروفایل‌های متعدد Local/VPS، Java/Bedrock/Hybrid، فعال‌سازی/نام/حذف
+- **بستهٔ JRE موبایل**: `tools/make_jre_pack.py` + `docs/JRE_GUIDE.md` برای ساخت ZIP JRE قابل نصب
 - **ابزار ساخت/تست**: `tools/static_check.py` + `tools/build_apk.sh` + GitHub Actions (`android-debug-build`)
 
 ## Build

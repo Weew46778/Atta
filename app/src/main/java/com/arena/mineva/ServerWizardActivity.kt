@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.PackageCatalog
 import com.arena.mineva.server.ServerConfig
+import com.arena.mineva.server.ServerProfileStore
 import com.arena.mineva.server.ServerEdition
 import com.arena.mineva.server.ServerRecipeGenerator
 import com.arena.mineva.server.ServerTarget
@@ -28,6 +29,7 @@ class ServerWizardActivity : AppCompatActivity() {
 
     private lateinit var targetLocal: android.widget.TextView
     private lateinit var targetVps: android.widget.TextView
+    private lateinit var profileNameField: EditText
     private lateinit var vpsFields: LinearLayout
     private lateinit var hostField: EditText
     private lateinit var userField: EditText
@@ -66,6 +68,11 @@ class ServerWizardActivity : AppCompatActivity() {
         val root = Ui.fill(this)
         root.addView(Ui.text(this, "🛠 ساخت سرور خودکار", 22f, 0xFF2E70B8.toInt(), bold = true))
         root.addView(Ui.text(this, "چند سوال کوتاه بپرس، بقیه را آوا خودش انجام میدهد. پاسخ نهایی: فایل دستور آماده.", 13f, 0xFF9FB2C2.toInt()))
+
+        root.addView(section("نام پروفایل در پیشخوان"))
+        profileNameField = field("مثلاً سرور آوا VPS")
+        profileNameField.hint = "نام سرور در پیشخوان (اختیاری)"
+        root.addView(profileNameField)
 
         root.addView(section("سرور کجا ساخته شود؟"))
         val targetRow = Ui.horizontal(this).apply {
@@ -284,6 +291,8 @@ class ServerWizardActivity : AppCompatActivity() {
     private fun buildServer() {
         val config = createConfig()
         val recipe = ServerRecipeGenerator.generate(this, config)
+        val profileId = ServerProfileStore.add(config, profileNameField.text.toString().trim().ifBlank { null })
+        ServerProfileStore.setActive(profileId)
         AppPrefs.lastServerConfigJson = config.toJson()
         AppPrefs.homeServerTarget = config.target.name
 
@@ -340,6 +349,8 @@ class ServerWizardActivity : AppCompatActivity() {
         }
         deployButton.isEnabled = false
         deployButton.text = "در حال اتصال..."
+        val profileId = ServerProfileStore.add(config, profileNameField.text.toString().trim().ifBlank { null })
+        ServerProfileStore.setActive(profileId)
         AppPrefs.lastServerConfigJson = config.toJson()
         AppPrefs.homeServerTarget = config.target.name
         result.removeAllViews()

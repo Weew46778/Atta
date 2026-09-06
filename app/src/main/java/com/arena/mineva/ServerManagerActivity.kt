@@ -15,6 +15,7 @@ import com.arena.mineva.server.OnDeviceJavaServerProvisioner
 import com.arena.mineva.server.OnDeviceServerManager
 import com.arena.mineva.server.OnDeviceServerProvisioner
 import com.arena.mineva.server.ServerConfig
+import com.arena.mineva.server.ServerProfileStore
 import com.arena.mineva.server.ServerEdition
 import com.arena.mineva.server.ServerRecipeGenerator
 import com.arena.mineva.server.ServerTarget
@@ -41,7 +42,7 @@ class ServerManagerActivity : AppCompatActivity() {
         val root = Ui.fill(this)
         root.addView(Ui.text(this, "⚙️ مدیریت سرور", 22f, 0xFF2E70B8.toInt(), bold = true))
 
-        val current = ServerConfig.fromJson(AppPrefs.lastServerConfigJson)
+        val current = ServerProfileStore.activeConfig()
         val body = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         root.addView(body)
         if (current == null) {
