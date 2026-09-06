@@ -11,3 +11,5 @@ captures/
 .cxx/
 *.apk
 *.aab
+__pycache__/
+*.pyc

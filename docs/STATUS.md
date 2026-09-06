@@ -122,6 +122,23 @@
    - `docs/BUILD.md`: راهنمای نصب SDK و ساخت APK محلی.
    - GitHub Actions: نصب خودکار JDK/Gradle/SDK، چک سلامت، `assembleDebug`، آپلود `app-debug.apk`.
 
+
+9b. **سرور Java واقعی روی گوشی** (`server/OnDeviceJavaServerManager.kt`, `server/OnDeviceJavaServerProvisioner.kt`)
+   - نصب JRE موبایل (ZIP) به `filesDir/ondevice_java_server/jre` + تشخیص `bin/java`.
+   - نصب `server.jar` (فایل مستقیم یا ZIP) و نوشتن `eula.txt`/`server.properties`/`run.sh`.
+   - اجرای واقعی `ProcessBuilder` با `-Xms/-Xmx -jar server.jar nogui`، توقف، وضعیت، لاگ.
+   - گزارش دقیق پیش‌نیاز ناقص به‌جای ادعای اجرا.
+
+9c. **ارسال واقعی فرمان با RCON** (`server/RconClient.kt`)
+   - پیاده‌سازی کامل پروتکل TCP RCON (login/auth/command).
+   - پنل حرفه‌ای: فیلد پورت/رمز RCON، تست اتصال (`list`)، ارسال کنسول با RCON.
+   - `server.properties` بدراک و Java روی گوشی وقتی فعال باشد `enable-rcon=true` می‌شود.
+
+9d. **دانلود/بروزرسانی بستهٔ صوتی آنلاین** (`assistant/VoicePackDownloader.kt`, `assets/voice_pack_catalog.json`)
+   - کاتالوگ محلی + بروزرسانی آنلاین؛ دانلود ZIP مستقیم با چک حجم/HTTP.
+   - دکمه در تنظیمات صوتی: «بررسی کاتالوگ» و «دانلود از لینک».
+   - `tools/render_voice_pack_from_piper.py`: رندر WAV فارسی با مدل open-source Piper و ساخت ZIP واقعی.
+
 ## چیزهایی که عمداً به «پیشخوان/بعدی» گذاشتم
 
 - **اجرای واقعی سرور روی خود گوشی**: نیاز به Bedrock Server runtime داخل اپ دارد.

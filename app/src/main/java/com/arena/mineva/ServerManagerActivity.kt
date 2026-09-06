@@ -10,10 +10,13 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
-import com.arena.mineva.server.ServerConfig
-import com.arena.mineva.server.ServerRecipeGenerator
+import com.arena.mineva.server.OnDeviceJavaServerManager
+import com.arena.mineva.server.OnDeviceJavaServerProvisioner
 import com.arena.mineva.server.OnDeviceServerManager
 import com.arena.mineva.server.OnDeviceServerProvisioner
+import com.arena.mineva.server.ServerConfig
+import com.arena.mineva.server.ServerEdition
+import com.arena.mineva.server.ServerRecipeGenerator
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.SshClient
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +27,7 @@ class ServerManagerActivity : AppCompatActivity() {
 
     private val tts by lazy { TextToSpeechManager(this) }
     private val onDevice = OnDeviceServerManager(this)
+    private val onDeviceJava = OnDeviceJavaServerManager(this)
     private lateinit var remotePassword: EditText
     private lateinit var remoteKeyPass: EditText
     private lateinit var output: LinearLayout
@@ -121,42 +125,98 @@ class ServerManagerActivity : AppCompatActivity() {
             )
             root.addView(Ui.text(this, "اگر کلید SSH ذخیره شده باشد، این دستورها مستقیم کار میکنند. برای ریاستارت با رمز عبور، از ویزارد ساخت سرور دوباره استفاده کن.", 12f, 0xFF9FB2C2.toInt()))
         } else {
-            root.addView(
-                Ui.button(this, "▶ شروع سرور روی گوشی", 0xFF35D07F.toInt(), 48f) {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val r = onDevice.start(current ?: ServerConfig(target = ServerTarget.LOCAL))
-                        withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFF35D07F.toInt())) }
-                        tts.speak("سرور روی گوشی روشن شد.")
+            // Local target: show Bedrock and/or Java controls depending on the saved edition.
+            val edition = current?.edition ?: ServerEdition.BEDROCK
+            val wantsJava = edition == ServerEdition.JAVA || edition == ServerEdition.HYBRID
+            val wantsBedrock = edition == ServerEdition.BEDROCK || edition == ServerEdition.HYBRID
+
+            if (wantsJava) {
+                root.addView(Ui.text(this, "☕ سرور Java روی گوشی", 17f, 0xFFF1F5F9.toInt(), bold = true))
+                root.addView(
+                    Ui.button(this, "▶ شروع سرور Java", 0xFF35D07F.toInt(), 48f) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val r = onDeviceJava.start(current ?: ServerConfig(target = ServerTarget.LOCAL, edition = ServerEdition.JAVA))
+                            withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, if (r.startsWith("خطا")) 0xFFFF5A5A.toInt() else 0xFF35D07F.toInt())) }
+                            tts.speak(if (r.startsWith("خطا")) "سرور Java روی گوشی اجرا نشد." else "سرور Java روشن شد.")
+                        }
                     }
-                }
-            )
-            root.addView(
-                Ui.button(this, "⏹ توقف سرور روی گوشی", 0xFFFF5A5A.toInt(), 48f) {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val r = onDevice.stop()
-                        withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFC97C22.toInt())) }
-                        tts.speak("سرور روی گوشی متوقف شد.")
+                )
+                root.addView(
+                    Ui.button(this, "⏹ توقف سرور Java", 0xFFFF5A5A.toInt(), 48f) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val r = onDeviceJava.stop()
+                            withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFC97C22.toInt())) }
+                            tts.speak("سرور Java متوقف شد.")
+                        }
                     }
-                }
-            )
-            root.addView(
-                Ui.button(this, "📜 لاگ سرور روی گوشی", 0xFF1F8F8F.toInt(), 48f) {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val r = onDevice.logs()
-                        withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFD8E3EC.toInt())) }
-                        tts.speak("لاگ سرور آماده است.")
+                )
+                root.addView(
+                    Ui.button(this, "🔍 وضعیت + پیش‌نیازها", 0xFF2E70B8.toInt(), 48f) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val r = onDeviceJava.status()
+                            withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFD8E3EC.toInt())) }
+                        }
                     }
-                }
-            )
-            root.addView(
-                Ui.button(this, "📂 نصب باینری سرور (ZIP)", 0xFFC97C22.toInt(), 48f) {
-                    val intent = android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT).apply {
-                        addCategory(android.content.Intent.CATEGORY_OPENABLE)
-                        type = "application/zip"
+                )
+                root.addView(
+                    Ui.button(this, "📜 لاگ سرور Java", 0xFF1F8F8F.toInt(), 48f) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val r = onDeviceJava.logs()
+                            withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFD8E3EC.toInt())) }
+                            tts.speak("لاگ سرور Java آماده است.")
+                        }
                     }
-                    startActivityForResult(intent, 8002)
-                }
-            )
+                )
+                root.addView(
+                    Ui.button(this, "📂 نصب JRE موبایل (ZIP)", 0xFFC97C22.toInt(), 48f) {
+                        pickFile(8003)
+                    }
+                )
+                root.addView(
+                    Ui.button(this, "📦 نصب server.jar سرور", 0xFF7D4DB1.toInt(), 48f) {
+                        pickFile(8004)
+                    }
+                )
+                root.addView(Ui.text(this, "JRE باید یک runtime سازگار با Android/ARM باشد و داخل ZIP فایل bin/java داشته باشد. server.jar می‌تواند vanilla/Paper/Purpur باشد.", 11f, 0xFF9FB2C2.toInt()))
+            }
+
+            if (wantsBedrock) {
+                root.addView(Ui.text(this, "🧱 سرور Bedrock روی گوشی", 17f, 0xFFF1F5F9.toInt(), bold = true))
+                root.addView(
+                    Ui.button(this, "▶ شروع سرور Bedrock", 0xFF35D07F.toInt(), 48f) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val r = onDevice.start(current ?: ServerConfig(target = ServerTarget.LOCAL, edition = ServerEdition.BEDROCK))
+                            withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, if (r.startsWith("خطا")) 0xFFFF5A5A.toInt() else 0xFF35D07F.toInt())) }
+                            tts.speak("سرور Bedrock روی گوشی روشن شد.")
+                        }
+                    }
+                )
+                root.addView(
+                    Ui.button(this, "⏹ توقف سرور Bedrock", 0xFFFF5A5A.toInt(), 48f) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val r = onDevice.stop()
+                            withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFC97C22.toInt())) }
+                            tts.speak("سرور Bedrock متوقف شد.")
+                        }
+                    }
+                )
+                root.addView(
+                    Ui.button(this, "📜 لاگ سرور Bedrock", 0xFF1F8F8F.toInt(), 48f) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val r = onDevice.logs()
+                            withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFD8E3EC.toInt())) }
+                            tts.speak("لاگ سرور Bedrock آماده است.")
+                        }
+                    }
+                )
+                root.addView(
+                    Ui.button(this, "📂 نصب باینری سرور (ZIP)", 0xFFC97C22.toInt(), 48f) {
+                        pickFile(8002)
+                    }
+                )
+            }
+
+            root.addView(Ui.text(this, "⚠ اگر سرور LOCAL است و نسخهٔ ذخیره‌شده BEDROCK باشد، از بخش Bedrock استفاده می‌کنم؛ اگر JAVA/HYBRID باشد، بخش Java هم اضافه می‌شود.", 11f, 0xFFC97C22.toInt()))
         }
         root.addView(output)
 
@@ -270,16 +330,39 @@ class ServerManagerActivity : AppCompatActivity() {
 
     private fun shQuote(value: String): String = "'" + value.replace("'", "'\\''") + "'"
 
+    private fun pickFile(requestCode: Int) {
+        val intent = android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(android.content.Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+        }
+        startActivityForResult(intent, requestCode)
+    }
+
     @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != 8002) return
         val uri = data?.data ?: return
-        lifecycleScope.launch(Dispatchers.IO) {
-            val result = OnDeviceServerProvisioner.installZip(this@ServerManagerActivity, uri)
-            withContext(Dispatchers.Main) {
-                output.addView(Ui.text(this@ServerManagerActivity, result.detail, 13f, if (result.success) 0xFF35D07F.toInt() else 0xFFFF5A5A.toInt()))
-                tts.speak(if (result.success) "باینری سرور روی گوشی نصب شد." else "نصب باینری ناموفق بود.")
+        when (requestCode) {
+            8002 -> lifecycleScope.launch(Dispatchers.IO) {
+                val result = OnDeviceServerProvisioner.installZip(this@ServerManagerActivity, uri)
+                withContext(Dispatchers.Main) {
+                    output.addView(Ui.text(this@ServerManagerActivity, result.detail, 13f, if (result.success) 0xFF35D07F.toInt() else 0xFFFF5A5A.toInt()))
+                    tts.speak(if (result.success) "باینری سرور روی گوشی نصب شد." else "نصب باینری ناموفق بود.")
+                }
+            }
+            8003 -> lifecycleScope.launch(Dispatchers.IO) {
+                val result = OnDeviceJavaServerProvisioner.installJreZip(this@ServerManagerActivity, uri)
+                withContext(Dispatchers.Main) {
+                    output.addView(Ui.text(this@ServerManagerActivity, result.detail, 13f, if (result.success) 0xFF35D07F.toInt() else 0xFFFF5A5A.toInt()))
+                    tts.speak(if (result.success) "JRE موبایل نصب شد." else "نصب JRE ناموفق بود.")
+                }
+            }
+            8004 -> lifecycleScope.launch(Dispatchers.IO) {
+                val result = OnDeviceJavaServerProvisioner.installServerJar(this@ServerManagerActivity, uri)
+                withContext(Dispatchers.Main) {
+                    output.addView(Ui.text(this@ServerManagerActivity, result.detail, 13f, if (result.success) 0xFF35D07F.toInt() else 0xFFFF5A5A.toInt()))
+                    tts.speak(if (result.success) "server.jar نصب شد." else "نصب JAR ناموفق بود.")
+                }
             }
         }
     }

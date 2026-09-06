@@ -1,6 +1,7 @@
 package com.arena.mineva.server
 
 import android.content.Context
+import com.arena.mineva.AppPrefs
 import java.io.File
 
 /**
@@ -49,6 +50,9 @@ class OnDeviceServerManager(private val context: Context) {
             |difficulty=normal
             |gamemode=survival
             |allow-cheats=true
+            |enable-rcon=${if (AppPrefs.rconEnabled) "true" else "false"}
+            |rcon-port=${AppPrefs.rconPort}
+            |rcon-password=${AppPrefs.rconPassword}
             """.trimMargin()
         )
     }

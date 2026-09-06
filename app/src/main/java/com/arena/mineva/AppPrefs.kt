@@ -45,6 +45,19 @@ object AppPrefs {
         get() = get().getBoolean("use_bundled_voice", false)
         set(value) = get().edit().putBoolean("use_bundled_voice", value).apply()
 
+    var rconEnabled: Boolean
+        get() = get().getBoolean("rcon_enabled", false)
+        set(value) = get().edit().putBoolean("rcon_enabled", value).apply()
+
+    var rconPort: Int
+        get() = get().getInt("rcon_port", 19132)
+        set(value) = get().edit().putInt("rcon_port", value).apply()
+
+    var rconPassword: String
+        get() = get().getString("rcon_password", "mineava123") ?: "mineava123"
+        set(value) = get().edit().putString("rcon_password", value).apply()
+
+
     var homeServerTarget: String
         get() = get().getString("server_target", "") ?: ""
         set(value) = get().edit().putString("server_target", value).apply()

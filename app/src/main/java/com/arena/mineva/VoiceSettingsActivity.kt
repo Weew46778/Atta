@@ -4,11 +4,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
+import android.text.InputType
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
+import com.arena.mineva.assistant.VoicePackDownloader
 import com.arena.mineva.assistant.VoicePackSample
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class VoiceSettingsActivity : AppCompatActivity() {
 
@@ -16,6 +23,7 @@ class VoiceSettingsActivity : AppCompatActivity() {
     private lateinit var bundledButton: android.widget.TextView
     private lateinit var bundledToggle: android.widget.TextView
     private lateinit var bundledStatus: android.widget.TextView
+    private lateinit var voiceUrlField: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +53,41 @@ class VoiceSettingsActivity : AppCompatActivity() {
             Ui.button(this, "📤 خروجی ZIP نمونه (دانلود)", 0xFF2E9BFF.toInt(), 48f) {
                 val zip = VoicePackSample.exportZip(this)
                 ttsMessage(if (zip != null) "بستهٔ نمونه ساخته شد. مسیر: ${zip.absolutePath}" else "ساخت ZIP نمونه ناموفق بود.")
+            }
+        )
+        root.addView(
+            Ui.button(this, "📡 بررسی کاتالوگ بستهٔ صوتی آنلاین", 0xFF2E70B8.toInt(), 48f) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val catalog = VoicePackDownloader.remoteCatalog(this@VoiceSettingsActivity)
+                    withContext(Dispatchers.Main) { ttsMessage(catalog.take(300)) }
+                }
+            }
+        )
+        voiceUrlField = EditText(this).apply {
+            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            hint = "لینک مستقیم ZIP بستهٔ صوتی (https://...)"
+            setTextColor(Color.WHITE)
+            setHintTextColor(0xFF9FB2C2.toInt())
+            setSingleLine(true)
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
+            background = Ui.card(this@VoiceSettingsActivity).background
+            setPadding(Ui.dp(this@VoiceSettingsActivity, 12f), Ui.dp(this@VoiceSettingsActivity, 10f), Ui.dp(this@VoiceSettingsActivity, 12f), Ui.dp(this@VoiceSettingsActivity, 10f))
+        }
+        root.addView(voiceUrlField)
+        root.addView(
+            Ui.button(this, "⬇️ دانلود و نصب بستهٔ صوتی از لینک", 0xFF35D07F.toInt(), 48f) {
+                val url = voiceUrlField.text.toString()
+                if (url.isBlank()) {
+                    ttsMessage("اول لینک مستقیم ZIP را وارد کن.")
+                    return@Ui.button
+                }
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val r = VoicePackDownloader.download(this@VoiceSettingsActivity, url)
+                    withContext(Dispatchers.Main) {
+                        ttsMessage(r.detail)
+                        refreshBundledState()
+                    }
+                }
             }
         )
         bundledToggle = Ui.button(this, "🎤 استفاده از صدای داخل اپ: OFF", 0xFFC97C22.toInt(), 48f) {

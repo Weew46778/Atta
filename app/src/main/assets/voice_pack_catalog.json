@@ -1,0 +1,26 @@
+[
+  {
+    "id": "manual-zip",
+    "name": "آوا — بستهٔ صوتی سفارشی",
+    "type": "zip",
+    "source": "",
+    "license": "باید لایسنس پخش داخل اپ را داشته باشی",
+    "notes": "هیچ بستهٔ WAV لایسنس‌دار به‌صورت عمومی منتشر نشده. از دکمهٔ «📦 وارد کردن بستهٔ صوتی زن فارسی (ZIP)» یا لینک مستقیم ZIP استفاده کن."
+  },
+  {
+    "id": "piper-fa-mana-medium",
+    "name": "آوا — مدل Piper Persian (Mana fa-IR)",
+    "type": "model",
+    "source": "https://huggingface.co/MahtaFetrat/Mana-Persian-Piper",
+    "license": "open-source (Hugging Face)",
+    "notes": "این یک مدل نورون‌ی TTS فارسی است؛ برای تولید WAVهای بستهٔ صوتی، با tools/render_voice_pack_from_piper.py فریزها را رندر کن و ZIP حاصل را در اپ نصب کن."
+  },
+  {
+    "id": "fa-ir-gyro-piper",
+    "name": "Persian Piper (gyro/fa-IR)",
+    "type": "model",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/fa/fa_IR/gyro",
+    "license": "open-source (Piper project)",
+    "notes": "مدل جایگزین Persian Piper. برای ساخت بستهٔ WAV همان اسکریپت رندر را استفاده کن."
+  }
+]

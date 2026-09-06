@@ -24,6 +24,10 @@ MVP اول یک اپ اندروید بومی (Kotlin + Android Views) برای:
 - **پنل حرفهای سرور** (`ServerPanelActivity`): وضعیت، کنسول، منابع، بکاپ، پکیج در یک صفحه
 - **ساخت بستهٔ نمونهٔ صوتی داخل اپ**: `VoicePackSample` + خروجی ZIP به Download (برای تست بدون فایل لایسنسدار)
 - **لاگ و کنسول ابری سرور** (`CloudLogActivity`): systemd/journal/tmux/file، فیلتر، کپی، ذخیره، بهروزرسانی خودکار
+- **سرور Java واقعی روی گوشی** (`OnDeviceJavaServerManager`): import JRE موبایل + `server.jar`، شروع/توقف/لاگ/وضعیت فرایند واقعی با ProcessBuilder
+- **ارسال واقعی فرمان با RCON** (`RconClient`): پروتکل RCON استاندارد برای Bedrock/Java بهجای فقط کلیپبورد
+- **دانلود/بروزرسانی بستهٔ صوتی آنلاین** (`VoicePackDownloader`): بررسی کاتالوگ + دانلود و نصب ZIP از لینک مستقیم
+- **تولید بستهٔ صوتی واقعی**: `tools/render_voice_pack_from_piper.py` برای رندر WAVهای فارسی open-source
 - **ابزار ساخت/تست**: `tools/static_check.py` + `tools/build_apk.sh` + GitHub Actions (`android-debug-build`)
 
 ## Build

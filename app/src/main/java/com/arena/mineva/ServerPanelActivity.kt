@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.OnDeviceServerManager
+import com.arena.mineva.server.RconClient
 import com.arena.mineva.server.ServerConfig
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.SshClient
@@ -34,6 +36,10 @@ class ServerPanelActivity : AppCompatActivity() {
     private lateinit var consoleInput: EditText
     private lateinit var remotePassword: EditText
     private lateinit var remoteKeyPass: EditText
+    private lateinit var rconPortInput: EditText
+    private lateinit var rconPasswordInput: EditText
+    private lateinit var rconEnabled: CheckBox
+    private var rcon: RconClient? = null
     private val onDevice = OnDeviceServerManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +86,27 @@ class ServerPanelActivity : AppCompatActivity() {
             stopServer()
         }, weightParams())
         root.addView(statusRow)
+
+        root.addView(section("ارسال واقعی فرمان (RCON)"))
+        root.addView(Ui.text(this, "وقتی سرور RCON فعال باشد، فرمان‌ها مستقیم به موتور سرور ارسال می‌شوند (برای Bedrock و Java).", 12f, 0xFF9FB2C2.toInt()))
+        rconEnabled = CheckBox(this).apply {
+            text = "فعال‌کردن ارسال با RCON"
+            isChecked = AppPrefs.rconEnabled
+            setTextColor(Color.WHITE)
+            setOnCheckedChangeListener { _, checked -> AppPrefs.rconEnabled = checked }
+        }
+        root.addView(rconEnabled)
+        rconPortInput = field("پورت RCON (پیش‌فرض ${AppPrefs.rconPort})")
+        rconPortInput.setInputType(InputType.TYPE_CLASS_NUMBER)
+        root.addView(rconPortInput)
+        rconPasswordInput = field("رمز RCON")
+        rconPasswordInput.setText(AppPrefs.rconPassword)
+        root.addView(rconPasswordInput)
+        root.addView(
+            Ui.button(this, "🔌 تست/اتصال RCON", 0xFF7D4DB1.toInt(), 44f) {
+                testRcon()
+            }
+        )
 
         root.addView(section("کنسول سرور"))
         consoleInput = field("فرمان مثل: say سلام  یا  /tp  یا  stop")
@@ -191,18 +218,46 @@ class ServerPanelActivity : AppCompatActivity() {
             return
         }
         lifecycleScope.launch(Dispatchers.IO) {
-            val quoted = "'" + cmd.replace("'", "'\\''") + "'"
-            val result = when (config.target) {
-                ServerTarget.VPS -> vpsCommand("tmux send-keys -t MineAvaServer $quoted Enter && echo SENT")
-                ServerTarget.LOCAL -> {
-                    // In on-device mode commands can be appended to the process stdin in a later
-                    // build; for now record them in the log.
-                    "ON-DEVICE: command $cmd queued; direct stdin attached in future build."
+            val result = if (AppPrefs.rconEnabled) {
+                sendViaRcon(cmd)
+            } else {
+                val quoted = "'" + cmd.replace("'", "'\\''") + "'"
+                when (config.target) {
+                    ServerTarget.VPS -> vpsCommand("tmux send-keys -t MineAvaServer $quoted Enter && echo SENT")
+                    ServerTarget.LOCAL -> {
+                        // In on-device mode commands can be appended to the process stdin in a later
+                        // build; for now record them in the log.
+                        "ON-DEVICE: command $cmd queued; direct stdin attached in future build."
+                    }
                 }
             }
             show("📨", result)
             tts.speak(if (!result.contains("خطا")) "ارسال شد." else "ارسال نشد.")
         }
+    }
+
+    private fun testRcon() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val result = sendViaRcon("list")
+            show("🔌 RCON", result)
+            tts.speak(if (!result.contains("خطا")) "اتصال RCON برقرار شد." else "اتصال RCON برقرار نشد.")
+        }
+    }
+
+    /** Real server-side command execution through the RCON protocol. */
+    private fun sendViaRcon(command: String): String {
+        return runCatching {
+            val conn = rcon ?: RconClient().also { rcon = it }
+            val port = rconPortInput.text.toString().toIntOrNull() ?: AppPrefs.rconPort
+            val password = rconPasswordInput.text.toString().ifBlank { AppPrefs.rconPassword }
+            if (!conn.isConnected()) {
+                val host = if (config.target == ServerTarget.VPS) config.host else "127.0.0.1"
+                val auth = conn.connect(host, port, password)
+                if (!auth.success) return "خطا: ${auth.message}"
+            }
+            val res = conn.command(command)
+            if (res.success) "RCON OK: ${res.message.ifBlank { "پاسخ خالی" }}" else "خطا: ${res.message}"
+        }.getOrElse { e -> "خطا: ${e.message}" }
     }
 
     private fun readConsole() {
@@ -272,6 +327,8 @@ class ServerPanelActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        rcon?.disconnect()
+        rcon = null
         if (isFinishing) tts.shutdown()
     }
 }
