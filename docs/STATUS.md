@@ -57,7 +57,7 @@
    - مدیریت از راه دور: `ServerManagerActivity` با status / restart / journalctl.
    - **بکاپ خودکار دنیا** با `tar -czf` در `~/minecraft-server/backups`.
    - **آمار VPS**: RAM (`free -m`)، دیسک (`df -h`)، آپتایم.
-   - **کنسول ساده**: ارسال فرمان به `console.log` و وضعیت سرویس روی سرور.
+   - **کنسول واقعی STDIN (tmux)**: سرور زیر سشن `MineAvaServer` اجرا میشود؛ ارسال فرمان با `tmux send-keys`، نمایش خروجی با `tmux capture-pane`، شروع/توقف سرویس، وضعیت سشن.
    - رمز عبور SSH فقط در حافظه نگهداری میشود و در کانفیگ JSON ذخیره نمیشود.
 
 7. **مدیریت پکیج** (`PackageManagerActivity`, `server/PackageCatalog.kt`, `server/PackageDeployer.kt`)

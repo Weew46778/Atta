@@ -131,13 +131,15 @@ class ServerManagerActivity : AppCompatActivity() {
         root.addView(output)
 
         if (current?.target == ServerTarget.VPS && current.host.isNotBlank()) {
-            root.addView(Ui.text(this, "🎮 کنسول سرور", 17f, 0xFFF1F5F9.toInt(), bold = true))
+            root.addView(Ui.text(this, "🎮 کنسول واقعی سرور (tmux)", 17f, 0xFFF1F5F9.toInt(), bold = true))
+            root.addView(Ui.text(this, "سرور باید روی سشن tmux با نام MineAvaServer اجرا شود. دستورها واقعاً به STDIN سرور ارسال میشوند.", 12f, 0xFF9FB2C2.toInt()))
+
             consoleInput = EditText(this).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-                hint = "مثلاً: say hello  یا  /tp  یا  stop  یا  start"
+                hint = "فرمان سرور، مثلاً: say hello  یا  /tp  یا  stop"
                 setTextColor(Color.WHITE)
                 setHintTextColor(0xFF9FB2C2.toInt())
                 setSingleLine(true)
@@ -146,28 +148,41 @@ class ServerManagerActivity : AppCompatActivity() {
                 setPadding(Ui.dp(this@ServerManagerActivity, 12f), Ui.dp(this@ServerManagerActivity, 10f), Ui.dp(this@ServerManagerActivity, 12f), Ui.dp(this@ServerManagerActivity, 10f))
             }
             root.addView(consoleInput)
+
             root.addView(
-                Ui.button(this, "📨 ارسال دستور به کنسول", 0xFF35D07F.toInt(), 48f) {
+                Ui.button(this, "📨 ارسال فرمان به کنسول", 0xFF35D07F.toInt(), 48f) {
                     val cmd = consoleInput.text.toString().trim()
                     if (cmd.isBlank()) {
-                        tts.speak("دستوری برای ارسال ننوشته‌ای.")
+                        tts.speak("فرمانی برای ارسال ننوشته‌ای.")
                         return@Ui.button
                     }
-                    consoleOutput.removeAllViews()
-                    vpsCommand(current, "systemctl is-active MineAva-server 2>/dev/null || true", consoleOutput, "ابتدا وضعیت")
-                    vpsCommand(current, "sudo -n systemctl is-active MineAva-server || true", consoleOutput, "وضعیت با sudo", clear = false)
-                    vpsCommand(
-                        current,
-                        "mkdir -p ~/minecraft-server && cd ~/minecraft-server && echo \"$cmd\" >> console.log && ls -lh server.jar run.sh 2>/dev/null || true && tail -5 console.log",
-                        consoleOutput,
-                        "ارسال",
-                        clear = false
-                    )
+                    val quoted = shQuote(cmd)
+                    vpsCommand(current, "tmux send-keys -t MineAvaServer $quoted Enter", consoleOutput, "ارسال", clear = true)
+                }
+            )
+            root.addView(
+                Ui.button(this, "📺 نمایش خروجی کنسول (آخرین ۵۰ خط)", 0xFF2E9BFF.toInt(), 48f) {
+                    vpsCommand(current, "tmux capture-pane -t MineAvaServer -p | tail -n 50", consoleOutput, "خروجی کنسول", clear = true)
+                }
+            )
+            root.addView(
+                Ui.button(this, "▶ شروع سرور در tmux", 0xFF35D07F.toInt(), 48f) {
+                    vpsCommand(current, "systemctl restart MineAva-server && sleep 2 && tmux has-session -t MineAvaServer && echo RUNNING", consoleOutput, "شروع سرویس", clear = true)
+                }
+            )
+            root.addView(
+                Ui.button(this, "⏹ توقف سرور", 0xFFFF5A5A.toInt(), 48f) {
+                    vpsCommand(current, "tmux send-keys -t MineAvaServer 'stop' Enter 2>/dev/null || true", consoleOutput, "توقف", clear = true)
+                }
+            )
+            root.addView(
+                Ui.button(this, "🔎 وضعیت کنسول", 0xFF1F8F8F.toInt(), 48f) {
+                    vpsCommand(current, "tmux has-session -t MineAvaServer 2>/dev/null && echo 'RUNNING' || echo 'STOPPED'", consoleOutput, "وضعیت", clear = true)
                 }
             )
             consoleOutput = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
             root.addView(consoleOutput)
-            root.addView(Ui.text(this, "🔹 توجه: این نسخه درخواست را به لاگ/وضعیت سرویس می‌فرستد. اتصال به STDIN واقعی سرور (سمت استاندارد `screen`/`tmux`) در نسخه بعدی اضافه می‌شود؛ برای آن، سرور باید روی `screen` اجرا شود.", 11f, 0xFFC97C22.toInt()))
+            root.addView(Ui.text(this, "🔹 اگر سرور قبلاً بدون tmux نصب شده، دوباره از ویزارد ساخت سرور استفاده کن تا اسکریپت‌های tmux و سرویس به‌روز شوند.", 11f, 0xFFC97C22.toInt()))
         }
 
         setContentView(root)
@@ -194,7 +209,18 @@ class ServerManagerActivity : AppCompatActivity() {
                     keyPassphrase = remoteKeyPass.text.toString().ifBlank { null },
                     port = config.sshPort
                 )
-                val out = ssh.exec(session, command).output
+                val uidResult = ssh.exec(session, "id -u").output.trim()
+                val pw = remotePassword.text.toString()
+                val finalCommand = when {
+                    uidResult == "0" -> command
+                    pw.isNotBlank() -> {
+                        val esc = pw.replace("'", "'\\''")
+                        val escCmd = command.replace("\"", "\\\"")
+                        "printf '%s\\n' '$esc' | sudo -S -p '' bash -c \"$escCmd\" 2>&1"
+                    }
+                    else -> command
+                }
+                val out = ssh.exec(session, finalCommand).output
                 session.disconnect()
                 out
             }.getOrElse { e -> "خطا: ${e.message}" }
@@ -211,6 +237,8 @@ class ServerManagerActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun shQuote(value: String): String = "'" + value.replace("'", "'\\''") + "'"
 
     override fun onDestroy() {
         super.onDestroy()
