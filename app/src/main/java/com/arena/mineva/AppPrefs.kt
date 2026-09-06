@@ -82,6 +82,10 @@ object AppPrefs {
         get() = get().getInt("watchdog_interval_sec", 8)
         set(value) = get().edit().putInt("watchdog_interval_sec", value).apply()
 
+    var watchdogServiceEnabled: Boolean
+        get() = get().getBoolean("watchdog_service_enabled", false)
+        set(value) = get().edit().putBoolean("watchdog_service_enabled", value).apply()
+
     fun removePackage(name: String) {
         get().edit().remove("pkg_$name").apply()
     }

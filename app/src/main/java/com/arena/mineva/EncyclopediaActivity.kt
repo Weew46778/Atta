@@ -9,8 +9,13 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.knowledge.KnowledgeRepository
+import com.arena.mineva.knowledge.KnowledgeResearchWorker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Encyclopedia screen. Lists every category/topic (Minecraft + default general topics +
@@ -74,6 +79,11 @@ class EncyclopediaActivity : AppCompatActivity() {
         root.addView(Ui.button(this, "💾 ذخیره موضوع در دایرة‌المعارف", 0xFF35D07F.toInt(), 46f) {
             addTopic()
         })
+        root.addView(
+            Ui.button(this, "🧠 تحقیق پویا عمومی (۵ موضوع)", 0xFF7D4DB1.toInt(), 46f) {
+                startGeneralResearch()
+            }
+        )
 
         list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         root.addView(Ui.text(this, "همهٔ موضوعات:", 16f, 0xFFF1F5F9.toInt(), bold = true))
@@ -123,6 +133,27 @@ class EncyclopediaActivity : AppCompatActivity() {
         list.addView(Ui.button(this, "⬅ بازگشت به فهرست", 0xFF2E70B8.toInt(), 42f) {
             render()
         })
+    }
+
+    private fun startGeneralResearch() {
+        list.removeAllViews()
+        list.addView(Ui.text(this, "آوا در حال تحقیق موضوعات عمومی است...", 13f, 0xFF7D4DB1.toInt()))
+        tts.speak("در حال تحقیق و افزودن موضوعات عمومی هستم.")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val res = KnowledgeResearchWorker.runGeneral(
+                context = this@EncyclopediaActivity,
+                limit = 5,
+                onProgress = { step ->
+                    withContext(Dispatchers.Main) {
+                        list.addView(Ui.text(this@EncyclopediaActivity, "• $step", 12f, 0xFFD8E3EC.toInt()))
+                    }
+                }
+            )
+            withContext(Dispatchers.Main) {
+                list.addView(Ui.text(this@EncyclopediaActivity, res.output, 13f, 0xFF35D07F.toInt()))
+                render()
+            }
+        }
     }
 
     private fun addTopic() {

@@ -37,6 +37,21 @@ object KnowledgeResearchWorker {
         "بهترین شیدر و روش نصب برای موبایل"
     )
 
+    /**
+     * Non-Minecraft general education topics that are researched online and stored into
+     * the same personal encyclopedia (category "دانش عمومی").
+     */
+    val generalTopics = listOf(
+        "تغییر اقلیم چیست و چطور زندگی ما را تغییر می دهد؟",
+        "فواید ورزش روزانه برای بدن و ذهن چیست؟",
+        "چطور پول خود را به درستی مدیریت و پس انداز کنم؟",
+        "هوش مصنوعی چیست و چه کارهایی می تواند انجام دهد؟",
+        "چطور یادگیری یک زبان جدید را شروع کنم؟",
+        "انرژی خورشیدی چگونه کار می کند؟",
+        "چرا خواب کافی برای سلامت مهم است؟",
+        "نحوه عیب یابی سریع اینترنت ضعیف در خانه"
+    )
+
     data class ResearchResult(
         val researched: Int = 0,
         val saved: Int = 0,
@@ -48,6 +63,8 @@ object KnowledgeResearchWorker {
         context: Context,
         limit: Int = 5,
         topics: List<String> = defaultTopics,
+        category: String = "تحقیق پویا",
+        systemHint: String = "تو «آوا» هستی. برای موضوع ماینکرافت فارسی پاسخ کامل، مرحله‌به‌مرحله و کاربردی بده. از عنوان شروع کن و با مراحل شماره‌دار ادامه بده.",
         onProgress: (String) -> Unit = {}
     ): ResearchResult = withContext(Dispatchers.IO) {
         val key = AppPrefs.geminiApiKey
@@ -72,14 +89,14 @@ object KnowledgeResearchWorker {
             val answer = runCatching {
                 GeminiAssistantEngine.ask(
                     apiKey = key,
-                    system = "تو «آوا» هستی. برای موضوع ماینکرافت فارسی پاسخ کامل، مرحله‌به‌مرحله و کاربردی بده. از عنوان شروع کن و با مراحل شماره‌دار ادامه بده.",
+                    system = systemHint,
                     question = topic,
                     timeoutMs = 40_000
                 )
             }.getOrNull()
             researched++
             if (!answer.isNullOrBlank() && answer.length > 40) {
-                repo.addLearned(topic, answer, "تحقیق پویا")
+                repo.addLearned(topic, answer, category)
                 saved++
                 onProgress("ذخیره شد: $topic")
             } else {
@@ -95,4 +112,20 @@ object KnowledgeResearchWorker {
             output = "تحقیق: ${selected.size} موضوع | ${saved} ذخیره شد | ${skipped} بدون تغییر"
         )
     }
+
+    /**
+     * Researches non-Minecraft general topics into the "دانش عمومی" category.
+     */
+    suspend fun runGeneral(
+        context: Context,
+        limit: Int = 5,
+        onProgress: (String) -> Unit = {}
+    ): ResearchResult = run(
+        context = context,
+        limit = limit,
+        topics = generalTopics,
+        category = "دانش عمومی",
+        systemHint = "تو «آوا» هستی. برای سوال عمومی فارسی پاسخ کامل، دقیق و مرحله‌به‌مرحله بده. از عنوان شروع کن و با مراحل شماره‌دار ادامه بده.",
+        onProgress = onProgress
+    )
 }

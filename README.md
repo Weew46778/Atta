@@ -33,6 +33,9 @@ MVP اول یک اپ اندروید بومی (Kotlin + Android Views) برای:
 - **پایش خودکار و ریاستارت سرور** (`ServerWatchdogActivity`, `ServerWatchdog`): تشخیص کرش/قطع و ریاستارت خودکار محلی و VPS
 - **دایرة‌المعارف غیرماینکرافتی** (`EncyclopediaActivity`): ۵ موضوع دانش عمومی + افزودن موضوع دلخواه با دستهٔ دلخواه
 - **بروزرسانی خودکار اپ** (`AppUpdater`): چک مانیفست آنلاین، دانلود APK، هم‌سنجی SHA-256، باز کردن نصب‌کننده
+- **تحقیق پویا عمومی** (`KnowledgeResearchWorker.runGeneral`): افزودن موضوعات غیرماینکرافت به «دانش عمومی» از دایرة‌المعارف
+- **پایش پس‌زمینه** (`ServerWatchdogService`): سرویس foreground حتی وقتی اپ بسته است
+- **راهنمای گام‌به‌گام VPS** (`VpsGuideActivity`): تست SSH → انتخاب نوع → استقرار خودکار → بررسی نهایی
 - **ابزار ساخت/تست**: `tools/static_check.py` + `tools/build_apk.sh` + GitHub Actions (`android-debug-build`)
 
 ## Build

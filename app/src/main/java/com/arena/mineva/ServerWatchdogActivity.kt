@@ -14,6 +14,7 @@ import com.arena.mineva.server.ServerConfig
 import com.arena.mineva.server.ServerProfileStore
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.ServerWatchdog
+import com.arena.mineva.service.ServerWatchdogService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -31,6 +32,7 @@ class ServerWatchdogActivity : AppCompatActivity() {
     private val watchdog = ServerWatchdog(this)
     private lateinit var output: LinearLayout
     private lateinit var autoRestart: CheckBox
+    private lateinit var backgroundCheck: CheckBox
     private lateinit var intervalInput: EditText
     private lateinit var sshPassword: EditText
     private lateinit var sshKeyPass: EditText
@@ -78,6 +80,25 @@ class ServerWatchdogActivity : AppCompatActivity() {
             setPadding(Ui.dp(this@ServerWatchdogActivity, 12f), Ui.dp(this@ServerWatchdogActivity, 10f), Ui.dp(this@ServerWatchdogActivity, 12f), Ui.dp(this@ServerWatchdogActivity, 10f))
         }
         root.addView(intervalInput)
+
+        backgroundCheck = CheckBox(this).apply {
+            text = "📲 اجرا در پس‌زمینه (حتی وقتی اپ بسته است)"
+            isChecked = AppPrefs.watchdogServiceEnabled
+            setTextColor(Color.WHITE)
+            setOnCheckedChangeListener { _, checked ->
+                AppPrefs.watchdogServiceEnabled = checked
+                if (checked) {
+                    ServerWatchdogService.start(this@ServerWatchdogActivity)
+                    output.addView(Ui.text(this@ServerWatchdogActivity, "پایش پس‌زمینه شروع شد.", 13f, 0xFF35D07F.toInt()))
+                    tts.speak("پایش پس‌زمینه فعال شد.")
+                } else {
+                    ServerWatchdogService.stop(this@ServerWatchdogActivity)
+                    output.addView(Ui.text(this@ServerWatchdogActivity, "پایش پس‌زمینه متوقف شد.", 13f, 0xFFC97C22.toInt()))
+                    tts.speak("پایش پس‌زمینه غیرفعال شد.")
+                }
+            }
+        }
+        root.addView(backgroundCheck)
 
         if (config.target == ServerTarget.VPS && config.host.isNotBlank()) {
             sshPassword = passwordField("رمز SSH (اختیاری)")

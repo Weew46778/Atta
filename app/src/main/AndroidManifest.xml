@@ -80,6 +80,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".VpsGuideActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ServerWizardActivity"
             android:exported="false" />
 
@@ -103,6 +107,16 @@
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Displays in-game Minecraft assistant overlay panel while the game is running." />
+        </service>
+
+        <!-- Persistent background server watchdog. -->
+        <service
+            android:name=".service.ServerWatchdogService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Monitors and auto-restarts the Minecraft server hosted by the app while in background." />
         </service>
 
         <!-- Needed to hand the downloaded APK to Android's package installer. -->

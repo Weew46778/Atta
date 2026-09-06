@@ -175,6 +175,11 @@ class ServerWizardActivity : AppCompatActivity() {
         }
 
         root.addView(
+            Ui.button(this, "🎓 راهنمای گام‌به‌گام VPS", 0xFFC97C22.toInt(), 48f) {
+                startActivity(android.content.Intent(this, VpsGuideActivity::class.java))
+            }
+        )
+        root.addView(
             Ui.button(this, "⚙️ ساخت خودکار سرور", 0xFF35D07F.toInt(), 56f) {
                 buildServer()
             }
