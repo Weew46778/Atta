@@ -107,6 +107,11 @@ class MainActivity : AppCompatActivity() {
             }
         )
         root.addView(
+            Ui.button(this, "📚  دایرة‌المعارف آوا", 0xFF7D4DB1.toInt()) {
+                startActivity(Intent(this, EncyclopediaActivity::class.java))
+            }
+        )
+        root.addView(
             Ui.button(this, "🔬  تست کامل سیستم و گزارش خطا", 0xFFFF5A5A.toInt()) {
                 startActivity(Intent(this, DiagnosticsActivity::class.java))
             }

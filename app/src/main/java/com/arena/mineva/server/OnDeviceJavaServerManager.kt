@@ -21,6 +21,7 @@ class OnDeviceJavaServerManager(private val context: Context) {
     private val dir: File = File(context.filesDir, "ondevice_java_server")
     private val jreDir: File = File(dir, "jre")
     private val logFile: File = File(dir, "server.log")
+    private val pidFile: File = File(dir, "server.pid")
     private var process: Process? = null
 
     fun provision(config: ServerConfig): String {
@@ -104,14 +105,17 @@ class OnDeviceJavaServerManager(private val context: Context) {
                     pb.redirectErrorStream(true)
                     pb.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile))
                     process = pb.start()
+                    pidFile.writeText("${process!!.pid()}")
                     Thread.sleep(1800L)
                     if (process!!.isAlive) {
                         "ON-DEVICE JAVA: سرور Java روی پورت ${config.port} اجرا شد (PID ${process!!.pid()})."
                     } else {
+                        pidFile.delete()
                         val tail = logFile.takeIf { it.exists() }?.readText()?.takeLast(500)
                         "ON-DEVICE JAVA: پردازه خارج شد — ${tail ?: "دلیل نامشخص"}"
                     }
                 }.getOrElse { e ->
+                    pidFile.delete()
                     "ON-DEVICE JAVA: خطا در اجرا — ${e.message}"
                 }
             }
@@ -120,23 +124,46 @@ class OnDeviceJavaServerManager(private val context: Context) {
 
     fun stop(): String {
         val p = process
-        if (p == null) return "ON-DEVICE JAVA: هیچ پردازه‌ای در حال اجرا نیست."
-        runCatching { p.destroy() }
-        Thread.sleep(600L)
-        if (p.isAlive) runCatching { p.destroyForcibly() }
+        if (p != null) {
+            runCatching { p.destroy() }
+            Thread.sleep(600L)
+            if (p.isAlive) runCatching { p.destroyForcibly() }
+        }
         process = null
+        pidFile.delete()
         return "ON-DEVICE JAVA: سرور متوقف شد."
     }
 
     fun status(): String {
         val p = process
-        return if (p != null && p.isAlive) {
-            "ON-DEVICE JAVA: RUNNING (PID ${p.pid()})"
-        } else {
+        if (p != null && p.isAlive) return "ON-DEVICE JAVA: RUNNING (PID ${p.pid()})"
+        return statusFromDisk()
+    }
+
+    /** Persisted status for the watchdog, works across re-created manager instances. */
+    fun statusFromDisk(): String {
+        val p = process
+        if (p != null && p.isAlive) return "ON-DEVICE JAVA: RUNNING (PID ${p.pid()})"
+        if (!pidFile.exists()) {
             val ready = hasJre() && hasServerJar()
-            "ON-DEVICE JAVA: STOPPED" + (if (ready) "" else " — پیش‌نیاز JRE یا server.jar ناقص است.")
+            return "ON-DEVICE JAVA: STOPPED" + (if (ready) "" else " — پیش‌نیاز JRE یا server.jar ناقص است.")
+        }
+        val pid = pidFile.readText().trim().toLongOrNull()
+        return if (pid != null && isPidAlive(pid)) {
+            "ON-DEVICE JAVA: RUNNING (PID $pid)"
+        } else {
+            "ON-DEVICE JAVA: CRASHED"
         }
     }
+
+    fun crashAwareRestart(config: ServerConfig): String {
+        val wasCrashed = statusFromDisk().contains("CRASHED")
+        val result = start(config)
+        return if (wasCrashed && result.contains("اجرا شد")) "ON-DEVICE JAVA: after crash, restarted." else result
+    }
+
+    private fun isPidAlive(pid: Long): Boolean =
+        runCatching { File("/proc/$pid").exists() }.getOrDefault(false)
 
     fun logs(lines: Int = 80): String {
         if (!logFile.exists()) return "ON-DEVICE JAVA: هنوز لاگی نیست."

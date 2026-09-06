@@ -72,6 +72,14 @@
             android:exported="false" />
 
         <activity
+            android:name=".ServerWatchdogActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".EncyclopediaActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ServerWizardActivity"
             android:exported="false" />
 
@@ -96,5 +104,16 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Displays in-game Minecraft assistant overlay panel while the game is running." />
         </service>
+
+        <!-- Needed to hand the downloaded APK to Android's package installer. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 </manifest>

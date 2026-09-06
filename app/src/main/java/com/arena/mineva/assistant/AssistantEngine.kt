@@ -33,7 +33,7 @@ class AssistantEngine(
         runCatching {
             val answer = GeminiAssistantEngine.ask(
                 apiKey = key,
-                system = "تو «آوا» هستی، دستیار هوشمند و متخصص ماینکرافت فارسی. کوتاه، دقیق و مرحله‌به‌مرحله جواب بده.",
+                system = "تو «آوا» هستی، دستیار هوشمند فارسی. متخصص ماینکرافت و همچنین راهنمای دانش عمومی هستی؛ اگر سؤال خارج از ماینکرافت هم بود، کوتاه، دقیق و مرحله‌به‌مرحله جواب بده.",
                 question = question
             )
             // Learn: the assistant writes the answer into its personal encyclopedia so it

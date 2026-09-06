@@ -12,6 +12,7 @@ import com.arena.mineva.assistant.GeminiAssistantEngine
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.knowledge.KnowledgeRepository
 import com.arena.mineva.knowledge.KnowledgeResearchWorker
+import com.arena.mineva.updater.AppUpdater
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -81,6 +82,11 @@ class SettingsActivity : AppCompatActivity() {
                 startResearch()
             }
         )
+        root.addView(
+            Ui.button(this, "🚀 بررسی بروزرسانی اپ", 0xFF2E70B8.toInt(), 48f) {
+                checkUpdate()
+            }
+        )
 
         val scroll = ScrollView(this)
         result = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
@@ -110,6 +116,46 @@ class SettingsActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 result.addView(Ui.text(this@SettingsActivity, res.output, 14f, 0xFF35D07F.toInt()))
                 tts.speak("کار تحقیق تمام شد. ${res.saved} مطلب جدید را یاد گرفتم.")
+            }
+        }
+    }
+
+    private fun checkUpdate() {
+        result.removeAllViews()
+        result.addView(Ui.text(this, "در حال بررسی بروزرسانی...", 13f, 0xFF9FB2C2.toInt()))
+        tts.speak("در حال بررسی به‌روز بودن اپ هستم.")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val info = AppUpdater.check(this@SettingsActivity)
+            withContext(Dispatchers.Main) {
+                result.addView(
+                    Ui.text(
+                        this@SettingsActivity,
+                        info.detail + (if (info.notes.isNotBlank()) "\n${info.notes}" else ""),
+                        13f,
+                        if (info.updateAvailable) 0xFF35D07F.toInt() else 0xFF9FB2C2.toInt()
+                    )
+                )
+                if (info.updateAvailable && info.apkUrl.isNotBlank()) {
+                    result.addView(
+                        Ui.button(this@SettingsActivity, "⬇️ دانلود و نصب نسخه جدید", 0xFF35D07F.toInt(), 46f) {
+                            installUpdate(info)
+                        }
+                    )
+                }
+                tts.speak(if (info.updateAvailable) "نسخه جدید موجود است." else "اپ به‌روز است.")
+            }
+        }
+    }
+
+    private fun installUpdate(info: com.arena.mineva.updater.AppUpdater.UpdateInfo) {
+        result.addView(Ui.text(this, "در حال دانلود APK...", 13f, 0xFF9FB2C2.toInt()))
+        lifecycleScope.launch(Dispatchers.IO) {
+            val res = AppUpdater.download(this@SettingsActivity, info)
+            withContext(Dispatchers.Main) {
+                result.addView(
+                    Ui.text(this@SettingsActivity, res.detail, 13f, if (res.success) 0xFF35D07F.toInt() else 0xFFFF5A5A.toInt())
+                )
+                tts.speak(if (res.success) "دانلود انجام شد؛ نصب‌کننده باز شد." else "دانلود نصب ناموفق بود.")
             }
         }
     }

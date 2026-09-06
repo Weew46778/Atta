@@ -135,6 +135,11 @@ class ServerPanelActivity : AppCompatActivity() {
             }
         )
         root.addView(
+            Ui.button(this, "🛡 پایش خودکار و ریاستارت", 0xFFFF5A5A.toInt(), 46f) {
+                startActivity(Intent(this, ServerWatchdogActivity::class.java))
+            }
+        )
+        root.addView(
             Ui.button(this, "🌐 لاگ و کنسول ابری", 0xFF2E9BFF.toInt(), 46f) {
                 startActivity(Intent(this, CloudLogActivity::class.java))
             }

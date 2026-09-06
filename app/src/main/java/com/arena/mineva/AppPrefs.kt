@@ -74,6 +74,14 @@ object AppPrefs {
         get() = get().getString("active_server_profile_id", "") ?: ""
         set(value) = get().edit().putString("active_server_profile_id", value).apply()
 
+    var autoRestartEnabled: Boolean
+        get() = get().getBoolean("auto_restart_enabled", true)
+        set(value) = get().edit().putBoolean("auto_restart_enabled", value).apply()
+
+    var watchdogIntervalSec: Int
+        get() = get().getInt("watchdog_interval_sec", 8)
+        set(value) = get().edit().putInt("watchdog_interval_sec", value).apply()
+
     fun removePackage(name: String) {
         get().edit().remove("pkg_$name").apply()
     }

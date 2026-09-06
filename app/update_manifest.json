@@ -1,0 +1,9 @@
+{
+  "versionCode": 1,
+  "versionName": "0.1.0",
+  "apkUrl": "",
+  "sha256": "",
+  "mandatory": false,
+  "notes": "نسخه اولیهٔ MineAva. وقتی APK انتشار در GitHub قرار گرفت، این فایل را با versionCode بالاتر و apkUrl به نشانی فایل رسمی به‌روز کن.",
+  "releaseDate": "2026-09-06"
+}

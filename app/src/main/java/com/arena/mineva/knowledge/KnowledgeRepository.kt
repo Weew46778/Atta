@@ -25,7 +25,8 @@ data class KnowledgeEntry(
 class KnowledgeRepository(context: Context) {
 
     private val entries: List<KnowledgeEntry> =
-        runCatching { load(context) }.getOrDefault(emptyList())
+        (runCatching { load(context) }.getOrDefault(emptyList()) +
+            runCatching { loadExtraBase(context) }.getOrDefault(emptyList())).distinctBy { it.id }
 
     private val extraFile: File = File(context.filesDir, "knowledge_extra.json")
     private val extraEntries: MutableList<KnowledgeEntry> = runCatching {
@@ -90,6 +91,40 @@ class KnowledgeRepository(context: Context) {
 
     fun learnedCount(): Int = extraEntries.size
 
+    /**
+     * Adds a user-defined encyclopedia topic (Minecraft or any other category).
+     * This is how the same framework supports up to (and beyond) five additional
+     * non-Minecraft topics added by the user.
+     */
+    fun addUserTopic(title: String, text: String, category: String, tags: List<String> = emptyList()): KnowledgeEntry {
+        val entry = KnowledgeEntry(
+            id = "user_${System.currentTimeMillis()}_${UUID.randomUUID().toString().take(6)}",
+            title = title.trim(),
+            category = category.trim().ifBlank { "دایرةالمعارف کاربر" },
+            text = text.trim(),
+            tags = tags.ifEmpty { title.split(" ").filter { it.length > 2 }.take(10) },
+            steps = emptyList()
+        )
+        extraEntries.removeAll { it.title.equals(entry.title, ignoreCase = true) }
+        extraEntries += entry
+        saveExtra()
+        return entry
+    }
+
+    /** Human-readable summary of all categories. */
+    fun categorySummary(): String {
+        if (all().isEmpty()) return "هیچ موضوعی ثبت نشده است."
+        return all()
+            .groupBy { it.category }
+            .toSortedMap()
+            .map { (cat, list) -> "$cat: ${list.size} موضوع" }
+            .joinToString(" | ")
+    }
+
+    /** All topics in a category, sorted by title. */
+    fun topicsIn(category: String): List<KnowledgeEntry> =
+        topics(category).sortedBy { it.title }
+
     private fun saveExtra() {
         val arr = JSONArray()
         extraEntries.forEach { e ->
@@ -118,6 +153,13 @@ class KnowledgeRepository(context: Context) {
             .use { it.readText() }
         return loadJson(json)
     }
+
+    private fun loadExtraBase(context: Context): List<KnowledgeEntry> = runCatching {
+        val json = context.assets.open("knowledge_extra_topics.json")
+            .bufferedReader()
+            .use { it.readText() }
+        loadJson(json)
+    }.getOrDefault(emptyList())
 
     private fun loadJson(json: String): List<KnowledgeEntry> {
         val arr = JSONArray(json)
