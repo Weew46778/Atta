@@ -1,0 +1,182 @@
+[
+  {
+    "id": "essentialsx",
+    "name": "EssentialsX",
+    "category": "plugin",
+    "version": "2.22.0",
+    "url": "https://github.com/EssentialsX/Essentials",
+    "description": "دستورات پایه، خانه، اسپان، اقتصاد و teleport برای سرور. بسیار پرکاربرد.",
+    "source": "GitHub",
+    "downloadUrl": "https://github.com/EssentialsX/Essentials/releases/download/2.22.0/EssentialsX-2.22.0.jar"
+  },
+  {
+    "id": "luckperms",
+    "name": "LuckPerms",
+    "category": "plugin",
+    "version": "5.4",
+    "url": "https://luckperms.net/download",
+    "description": "مدیریت مجوز و گروهبندی پیشرفته کاربران.",
+    "source": "Official",
+    "downloadUrl": ""
+  },
+  {
+    "id": "worldedit",
+    "name": "WorldEdit",
+    "category": "plugin",
+    "version": "7.3.9",
+    "url": "https://enginehub.org/worldedit",
+    "description": "ویرایش سریع سازهها، کپی/پیست، جایگذاری بلاک.",
+    "source": "EngineHub",
+    "downloadUrl": ""
+  },
+  {
+    "id": "worldguard",
+    "name": "WorldGuard",
+    "category": "plugin",
+    "version": "7.0.12",
+    "url": "https://enginehub.org/worldguard",
+    "description": "محافظت مناطق و جلوگیری از خرابی و گریف.",
+    "source": "EngineHub",
+    "downloadUrl": ""
+  },
+  {
+    "id": "vault",
+    "name": "Vault",
+    "category": "plugin",
+    "version": "1.7",
+    "url": "https://github.com/MilkBowl/Vault",
+    "description": "پل اقتصاد بین پلاگینهای مختلف.",
+    "source": "GitHub",
+    "downloadUrl": "https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar"
+  },
+  {
+    "id": "fabricapi",
+    "name": "Fabric API",
+    "category": "mod",
+    "version": "0.116.0+1.21",
+    "url": "https://modrinth.com/mod/fabric-api",
+    "description": "پایه اکثر مادهای Fabric.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "sodium",
+    "name": "Sodium",
+    "category": "mod",
+    "version": "0.6.0",
+    "url": "https://modrinth.com/mod/sodium",
+    "description": "بهبود شدید کارایی و فریمریت کلاین.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "lithium",
+    "name": "Lithium",
+    "category": "mod",
+    "version": "0.14.0",
+    "url": "https://modrinth.com/mod/lithium",
+    "description": "بهینهسازی منطق سرور برای سرویسدهی بیشتر.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "jei",
+    "name": "JEI (Just Enough Items)",
+    "category": "mod",
+    "version": "19.7.0",
+    "url": "https://modrinth.com/mod/jei",
+    "description": "نمایش همه آیتمها و دستورهای ساخت.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "create",
+    "name": "Create",
+    "category": "mod",
+    "version": "6.0.0",
+    "url": "https://modrinth.com/mod/create",
+    "description": "مکانیک چرخدنده، تسمه و ماشینهای صنعتی.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "bettermc",
+    "name": "Better MC",
+    "category": "modpack",
+    "version": "1.21",
+    "url": "https://www.curseforge.com/minecraft/modpacks/better-mc",
+    "description": "مودپک معروف با انواع ماد بهینه و متعادل.",
+    "source": "CurseForge",
+    "downloadUrl": ""
+  },
+  {
+    "id": "atm9",
+    "name": "All the Mods 9",
+    "category": "modpack",
+    "version": "0.3.0",
+    "url": "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9",
+    "description": "مودپک بزرگ و پرمحتوا برای سختگیرها.",
+    "source": "CurseForge",
+    "downloadUrl": ""
+  },
+  {
+    "id": "complementary",
+    "name": "Complementary Shaders",
+    "category": "shader",
+    "version": "r5.4",
+    "url": "https://modrinth.com/shader/complementary-reimagined",
+    "description": "شیدر پرطرفدار، نوری زیبا و روان.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "bslshaders",
+    "name": "BSL Shaders",
+    "category": "shader",
+    "version": "8.4",
+    "url": "https://modrinth.com/shader/bsl-shaders",
+    "description": "شیدر کلاسیک با کیفیت بالا.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "sildurs",
+    "name": "Sildur's Vibrant Shaders",
+    "category": "shader",
+    "version": "1.62",
+    "url": "https://modrinth.com/shader/sildurs-vibrant-shaders",
+    "description": "شیدر با حالتهای مختلف و قابل تنظیم.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "faithful",
+    "name": "Faithful 32x",
+    "category": "texturepack",
+    "version": "1.21",
+    "url": "https://faithfulpack.net/download",
+    "description": "تکستچر وفادار به حالت اصلی با رزولوشن 32x.",
+    "source": "faithfulpack.net",
+    "downloadUrl": ""
+  },
+  {
+    "id": "barebones",
+    "name": "Bare Bones",
+    "category": "texturepack",
+    "version": "1.21",
+    "url": "https://modrinth.com/resourcepack/bare-bones",
+    "description": "تکستچر مینیمال و تمیز.",
+    "source": "Modrinth",
+    "downloadUrl": ""
+  },
+  {
+    "id": "vanillatweaks",
+    "name": "Vanilla Tweaks",
+    "category": "resourcepack",
+    "version": "1.21",
+    "url": "https://vanillatweaks.net",
+    "description": "مجموعه تغییرات ظریف و کاربردی.",
+    "source": "vanillatweaks.net",
+    "downloadUrl": ""
+  }
+]

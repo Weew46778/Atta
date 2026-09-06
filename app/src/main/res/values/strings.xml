@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MineAva — دستیار ماینکرافت</string>
+    <string name="assistant_name">آوا</string>
+    <string name="app_version">نسخه اولیه (MVP) 0.1.0</string>
+</resources>
