@@ -19,6 +19,7 @@ import java.util.Locale
 class TextToSpeechManager(private val context: Context) {
 
     private var tts: TextToSpeech? = null
+    private val voicePack = VoicePack(context)
     var ready: Boolean = false
         private set
     var persianVoiceAvailable: Boolean = false
@@ -98,7 +99,14 @@ class TextToSpeechManager(private val context: Context) {
     fun persianVoices(): List<Voice> =
         availableVoices().filter { it.locale.language.equals("fa", ignoreCase = true) }
 
+    /**
+     * When a bundled voice pack is installed and enabled, matching phrases are played
+     * directly from the embedded audio. Falls back to system TTS otherwise.
+     */
     fun speak(text: String, interrupt: Boolean = true) {
+        if (AppPrefs.useBundledVoice && voicePack.isAvailable() && voicePack.speak(text)) {
+            return
+        }
         val engine = tts ?: return
         if (!ready) return
         if (interrupt) engine.stop()
@@ -114,7 +122,16 @@ class TextToSpeechManager(private val context: Context) {
         tts?.stop()
     }
 
+    fun bundledVoiceStatus(): String {
+        if (!voicePack.isAvailable()) return "بستهٔ صوتی داخل اپ نصب نشده است."
+        return "صدای «${voicePack.voiceName()}» — ${voicePack.phraseCount()} فریز"
+    }
+
+    fun installVoicePack(uri: android.net.Uri): VoicePackInstaller.InstallResult =
+        VoicePackInstaller.install(context, uri)
+
     fun shutdown() {
+        voicePack.stop()
         tts?.stop()
         tts?.shutdown()
         tts = null

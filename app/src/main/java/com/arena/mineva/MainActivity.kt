@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
             }
         )
         root.addView(
+            Ui.button(this, "🛠  پنل حرفهای سرور", 0xFF2E70B8.toInt()) {
+                startActivity(Intent(this, ServerPanelActivity::class.java))
+            }
+        )
+        root.addView(
             Ui.button(this, "📦  مدیریت پلاگین/مود/پک", 0xFF1F8F8F.toInt()) {
                 startActivity(Intent(this, PackageManagerActivity::class.java))
             }

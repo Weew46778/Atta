@@ -78,6 +78,21 @@
    - دکمه نصب/بروزرسانی داده صوتی فارسی و دکمه ورود به تنظیمات TTS.
    - کنترل سرعت گفتار با SeekBar.
 
+7d. **صدای زن فارسی جاسازی/قابلنصب در اپ** (`assistant/VoicePack.kt`, `assistant/VoicePackInstaller.kt`, `VoiceSettingsActivity`)
+   - پشتیبانی از «بسته صوتی ZIP» شامل `voice_pack.json` + فایلهای WAV.
+   - نصب بسته از حافظه دستگاه، شمارش فریز، و پخش مستقیم از داخل اپ.
+   - تغییر صوت بین TTS سیستم و صدای داخل اپ.
+   - به دلیل لایسنس/حجم، خود بستهٔ صوتی در ریپو نیست؛ مسیر کامل نصب در UI باز است.
+
+7e. **سرور بدراک روی خود گوشی** (`server/OnDeviceServerManager.kt`, `server/OnDeviceServerProvisioner.kt`)
+   - پوشهٔ `filesDir/ondevice_server`، `server.properties`، `run.sh`.
+   - اجرای فرایند با `ProcessBuilder`، توقف، وضعیت PID و خواندن لاگ.
+   - نصب باینری از ZIP کاربر (`OnDeviceServerProvisioner.installZip`).
+   - اجرای موفق به معماری گوشی و باینری ARM سرور وابسته است؛ در صورت ناسازگاری خطای دقیق گزارش میشود.
+
+8b. **پنل حرفهای سرور** (`ServerPanelActivity`)
+   - وضعیت، شروع/توقف، کنسول/لاگ، منابع، بکاپ، لینک پکیج و مدیریت قبلی در یک صفحه.
+   - برای VPS از SSH/tmux؛ برای گوشی از مدیر on-device استفاده میکند.
 7c. **ساخت/ارسال دستور بدراک از پنل اورلای** (`server/BedrockCommandBuilder`, `Service/OverlayService`)
    - تولید دستورهای سازگار با بدراک (`give`/انچنت/تخم اسپان).
    - کپی در کلیپبورد.

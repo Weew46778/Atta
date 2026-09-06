@@ -41,6 +41,10 @@ object AppPrefs {
         get() = get().getFloat("speech_rate", 0.92f)
         set(value) = get().edit().putFloat("speech_rate", value).apply()
 
+    var useBundledVoice: Boolean
+        get() = get().getBoolean("use_bundled_voice", false)
+        set(value) = get().edit().putBoolean("use_bundled_voice", value).apply()
+
     var homeServerTarget: String
         get() = get().getString("server_target", "") ?: ""
         set(value) = get().edit().putString("server_target", value).apply()

@@ -4,8 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
-import android.speech.tts.TextToSpeech
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +12,9 @@ import com.arena.mineva.assistant.TextToSpeechManager
 class VoiceSettingsActivity : AppCompatActivity() {
 
     private var manager: TextToSpeechManager? = null
+    private lateinit var bundledButton: android.widget.TextView
+    private lateinit var bundledToggle: android.widget.TextView
+    private lateinit var bundledStatus: android.widget.TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,18 @@ class VoiceSettingsActivity : AppCompatActivity() {
                 openSystemVoiceDataInstall()
             }
         )
+        bundledStatus = Ui.text(this, "", 13f, 0xFF9FB2C2.toInt())
+        root.addView(bundledStatus)
+        bundledButton = Ui.button(this, "📦 وارد کردن بستهٔ صوتی زن فارسی (ZIP)", 0xFF35D07F.toInt(), 48f) {
+            pickVoicePack()
+        }
+        root.addView(bundledButton)
+        bundledToggle = Ui.button(this, "🎤 استفاده از صدای داخل اپ: OFF", 0xFFC97C22.toInt(), 48f) {
+            AppPrefs.useBundledVoice = !AppPrefs.useBundledVoice
+            refreshBundledState()
+            manager?.speak("حالت صدای داخل اپ " + if (AppPrefs.useBundledVoice) "فعال شد." else "غیرفعال شد.")
+        }
+        root.addView(bundledToggle)
         root.addView(
             Ui.button(this, "⚙️ موتور متن به گفتار (تنظیمات سیستم)", 0xFFC97C22.toInt(), 48f) {
                 try {
@@ -67,8 +80,40 @@ class VoiceSettingsActivity : AppCompatActivity() {
         manager = m
         m.init {
             m.speak("تنظیمات صوتی آماده است.")
-            runOnUiThread { renderVoices(list) }
+            runOnUiThread {
+                renderVoices(list)
+                refreshBundledState()
+            }
         }
+    }
+
+    private fun refreshBundledState() {
+        val exists = manager?.bundledVoiceStatus() ?: ""
+        bundledStatus.text = if (AppPrefs.useBundledVoice) "صدای داخل اپ فعال: $exists" else "$exists"
+        bundledToggle.text = if (AppPrefs.useBundledVoice) "🎤 صدای داخل اپ: ON" else "🎤 صدای داخل اپ: OFF"
+    }
+
+    private fun pickVoicePack() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+        }
+        startActivityForResult(intent, 9001)
+    }
+
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != 9001) return
+        val uri = data?.data ?: return
+        val result = manager?.installVoicePack(uri) ?: return
+        ttsMessage(result.detail)
+        refreshBundledState()
+    }
+
+    private fun ttsMessage(text: String) {
+        manager?.speak(text)
+        bundledStatus.text = text
     }
 
     private fun openSystemVoiceDataInstall() {

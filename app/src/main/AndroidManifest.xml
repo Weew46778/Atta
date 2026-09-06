@@ -60,6 +60,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".ServerPanelActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ServerWizardActivity"
             android:exported="false" />
 

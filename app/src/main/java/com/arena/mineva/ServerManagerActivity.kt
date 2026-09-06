@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.ServerConfig
 import com.arena.mineva.server.ServerRecipeGenerator
+import com.arena.mineva.server.OnDeviceServerManager
+import com.arena.mineva.server.OnDeviceServerProvisioner
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.SshClient
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +23,10 @@ import kotlinx.coroutines.withContext
 class ServerManagerActivity : AppCompatActivity() {
 
     private val tts by lazy { TextToSpeechManager(this) }
+    private val onDevice = OnDeviceServerManager(this)
     private lateinit var remotePassword: EditText
     private lateinit var remoteKeyPass: EditText
+    private lateinit var output: LinearLayout
     private lateinit var consoleInput: EditText
     private lateinit var consoleOutput: LinearLayout
 
@@ -56,7 +60,7 @@ class ServerManagerActivity : AppCompatActivity() {
                 } ?: tts.speak("هنوز سروری نساختهاند.")
             }
         )
-        val output = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        output = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         if (current?.target == ServerTarget.VPS && current.host.isNotBlank()) {
             remotePassword = EditText(this).apply {
                 layoutParams = LinearLayout.LayoutParams(
@@ -118,13 +122,39 @@ class ServerManagerActivity : AppCompatActivity() {
             root.addView(Ui.text(this, "اگر کلید SSH ذخیره شده باشد، این دستورها مستقیم کار میکنند. برای ریاستارت با رمز عبور، از ویزارد ساخت سرور دوباره استفاده کن.", 12f, 0xFF9FB2C2.toInt()))
         } else {
             root.addView(
-                Ui.button(this, "▶ شروع سرور (پیشخوان)", 0xFF35D07F.toInt(), 48f) {
-                    tts.speak("اجرای مستقیم سرور روی گوشی در نسخه بعدی به این دکمه متصل میشود.")
+                Ui.button(this, "▶ شروع سرور روی گوشی", 0xFF35D07F.toInt(), 48f) {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val r = onDevice.start(current ?: ServerConfig(target = ServerTarget.LOCAL))
+                        withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFF35D07F.toInt())) }
+                        tts.speak("سرور روی گوشی روشن شد.")
+                    }
                 }
             )
             root.addView(
-                Ui.button(this, "⏹ توقف سرور", 0xFFFF5A5A.toInt(), 48f) {
-                    tts.speak("در این نسخه سرور بهصورت پیشخوان اجرا نمیشود.")
+                Ui.button(this, "⏹ توقف سرور روی گوشی", 0xFFFF5A5A.toInt(), 48f) {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val r = onDevice.stop()
+                        withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFC97C22.toInt())) }
+                        tts.speak("سرور روی گوشی متوقف شد.")
+                    }
+                }
+            )
+            root.addView(
+                Ui.button(this, "📜 لاگ سرور روی گوشی", 0xFF1F8F8F.toInt(), 48f) {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val r = onDevice.logs()
+                        withContext(Dispatchers.Main) { output.addView(Ui.text(this@ServerManagerActivity, r, 12f, 0xFFD8E3EC.toInt())) }
+                        tts.speak("لاگ سرور آماده است.")
+                    }
+                }
+            )
+            root.addView(
+                Ui.button(this, "📂 نصب باینری سرور (ZIP)", 0xFFC97C22.toInt(), 48f) {
+                    val intent = android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(android.content.Intent.CATEGORY_OPENABLE)
+                        type = "application/zip"
+                    }
+                    startActivityForResult(intent, 8002)
                 }
             )
         }
@@ -239,6 +269,20 @@ class ServerManagerActivity : AppCompatActivity() {
     }
 
     private fun shQuote(value: String): String = "'" + value.replace("'", "'\\''") + "'"
+
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != 8002) return
+        val uri = data?.data ?: return
+        lifecycleScope.launch(Dispatchers.IO) {
+            val result = OnDeviceServerProvisioner.installZip(this@ServerManagerActivity, uri)
+            withContext(Dispatchers.Main) {
+                output.addView(Ui.text(this@ServerManagerActivity, result.detail, 13f, if (result.success) 0xFF35D07F.toInt() else 0xFFFF5A5A.toInt()))
+                tts.speak(if (result.success) "باینری سرور روی گوشی نصب شد." else "نصب باینری ناموفق بود.")
+            }
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
