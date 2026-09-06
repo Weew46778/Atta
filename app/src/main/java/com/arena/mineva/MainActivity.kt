@@ -85,6 +85,11 @@ class MainActivity : AppCompatActivity() {
             }
         )
         root.addView(
+            Ui.button(this, "🌐  لاگ و کنسول ابری سرور", 0xFF2E9BFF.toInt()) {
+                startActivity(Intent(this, CloudLogActivity::class.java))
+            }
+        )
+        root.addView(
             Ui.button(this, "📦  مدیریت پلاگین/مود/پک", 0xFF1F8F8F.toInt()) {
                 startActivity(Intent(this, PackageManagerActivity::class.java))
             }

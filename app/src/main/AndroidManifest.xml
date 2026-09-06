@@ -64,6 +64,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".CloudLogActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ServerWizardActivity"
             android:exported="false" />
 

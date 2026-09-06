@@ -44,6 +44,11 @@ class VoicePack(context: Context) {
         return manifest?.optJSONObject("phrases")?.length() ?: 0
     }
 
+    fun phrases(): List<String> {
+        loadOnce()
+        return manifest?.optJSONObject("phrases")?.keys()?.asSequence()?.toList() ?: emptyList()
+    }
+
     /**
      * Speaks the best-matching phrase. Returns true when the bundled audio was played.
      */
@@ -51,28 +56,26 @@ class VoicePack(context: Context) {
         loadOnce()
         val m = manifest ?: return false
         val phrases = m.optJSONObject("phrases") ?: return false
-        val normalized = text.trim().lowercase()
-        var key: String? = null
+        val normalized = normalize(text)
         val keys = phrases.keys().asSequence().toList()
 
         // 1) exact match
-        key = keys.firstOrNull { it.lowercase() == normalized }
+        var key = keys.firstOrNull { normalize(it) == normalized }
         // 2) prefix / phrase appears in text
-        if (key == null) {
-            key = keys.firstOrNull { normalized.contains(it.lowercase()) }
-        }
+        if (key == null) key = keys.firstOrNull { normalized.contains(normalize(it)) }
         // 3) fallback to the first available phrase
         if (key == null) key = keys.firstOrNull()
 
         val fileName = key?.let { phrases.optString(it) } ?: return false
         if (fileName.isBlank()) return false
-        val file = File(audioDir, fileName)
+        val base = fileName.substringAfterLast('/')
+        val file = File(audioDir, base)
         if (!file.exists()) return false
 
         stop()
         return runCatching {
             player = MediaPlayer.create(context, Uri.fromFile(file))?.apply { start() }
-            true
+            if (player == null) false else true
         }.getOrDefault(false)
     }
 
@@ -81,6 +84,13 @@ class VoicePack(context: Context) {
         runCatching { player?.release() }
         player = null
     }
+
+    private fun normalize(value: String): String =
+        value.trim()
+            .lowercase()
+            .replace(Regex("[،.!؟?«»'\"\\-_:]"), " ")
+            .replace(Regex("\\s+"), " ")
+            .trim()
 
     private fun loadOnce() {
         if (manifest != null) return

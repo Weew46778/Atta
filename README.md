@@ -22,8 +22,23 @@ MVP اول یک اپ اندروید بومی (Kotlin + Android Views) برای:
 - **صدای زن فارسی داخل اپ (Voice Pack ZIP)**: نصب بستهٔ `voice_pack.json` + WAV و پخش مستقیم از اپ
 - **سرور بدراک روی گوشی**: مدیر on-device (شروع/توقف/لاگ/وضعیت) + نصب باینری ZIP
 - **پنل حرفهای سرور** (`ServerPanelActivity`): وضعیت، کنسول، منابع، بکاپ، پکیج در یک صفحه
+- **ساخت بستهٔ نمونهٔ صوتی داخل اپ**: `VoicePackSample` + خروجی ZIP به Download (برای تست بدون فایل لایسنسدار)
+- **لاگ و کنسول ابری سرور** (`CloudLogActivity`): systemd/journal/tmux/file، فیلتر، کپی، ذخیره، بهروزرسانی خودکار
+- **ابزار ساخت/تست**: `tools/static_check.py` + `tools/build_apk.sh` + GitHub Actions (`android-debug-build`)
 
 ## Build
+
+روش پیشنهادی، از ریشهٔ ریپو:
+
+```bash
+bash tools/build_apk.sh                 # debug
+BUILD_TYPE=release bash tools/build_apk.sh   # release (unsigned)
+```
+
+راهنمای کامل در [`docs/BUILD.md`](docs/BUILD.md) و راهنمای بستهٔ صوتی در
+[`docs/VOICE_PACK_GUIDE.md`](docs/VOICE_PACK_GUIDE.md).
+
+اگر Gradle wrapper نداری:
 
 1. با Android Studio (Hedgehog یا جدیدتر) پروژه را باز کنید.
 2. اگر فایل `gradle/wrapper` در ریپو نیست، اجازه دهید Android Studio خودش Gradle Wrapper را بسازد.

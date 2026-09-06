@@ -107,6 +107,11 @@ class ServerPanelActivity : AppCompatActivity() {
             }
         )
         root.addView(
+            Ui.button(this, "🌐 لاگ و کنسول ابری", 0xFF2E9BFF.toInt(), 46f) {
+                startActivity(Intent(this, CloudLogActivity::class.java))
+            }
+        )
+        root.addView(
             Ui.button(this, "📦 مدیریت پکیج‌ها", 0xFF1F8F8F.toInt(), 46f) {
                 startActivity(Intent(this, PackageManagerActivity::class.java))
             }

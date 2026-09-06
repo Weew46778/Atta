@@ -104,6 +104,24 @@
    - پاکسازی کش.
    - تست همهٔ اجزا + گزارش متنی + کپی در کلیپبورد.
 
+
+7f. **بستهٔ نمونهٔ صوتی داخل اپ** (`assistant/VoicePackSample.kt`, `tools/make_sample_voice_pack.py`)
+   - ساخت «بستهٔ نمونه» با تون‌های WAV داخل خود اپ و خروجی ZIP به Download/MineAva.
+   - راهنمای ساخت بستهٔ صوتی واقعی در `docs/VOICE_PACK_GUIDE.md`.
+   - فایل `artifacts/voice-pack-ava-sample.zip` برای تست مسیر نصب/پخش بدون فایل لایسنس‌دار.
+
+8c. **لاگ و کنسول ابری سرور** (`CloudLogActivity`)
+   - برای VPS: systemd journal، لاگ run.sh، خروجی tmux، وضعیت/مصرف.
+   - برای Local: لاگ و وضعیت on-device.
+   - فیلتر متن، تعداد خط، کپی، ذخیره در storage، به‌روزرسانی خودکار هر ۳ ثانیه.
+   - از منوی اصلی و پنل حرفه‌ای سرور باز می‌شود.
+
+9. **ابزار ساخت و تست** (`tools/`, `.github/workflows/android-debug-build.yml`)
+   - `tools/static_check.py`: تعادل آکولاد/پرانتز Kotlin، اعتبار JSON، ثبت Activity در Manifest.
+   - `tools/build_apk.sh`: ساخت debug/release روی دستگاه با JDK17 + Android SDK.
+   - `docs/BUILD.md`: راهنمای نصب SDK و ساخت APK محلی.
+   - GitHub Actions: نصب خودکار JDK/Gradle/SDK، چک سلامت، `assembleDebug`، آپلود `app-debug.apk`.
+
 ## چیزهایی که عمداً به «پیشخوان/بعدی» گذاشتم
 
 - **اجرای واقعی سرور روی خود گوشی**: نیاز به Bedrock Server runtime داخل اپ دارد.

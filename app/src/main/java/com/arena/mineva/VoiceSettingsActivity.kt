@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.arena.mineva.assistant.TextToSpeechManager
+import com.arena.mineva.assistant.VoicePackSample
 
 class VoiceSettingsActivity : AppCompatActivity() {
 
@@ -33,6 +34,19 @@ class VoiceSettingsActivity : AppCompatActivity() {
             pickVoicePack()
         }
         root.addView(bundledButton)
+        root.addView(
+            Ui.button(this, "🎁 ساخت بستهٔ نمونهٔ داخل اپ", 0xFF7D4DB1.toInt(), 48f) {
+                val r = VoicePackSample.install(this)
+                ttsMessage(r.detail)
+                refreshBundledState()
+            }
+        )
+        root.addView(
+            Ui.button(this, "📤 خروجی ZIP نمونه (دانلود)", 0xFF2E9BFF.toInt(), 48f) {
+                val zip = VoicePackSample.exportZip(this)
+                ttsMessage(if (zip != null) "بستهٔ نمونه ساخته شد. مسیر: ${zip.absolutePath}" else "ساخت ZIP نمونه ناموفق بود.")
+            }
+        )
         bundledToggle = Ui.button(this, "🎤 استفاده از صدای داخل اپ: OFF", 0xFFC97C22.toInt(), 48f) {
             AppPrefs.useBundledVoice = !AppPrefs.useBundledVoice
             refreshBundledState()
