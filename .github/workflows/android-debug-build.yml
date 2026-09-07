@@ -54,8 +54,9 @@ jobs:
               gradle assembleDebug --no-daemon --stacktrace
             fi
           } 2>&1 | tee /tmp/build.log
-          echo "== exit=${PIPESTATUS[0]} =="
-          exit "${PIPESTATUS[0]}"
+          BUILD_STATUS=${PIPESTATUS[0]}
+          echo "== exit=$BUILD_STATUS =="
+          exit $BUILD_STATUS
 
       - name: Show build outputs
         if: always()

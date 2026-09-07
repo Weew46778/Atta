@@ -112,7 +112,7 @@ object Ui {
      */
     fun scrollable(context: Context, content: View): ScrollView {
         val scroll = ScrollView(context)
-        val lp = ScrollView.LayoutParams(
+        val lp = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
