@@ -237,7 +237,7 @@ object TextureGenerator {
         "prismarine" -> prism(false)
         "dark_prismarine" -> prism(true)
         "sea_lantern" -> seaLantern
-        else -> stone
+        else -> coloredFamily(id) ?: woodFamily(id) ?: stoneFamily(id) ?: stone
     }
 
     fun allIds(): Array<String> = arrayOf(
@@ -250,7 +250,47 @@ object TextureGenerator {
         "lapis_ore", "copper_ore", "gold_block", "iron_block", "diamond_block", "emerald_block",
         "redstone_block", "lapis_block", "copper_block", "netherite_block", "sandstone",
         "red_sandstone", "mossy_cobblestone", "moss_block", "mud", "packed_mud", "basalt_side",
-        "blackstone", "gilded_blackstone", "prismarine", "dark_prismarine", "sea_lantern"
+        "blackstone", "gilded_blackstone", "prismarine", "dark_prismarine", "sea_lantern",
+        // batch 3 — wood variants
+        "spruce_planks", "birch_planks", "jungle_planks", "acacia_planks", "dark_oak_planks",
+        "mangrove_planks", "cherry_planks", "crimson_planks", "warped_planks",
+        "spruce_log_side", "birch_log_side", "jungle_log_side", "acacia_log_side", "dark_oak_log_side",
+        "mangrove_log_side", "cherry_log_side", "crimson_log_side", "warped_log_side",
+        "spruce_log_top", "birch_log_top", "jungle_log_top", "acacia_log_top", "dark_oak_log_top",
+        "mangrove_log_top", "cherry_log_top", "crimson_log_top", "warped_log_top",
+        "leaves_spruce", "leaves_birch", "leaves_jungle", "leaves_acacia", "leaves_dark_oak",
+        "leaves_mangrove", "leaves_cherry", "leaves_azalea", "leaves_flowering_azalea",
+        // batch 3 — all 16 colours (wool / concrete / powder / terracotta / glazed)
+        "wool_white", "wool_orange", "wool_magenta", "wool_light_blue", "wool_yellow", "wool_lime",
+        "wool_pink", "wool_gray", "wool_light_gray", "wool_cyan", "wool_purple", "wool_blue",
+        "wool_brown", "wool_green", "wool_red", "wool_black",
+        "concrete_white", "concrete_orange", "concrete_magenta", "concrete_light_blue", "concrete_yellow",
+        "concrete_lime", "concrete_pink", "concrete_gray", "concrete_light_gray", "concrete_cyan",
+        "concrete_purple", "concrete_blue", "concrete_brown", "concrete_green", "concrete_red", "concrete_black",
+        "concrete_powder_white", "concrete_powder_orange", "concrete_powder_magenta", "concrete_powder_light_blue",
+        "concrete_powder_yellow", "concrete_powder_lime", "concrete_powder_pink", "concrete_powder_gray",
+        "concrete_powder_light_gray", "concrete_powder_cyan", "concrete_powder_purple", "concrete_powder_blue",
+        "concrete_powder_brown", "concrete_powder_green", "concrete_powder_red", "concrete_powder_black",
+        "terracotta_white", "terracotta_orange", "terracotta_magenta", "terracotta_light_blue",
+        "terracotta_yellow", "terracotta_lime", "terracotta_pink", "terracotta_gray", "terracotta_light_gray",
+        "terracotta_cyan", "terracotta_purple", "terracotta_blue", "terracotta_brown", "terracotta_green",
+        "terracotta_red", "terracotta_black",
+        "glazed_terracotta_white", "glazed_terracotta_orange", "glazed_terracotta_magenta",
+        "glazed_terracotta_light_blue", "glazed_terracotta_yellow", "glazed_terracotta_lime",
+        "glazed_terracotta_pink", "glazed_terracotta_gray", "glazed_terracotta_light_gray",
+        "glazed_terracotta_cyan", "glazed_terracotta_purple", "glazed_terracotta_blue",
+        "glazed_terracotta_brown", "glazed_terracotta_green", "glazed_terracotta_red", "glazed_terracotta_black",
+        // batch 3 — stone family
+        "granite", "polished_granite", "diorite", "polished_diorite", "andesite", "polished_andesite",
+        "calcite", "smooth_stone", "stone_bricks", "cracked_stone_bricks", "mossy_stone_bricks",
+        "chiseled_stone_bricks", "deepslate_bricks", "cracked_deepslate_bricks", "chiseled_deepslate",
+        "polished_deepslate", "smooth_sandstone", "cut_sandstone", "chiseled_sandstone", "end_stone_bricks",
+        // batch 3 — nether & end
+        "soul_sand", "soul_soil", "crimson_nylium", "warped_nylium", "nether_wart_block",
+        "warped_wart_block", "shroomlight", "nether_gold_ore", "nether_quartz_ore", "ancient_debris",
+        // batch 3 — misc
+        "purpur_block", "purpur_pillar", "bookshelf", "hay_block", "bone_block", "honey_block",
+        "dried_kelp_block", "slime_block"
     )
 
     fun title(id: String): String = when (id) {
@@ -726,6 +766,362 @@ object TextureGenerator {
         if (grid) 1.0f else f * 0.4f
     }
 
+    // ---- batch 3: expanded palette (wood variants, colors, stone, nether & end) ----
+    private val COLOR16 = listOf(
+        "white" to Triple(236, 236, 238), "orange" to Triple(240, 118, 19),
+        "magenta" to Triple(189, 68, 179), "light_blue" to Triple(58, 175, 217),
+        "yellow" to Triple(248, 197, 39), "lime" to Triple(112, 185, 25),
+        "pink" to Triple(237, 141, 172), "gray" to Triple(62, 68, 71),
+        "light_gray" to Triple(142, 142, 134), "cyan" to Triple(21, 137, 145),
+        "purple" to Triple(121, 42, 172), "blue" to Triple(53, 57, 157),
+        "brown" to Triple(114, 71, 40), "green" to Triple(84, 109, 27),
+        "red" to Triple(160, 38, 48), "black" to Triple(8, 10, 15)
+    )
+
+    private val WOOD = mapOf(
+        "spruce" to Triple(82, 94, 64), "birch" to Triple(216, 196, 152),
+        "jungle" to Triple(168, 124, 82), "acacia" to Triple(134, 78, 41),
+        "dark_oak" to Triple(78, 52, 34), "mangrove" to Triple(104, 52, 32),
+        "cherry" to Triple(214, 128, 122), "crimson" to Triple(118, 46, 46),
+        "warped" to Triple(54, 92, 102)
+    )
+
+    private val LEAF = mapOf(
+        "spruce" to Triple(58, 92, 52), "birch" to Triple(120, 160, 74),
+        "jungle" to Triple(58, 120, 44), "acacia" to Triple(176, 178, 74),
+        "dark_oak" to Triple(60, 90, 44), "mangrove" to Triple(46, 78, 38),
+        "cherry" to Triple(214, 120, 132), "azalea" to Triple(70, 120, 56),
+        "flowering_azalea" to Triple(98, 120, 80)
+    )
+
+    private fun plankC(br: Int, bg: Int, bb: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val boards = 4
+        val board = (y / (s / boards.toFloat())).toInt()
+        val gap = abs((y / (s / boards.toFloat())) - (board + 0.5f)) * 2f
+        val between = if (gap > 0.86f) 1f else 0f
+        val grain = n.fbm(x / s * 34f, y / s * 6f + board, 3, 2f, 0.5f)
+        val v = 0.5f + grain * 0.18f - between * 0.35f
+        val shade = if (board % 2 == 0) 1f else 0.9f
+        rgb[off] = pack((br * (0.72f + v * 0.55f) * shade + r() * 12).toInt(),
+            (bg * (0.72f + v * 0.55f) * shade + r() * 10).toInt(),
+            (bb * (0.72f + v * 0.55f) * shade + r() * 8).toInt(), 255)
+        grain * 0.7f + between * 1.4f
+    }
+
+    private fun logSideC(br: Int, bg: Int, bb: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val groove = n.fbm(y / s * 9f, x / s * 1.6f, 3, 2f, 0.5f)
+        val lines = sin(y / s * Math.PI.toFloat() * 10f + groove * 3f) * 0.5f + 0.5f
+        val grain = n.fbm(x / s * 40f, y / s * 4f, 3, 2f, 0.5f)
+        val v = 0.5f + lines * 0.2f + grain * 0.14f
+        rgb[off] = pack((br * (0.66f + v * 0.6f) + r() * 14).toInt(),
+            (bg * (0.66f + v * 0.6f) + r() * 12).toInt(),
+            (bb * (0.66f + v * 0.6f) + r() * 10).toInt(), 255)
+        lines * 1.1f + grain * 0.3f
+    }
+
+    private fun logTopC(br: Int, bg: Int, bb: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val ix = x.toFloat() / s; val iy = y.toFloat() / s
+        val cx = 0.5f + n.fbm(ix * 3f, iy * 3f, 2, 2f, 0.5f) * 0.08f
+        val cy = 0.5f + n.fbm(ix * 3f + 30f, iy * 3f + 30f, 2, 2f, 0.5f) * 0.08f
+        val d = hypot((ix - cx).toDouble(), (iy - cy).toDouble()).toFloat()
+        val ring = 0.5f + 0.5f * sin(d * Math.PI.toFloat() * 26f)
+        val v = 0.45f + ring * 0.3f + n.fbm(ix * 46f, iy * 46f, 2, 2f, 0.5f) * 0.12f
+        rgb[off] = pack((br * (0.7f + v * 0.5f) + r() * 14).toInt(),
+            (bg * (0.7f + v * 0.5f) + r() * 12).toInt(),
+            (bb * (0.7f + v * 0.5f) + r() * 10).toInt(), 255)
+        ring * 1.1f + 0.2f
+    }
+
+    private fun leavesC(br: Int, bg: Int, bb: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val blades = n.fbm(x / s * 24f, y / s * 24f, 4, 2f, 0.5f)
+        val hole = n.ridged(x / s * 12f, y / s * 12f, 2, 2f, 0.6f)
+        val v = 0.5f + blades * 0.2f
+        var a = 235f + r() * 20f
+        if (hole > 0.78f) a = 60f
+        rgb[off] = pack((br * (0.8f + v * 0.3f)).toInt(),
+            (bg * (0.8f + v * 0.3f)).toInt(),
+            (bb * (0.8f + v * 0.3f)).toInt(), a.toInt())
+        blades * 0.9f + hole * 0.3f
+    }
+
+    private fun concreteC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, rn, rgb, off ->
+        val f = n.fbm(x / s * 20f, y / s * 20f, 3, 2f, 0.5f)
+        val pores = n.ridged(x / s * 34f, y / s * 34f, 2, 2f, 0.6f)
+        val v = 0.5f + f * 0.12f - pores * 0.12f
+        rgb[off] = pack((r * (0.82f + v * 0.32f) + rn() * 4).toInt(),
+            (g * (0.82f + v * 0.32f) + rn() * 4).toInt(),
+            (b * (0.82f + v * 0.32f) + rn() * 4).toInt(), 255)
+        pores * 0.5f + f * 0.25f
+    }
+
+    private fun concretePowderC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, rn, rgb, off ->
+        val grain = n.ridged(x / s * 40f, y / s * 40f, 3, 2f, 0.6f)
+        val f = n.fbm(x / s * 20f, y / s * 20f, 3, 2f, 0.5f)
+        val v = 0.5f + f * 0.1f + (grain - 0.5f) * 0.4f
+        rgb[off] = pack((r * (0.8f + v * 0.34f) + rn() * 6).toInt(),
+            (g * (0.8f + v * 0.34f) + rn() * 6).toInt(),
+            (b * (0.8f + v * 0.34f) + rn() * 5).toInt(), 255)
+        grain * 0.9f + f * 0.2f
+    }
+
+    private fun terracottaC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, rn, rgb, off ->
+        val f = n.fbm(x / s * 8f, y / s * 8f, 3, 2f, 0.5f)
+        val band = sin(y / s * Math.PI.toFloat() * 8f + f * 2f) * 0.5f + 0.5f
+        val v = 0.5f + f * 0.1f + band * 0.08f
+        rgb[off] = pack((r * (0.86f + v * 0.3f) + rn() * 5).toInt(),
+            (g * (0.86f + v * 0.3f) + rn() * 5).toInt(),
+            (b * (0.86f + v * 0.3f) + rn() * 5).toInt(), 255)
+        f * 0.5f + band * 0.4f
+    }
+
+    private fun glazedC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, rn, rgb, off ->
+        val cell = (Math.floor(x / (s / 4f).toDouble()).toInt() % 2 == Math.floor(y / (s / 4f).toDouble()).toInt() % 2)
+        val seam = (x % (s / 4f) < s / 28f || y % (s / 4f) < s / 28f)
+        val f = n.fbm(x / s * 14f, y / s * 14f, 2, 2f, 0.5f)
+        val v = 0.5f + f * 0.12f + (if (cell) 0.1f else 0f)
+        val lit = if (seam) 1.25f else 1f
+        rgb[off] = pack((r * (0.8f + v * 0.3f) * lit + rn() * 4).toInt().coerceIn(0, 255),
+            (g * (0.8f + v * 0.3f) * lit + rn() * 4).toInt().coerceIn(0, 255),
+            (b * (0.8f + v * 0.3f) * lit + rn() * 4).toInt().coerceIn(0, 255), 255)
+        (if (cell) 0.5f else 0.9f) + (if (seam) 1.6f else 0f)
+    }
+
+    private fun speckledStone(br: Int, bg: Int, bb: Int, ar: Int, ag: Int, ab: Int): PixelGen =
+        PixelGen { x, y, s, n, r, rgb, off ->
+            val baseF = n.fbm(x / s * 9f, y / s * 9f, 4, 2f, 0.55f)
+            val speck = n.ridged(x / s * 34f, y / s * 34f, 3, 2f, 0.6f)
+            val accent = if (speck > 0.62f) 1f else 0f
+            val v = 0.5f + baseF * 0.16f + accent * 0.1f
+            rgb[off] = pack((br * (0.8f + v * 0.4f) + ar * accent * 0.3f + r() * 6).toInt(),
+                (bg * (0.8f + v * 0.4f) + ag * accent * 0.3f + r() * 6).toInt(),
+                (bb * (0.8f + v * 0.4f) + ab * accent * 0.3f + r() * 5).toInt(), 255)
+            baseF * 0.7f + accent * 0.9f
+        }
+
+    private fun polishedC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, rn, rgb, off ->
+        val f = n.fbm(x / s * 12f, y / s * 12f, 3, 2f, 0.5f)
+        val sheen = sin((x + y.toFloat()) / s * Math.PI.toFloat() * 4f) * 0.08f
+        val v = 0.5f + f * 0.08f + sheen
+        rgb[off] = pack((r * (0.86f + v * 0.26f) + rn() * 4).toInt(),
+            (g * (0.86f + v * 0.26f) + rn() * 4).toInt(),
+            (b * (0.86f + v * 0.26f) + rn() * 4).toInt(), 255)
+        f * 0.4f + sheen * 0.7f
+    }
+
+    private fun stoneBricksC(r: Int, g: Int, b: Int, mossy: Boolean, cracked: Boolean): PixelGen =
+        PixelGen { x, y, s, n, rn, rgb, off ->
+            val rows = 4; val bw = s / 2f
+            val row = (y / (s / rows.toFloat())).toInt()
+            val offset = if (row % 2 == 0) 0f else bw / 2f
+            val bx = (x + offset) % bw
+            val mortar = if (bx < s / 24f || bx > bw - s / 24f || (y % (s / rows.toFloat())) < s / 24f) 1f else 0f
+            val f = n.fbm(x / s * 14f, y / s * 14f + row, 3, 2f, 0.5f)
+            val v = 0.5f + f * 0.14f - mortar * 0.5f
+            val crack = if (cracked && n.ridged(x / s * 12f, y / s * 12f, 2, 2f, 0.7f) > 0.72f) 1f else 0f
+            val m = if (mossy && n.ridged(x / s * 14f, y / s * 14f, 2, 2f, 0.6f) > 0.6f) 1f else 0f
+            rgb[off] = pack((r * (0.8f + v * 0.4f) * (1 - m) + m * 70 + crack * 20 + rn() * 6).toInt(),
+                (g * (0.8f + v * 0.4f) * (1 - m) + m * 110 + crack * 18 + rn() * 6).toInt(),
+                (b * (0.8f + v * 0.4f) * (1 - m) + m * 58 + crack * 16 + rn() * 5).toInt(), 255)
+            f * 0.6f + mortar * 1.7f + crack * 1.5f + m * 0.7f
+        }
+
+    private fun soulSandC(dark: Boolean): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val grain = n.ridged(x / s * 16f, y / s * 16f, 3, 2f, 0.6f)
+        val f = n.fbm(x / s * 30f, y / s * 30f, 3, 2f, 0.5f)
+        val v = 0.5f + grain * 0.14f + f * 0.1f
+        val base = if (dark) 0.62f else 0.72f
+        rgb[off] = pack(((96 + v * 40 + r() * 8) * base).toInt(),
+            ((66 + v * 28 + r() * 7) * base).toInt(),
+            ((50 + v * 20 + r() * 6) * base).toInt(), 255)
+        grain * 0.9f + f * 0.2f
+    }
+
+    private fun nyliumC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val blade = n.fbm(x / s * 22f, y / s * 22f, 4, 2f, 0.5f)
+        val v = 0.5f + blade * 0.22f
+        rgb[off] = pack((r * (0.82f + v * 0.3f) + r() * 8).toInt(),
+            (g * (0.82f + v * 0.3f) + r() * 8).toInt(),
+            (b * (0.82f + v * 0.3f) + r() * 8).toInt(), 255)
+        blade * 0.9f
+    }
+
+    private fun wartBlockC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val bump = n.ridged(x / s * 16f, y / s * 16f, 3, 2f, 0.6f)
+        val f = n.fbm(x / s * 24f, y / s * 24f, 2, 2f, 0.5f)
+        val v = 0.5f + bump * 0.22f + f * 0.1f
+        rgb[off] = pack((r * (0.8f + v * 0.4f) + r() * 6).toInt(),
+            (g * (0.8f + v * 0.4f) + r() * 6).toInt(),
+            (b * (0.8f + v * 0.4f) + r() * 6).toInt(), 255)
+        bump * 1.4f + f * 0.2f
+    }
+
+    private val shroomlight = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 8f, y / s * 8f, 3, 2f, 0.5f)
+        val v = 0.5f + f * 0.12f
+        rgb[off] = pack((224 + v * 26 + r() * 6).toInt(), (188 + v * 30 + r() * 6).toInt(),
+            (132 + v * 30 + r() * 6).toInt(), 255)
+        f * 0.5f
+    }
+
+    private fun purpurC(rr: Int, rg: Int, rb: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val chip = n.fbm(x / s * 9f, y / s * 9f, 3, 2f, 0.6f)
+        val v = 0.5f + chip * 0.2f
+        rgb[off] = pack((rr + v * 40 + r() * 8).toInt(), (rg + v * 36 + r() * 8).toInt(),
+            (rb + v * 44 + r() * 8).toInt(), 255)
+        chip * 0.8f
+    }
+
+    private fun purpurPillarC(rr: Int, rg: Int, rb: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val band = sin(y / s * Math.PI.toFloat() * 12f + n.fbm(x / s * 6f, y / s * 6f, 2, 2f, 0.5f) * 2f) * 0.5f + 0.5f
+        val f = n.fbm(x / s * 16f, y / s * 16f, 3, 2f, 0.5f)
+        val v = 0.5f + band * 0.14f + f * 0.08f
+        rgb[off] = pack((rr + v * 44 + r() * 6).toInt(), (rg + v * 38 + r() * 6).toInt(),
+            (rb + v * 48 + r() * 6).toInt(), 255)
+        band * 0.9f + f * 0.3f
+    }
+
+    private val bookshelf = PixelGen { x, y, s, n, r, rgb, off ->
+        val shelf = y % (s / 2f) < s / 10f
+        val bookRow = (y / (s / 2f)).toInt() % 2
+        val book = n.fbm(x / s * 18f, y / s * 18f, 2, 2f, 0.5f)
+        val bx = (x / (s / 6f)).toInt()
+        val rc = if (bx % 3 == 0) (140 + book * 40) else if (bookRow % 2 == 0) (60 + book * 20) else (30 + book * 12)
+        val v = if (shelf) (0.6f + sin(y / s * Math.PI.toFloat() * 6f) * 0.1f) * 180f else rc
+        rgb[off] = pack((if (shelf) v * 0.6f + r() * 8 else v * 0.5f + 40 + r() * 10).toInt(),
+            (if (shelf) v * 0.42f + r() * 6 else v * 0.4f + 30 + r() * 10).toInt(),
+            (if (shelf) v * 0.3f + r() * 5 else v * 0.3f + 24 + r() * 8).toInt(), 255)
+        if (shelf) 0.2f else book * 0.7f
+    }
+
+    private val hay = PixelGen { x, y, s, n, r, rgb, off ->
+        val straw = 0.5f + 0.5f * sin((y + n.fbm(x / s * 8f, y / s * 3f, 3, 2f, 0.5f) * 8f) / s * Math.PI.toFloat() * 24f)
+        val f = n.fbm(x / s * 20f, y / s * 20f, 2, 2f, 0.5f)
+        val v = 0.5f + straw * 0.28f + f * 0.1f
+        rgb[off] = pack((200 + v * 46 + r() * 8).toInt(), (168 + v * 42 + r() * 8).toInt(),
+            (78 + v * 26 + r() * 6).toInt(), 255)
+        straw * 1.2f + f * 0.2f
+    }
+
+    private val boneBlock = PixelGen { x, y, s, n, r, rgb, off ->
+        val ridged = n.ridged(x / s * 8f, y / s * 8f, 3, 2f, 0.6f)
+        val f = n.fbm(x / s * 24f, y / s * 24f, 3, 2f, 0.5f)
+        val v = 0.5f + ridged * 0.14f + f * 0.1f
+        rgb[off] = pack((220 + v * 30 + r() * 5).toInt(), (212 + v * 30 + r() * 5).toInt(),
+            (200 + v * 30 + r() * 5).toInt(), 255)
+        ridged * 0.8f + f * 0.4f
+    }
+
+    private val honey = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 12f, y / s * 12f, 3, 2f, 0.5f)
+        val v = 0.5f + f * 0.08f
+        rgb[off] = pack((232 + v * 20 + r() * 4).toInt(), (150 + v * 30 + r() * 5).toInt(),
+            (30 + v * 16 + r() * 4).toInt(), 255)
+        f * 0.5f
+    }
+
+    private val driedKelp = PixelGen { x, y, s, n, r, rgb, off ->
+        val strand = 0.5f + 0.5f * sin(x / s * Math.PI.toFloat() * 26f + n.fbm(x / s * 10f, y / s * 10f, 2, 2f, 0.5f) * 4f)
+        val f = n.fbm(x / s * 24f, y / s * 24f, 3, 2f, 0.5f)
+        val v = 0.5f + strand * 0.18f + f * 0.08f
+        rgb[off] = pack((60 + v * 30 + r() * 6).toInt(), (70 + v * 32 + r() * 6).toInt(),
+            (44 + v * 22 + r() * 5).toInt(), 255)
+        strand * 1.0f + f * 0.3f
+    }
+
+    private val slime = PixelGen { x, y, s, n, r, rgb, off ->
+        val bubble = n.ridged(x / s * 14f, y / s * 14f, 3, 2f, 0.7f)
+        val f = n.fbm(x / s * 30f, y / s * 30f, 2, 2f, 0.5f)
+        val v = 0.5f + f * 0.1f
+        rgb[off] = pack((110 + v * 30 + r() * 6).toInt(), (180 + v * 40 + r() * 6).toInt(),
+            (110 + v * 30 + r() * 6).toInt(), 255)
+        bubble * 1.0f + f * 0.3f
+    }
+
+    // Generic dispatch for the expanded palette (color families, wood variants, stone variants).
+    private fun coloredFamily(id: String): PixelGen? {
+        val prefixes = listOf("wool", "concrete_powder", "concrete", "terracotta", "glazed_terracotta")
+        for (p in prefixes) {
+            if (id.startsWith("$p_")) {
+                val cname = id.removePrefix("$p_")
+                val c = COLOR16.firstOrNull { it.first == cname }?.second ?: return null
+                return when (p) {
+                    "wool" -> woolGen(11, c.first, c.second, c.third)
+                    "concrete" -> concreteC(c.first, c.second, c.third)
+                    "concrete_powder" -> concretePowderC(c.first, c.second, c.third)
+                    "terracotta" -> terracottaC(c.first, c.second, c.third)
+                    else -> glazedC(c.first, c.second, c.third)
+                }
+            }
+        }
+        return null
+    }
+
+    private fun woodFamily(id: String): PixelGen? {
+        if (id.endsWith("_planks")) {
+            val w = id.removeSuffix("_planks")
+            val c = WOOD[w] ?: return null
+            return plankC(c.first, c.second, c.third)
+        }
+        if (id.endsWith("_log_side")) {
+            val w = id.removeSuffix("_log_side")
+            val c = WOOD[w] ?: return null
+            return logSideC(c.first, c.second, c.third)
+        }
+        if (id.endsWith("_log_top")) {
+            val w = id.removeSuffix("_log_top")
+            val c = WOOD[w] ?: return null
+            return logTopC(c.first, c.second, c.third)
+        }
+        if (id.startsWith("leaves_")) {
+            val w = id.removePrefix("leaves_")
+            val c = LEAF[w] ?: return null
+            return leavesC(c.first, c.second, c.third)
+        }
+        return null
+    }
+
+    private fun stoneFamily(id: String): PixelGen? = when (id) {
+        "granite" -> speckledStone(120, 116, 116, 210, 120, 120)
+        "polished_granite" -> polishedC(150, 108, 104)
+        "diorite" -> speckledStone(180, 182, 186, 60, 64, 70)
+        "polished_diorite" -> polishedC(180, 182, 186)
+        "andesite" -> speckledStone(120, 122, 124, 70, 72, 74)
+        "polished_andesite" -> polishedC(128, 126, 128)
+        "calcite" -> polishedC(220, 222, 224)
+        "smooth_stone" -> polishedC(116, 118, 120)
+        "stone_bricks" -> stoneBricksC(128, 130, 132, false, false)
+        "cracked_stone_bricks" -> stoneBricksC(128, 130, 132, false, true)
+        "mossy_stone_bricks" -> stoneBricksC(128, 130, 132, true, false)
+        "chiseled_stone_bricks" -> polishedC(132, 134, 136)
+        "deepslate_bricks" -> stoneBricksC(76, 74, 88, false, false)
+        "cracked_deepslate_bricks" -> stoneBricksC(76, 74, 88, false, true)
+        "chiseled_deepslate" -> polishedC(76, 74, 88)
+        "polished_deepslate" -> polishedC(76, 74, 88)
+        "smooth_sandstone" -> polishedC(200, 184, 128)
+        "cut_sandstone" -> sand(200f, 184f, 128f)
+        "chiseled_sandstone" -> polishedC(202, 186, 130)
+        "end_stone_bricks" -> stoneBricksC(210, 194, 140, false, false)
+        "purpur_block" -> purpurC(170, 130, 176)
+        "purpur_pillar" -> purpurPillarC(170, 130, 176)
+        "soul_sand" -> soulSandC(false)
+        "soul_soil" -> soulSandC(true)
+        "crimson_nylium" -> nyliumC(190, 78, 96)
+        "warped_nylium" -> nyliumC(78, 168, 168)
+        "nether_wart_block" -> wartBlockC(150, 40, 44)
+        "warped_wart_block" -> wartBlockC(40, 120, 110)
+        "shroomlight" -> shroomlight
+        "nether_gold_ore" -> ore(224, 200, 70)
+        "nether_quartz_ore" -> ore(230, 226, 214)
+        "ancient_debris" -> ore(170, 120, 80)
+        "bookshelf" -> bookshelf
+        "hay_block" -> hay
+        "bone_block" -> boneBlock
+        "honey_block" -> honey
+        "dried_kelp_block" -> driedKelp
+        "slime_block" -> slime
+        else -> null
+    }
+
     // Expected Bedrock texture file path for an id.
     fun bedrockPath(id: String): String = when (id) {
         "grass_top" -> "textures/blocks/grass_top.png"
@@ -753,6 +1149,60 @@ object TextureGenerator {
         "mossy_cobblestone" -> "textures/blocks/cobblestone_mossy.png"
         "dark_prismarine" -> "textures/blocks/prismarine_dark.png"
         "basalt_side" -> "textures/blocks/basalt_side.png"
-        else -> "textures/blocks/$id.png"
+        // batch 3 — exact Bedrock asset names for the well-known families
+        "granite" -> "textures/blocks/stone_granite.png"
+        "polished_granite" -> "textures/blocks/stone_granite_smooth.png"
+        "diorite" -> "textures/blocks/stone_diorite.png"
+        "polished_diorite" -> "textures/blocks/stone_diorite_smooth.png"
+        "andesite" -> "textures/blocks/stone_andesite.png"
+        "polished_andesite" -> "textures/blocks/stone_andesite_smooth.png"
+        "stone_bricks" -> "textures/blocks/stonebrick.png"
+        "cracked_stone_bricks" -> "textures/blocks/stonebrick_cracked.png"
+        "mossy_stone_bricks" -> "textures/blocks/stonebrick_mossy.png"
+        "chiseled_stone_bricks" -> "textures/blocks/stonebrick_carved.png"
+        "end_stone_bricks" -> "textures/blocks/end_bricks.png"
+        "smooth_stone" -> "textures/blocks/stone_smooth.png"
+        "smooth_sandstone" -> "textures/blocks/sandstone_smooth.png"
+        "cut_sandstone" -> "textures/blocks/sandstone_cut.png"
+        "chiseled_sandstone" -> "textures/blocks/sandstone_carved.png"
+        "bookshelf" -> "textures/blocks/bookshelf.png"
+        "hay_block" -> "textures/blocks/hay_block_side.png"
+        "bone_block" -> "textures/blocks/bone_block_side.png"
+        "honey_block" -> "textures/blocks/honey_block.png"
+        "dried_kelp_block" -> "textures/blocks/dried_kelp_block.png"
+        "slime_block" -> "textures/blocks/slime.png"
+        "soul_sand" -> "textures/blocks/soul_sand.png"
+        "soul_soil" -> "textures/blocks/soul_soil.png"
+        "crimson_nylium" -> "textures/blocks/crimson_nylium.png"
+        "warped_nylium" -> "textures/blocks/warped_nylium.png"
+        "nether_wart_block" -> "textures/blocks/nether_wart_block.png"
+        "warped_wart_block" -> "textures/blocks/warped_wart_block.png"
+        "shroomlight" -> "textures/blocks/shroomlight.png"
+        "nether_gold_ore" -> "textures/blocks/nether_gold_ore.png"
+        "nether_quartz_ore" -> "textures/blocks/quartz_ore.png"
+        "ancient_debris" -> "textures/blocks/ancient_debris_side.png"
+        "purpur_block" -> "textures/blocks/purpur_block.png"
+        "purpur_pillar" -> "textures/blocks/purpur_pillar.png"
+        "calcite" -> "textures/blocks/calcite.png"
+        "deepslate_bricks" -> "textures/blocks/deepslate_bricks.png"
+        "cracked_deepslate_bricks" -> "textures/blocks/deepslate_bricks_cracked.png"
+        "chiseled_deepslate" -> "textures/blocks/deepslate_chiseled.png"
+        "polished_deepslate" -> "textures/blocks/deepslate_polished.png"
+        else -> derivedPath(id)
+    }
+
+    // Fallback Bedrock filename for the expanded palette (mirrors the browser engine).
+    private fun derivedPath(id: String): String {
+        val woods = listOf("spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry", "crimson", "warped")
+        if (id.endsWith("_planks")) { val w = id.removeSuffix("_planks"); if (w in woods) return "textures/blocks/planks_$w.png" }
+        if (id.endsWith("_log_side")) { val w = id.removeSuffix("_log_side"); if (w in woods) return "textures/blocks/log_$w.png" }
+        if (id.endsWith("_log_top")) { val w = id.removeSuffix("_log_top"); if (w in woods) return "textures/blocks/log_${w}_top.png" }
+        if (id.startsWith("leaves_")) return "textures/blocks/leaves_${id.removePrefix("leaves_")}.png"
+        if (id.startsWith("wool_")) return "textures/blocks/wool_colored_${id.removePrefix("wool_")}.png"
+        if (id.startsWith("glazed_terracotta_")) return "textures/blocks/glazed_terracotta_${id.removePrefix("glazed_terracotta_")}.png"
+        if (id.startsWith("concrete_powder_")) return "textures/blocks/concrete_powder_${id.removePrefix("concrete_powder_")}.png"
+        if (id.startsWith("concrete_")) return "textures/blocks/concrete_${id.removePrefix("concrete_")}.png"
+        if (id.startsWith("terracotta_")) return "textures/blocks/hardened_clay_stained_${id.removePrefix("terracotta_")}.png"
+        return "textures/blocks/$id.png"
     }
 }

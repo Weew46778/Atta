@@ -27,7 +27,7 @@
 
   // ------- init UI -------
   // Curated order: each entry is a representative texture id; the "block" it belongs to
-  // drives the 3-face cube preview. These map to the 30+ blocks in the pack.
+  // drives the 3-face cube preview. These map to the expanded (200+) block palette.
   const BLOCK_CHIPS = [
     'grass_top', 'dirt', 'coarse_dirt', 'mycelium_top', 'moss_block', 'mud', 'packed_mud',
     'stone', 'cobblestone', 'mossy_cobblestone', 'deepslate', 'tuff', 'gravel', 'basalt_side', 'blackstone', 'gilded_blackstone',
@@ -38,6 +38,27 @@
     'sponge', 'wool_blue', 'wool_purple', 'prismarine', 'dark_prismarine', 'sea_lantern',
     'gold_ore', 'iron_ore', 'coal_ore', 'diamond_ore', 'redstone_ore', 'emerald_ore', 'lapis_ore', 'copper_ore',
     'gold_block', 'iron_block', 'diamond_block', 'emerald_block', 'redstone_block', 'lapis_block', 'copper_block', 'netherite_block',
+    // batch 3 — wood variants
+    'spruce_planks', 'birch_planks', 'jungle_planks', 'acacia_planks', 'dark_oak_planks', 'mangrove_planks', 'cherry_planks',
+    'spruce_log_side', 'birch_log_side', 'jungle_log_side', 'acacia_log_side', 'dark_oak_log_side', 'cherry_log_side',
+    'leaves_spruce', 'leaves_birch', 'leaves_cherry', 'leaves_mangrove', 'leaves_azalea',
+    // batch 3 — colors (representative + power palette)
+    'wool_white', 'wool_red', 'wool_black', 'wool_lime', 'wool_cyan',
+    'concrete_red', 'concrete_blue', 'concrete_light_blue', 'concrete_green', 'concrete_white', 'concrete_orange', 'concrete_black',
+    'concrete_powder_red', 'concrete_powder_yellow', 'concrete_powder_cyan',
+    'terracotta_red', 'terracotta_orange', 'terracotta_cyan', 'terracotta_black',
+    'glazed_terracotta_white', 'glazed_terracotta_blue', 'glazed_terracotta_red', 'glazed_terracotta_black',
+    // batch 3 — stone family
+    'granite', 'polished_granite', 'diorite', 'polished_diorite', 'andesite', 'polished_andesite', 'calcite',
+    'stone_bricks', 'mossy_stone_bricks', 'cracked_stone_bricks', 'chiseled_stone_bricks',
+    'deepslate_bricks', 'cracked_deepslate_bricks', 'polished_deepslate', 'smooth_stone',
+    'smooth_sandstone', 'cut_sandstone', 'chiseled_sandstone', 'end_stone_bricks',
+    // batch 3 — nether & end
+    'soul_sand', 'soul_soil', 'crimson_nylium', 'warped_nylium', 'nether_wart_block', 'warped_wart_block',
+    'shroomlight', 'nether_gold_ore', 'nether_quartz_ore', 'ancient_debris',
+    'purpur_block', 'purpur_pillar',
+    // batch 3 — misc
+    'bookshelf', 'hay_block', 'bone_block', 'honey_block', 'dried_kelp_block', 'slime_block',
   ];
 
   function buildBlockList() {

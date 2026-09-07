@@ -693,6 +693,329 @@ function genSeaLantern(seed, size, relief) {
   }, relief);
 }
 
+// ---------- batch 3: wood variants, colors, stone polishes, nether & end ----------
+
+// Colored wood planks / log side / log top.
+function genPlankC(seed, size, relief, br, bg, bb) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const boards = 4;
+    const board = Math.floor(y / (s / boards));
+    const gap = Math.abs(y / (s / boards) - (board + 0.5)) * 2;
+    const between = gap > 0.86 ? 1 : 0;
+    const grain = Perlin.fbm(n, x / s * 34, y / s * 6 + board, 3, 2, 0.5);
+    const v = 0.5 + grain * 0.18 - between * 0.35;
+    const shade = board % 2 === 0 ? 1 : 0.9;
+    rgb[i]     = br * (0.72 + v * 0.55) * shade + r() * 12;
+    rgb[i + 1] = bg * (0.72 + v * 0.55) * shade + r() * 10;
+    rgb[i + 2] = bb * (0.72 + v * 0.55) * shade + r() * 8;
+    rgb[i + 3] = 255;
+    return grain * 0.7 + between * 1.4;
+  }, relief);
+}
+function genLogSideC(seed, size, relief, br, bg, bb) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const groove = Perlin.fbm(n, y / s * 9, x / s * 1.6, 3, 2, 0.5);
+    const lines = Math.sin(y / s * Math.PI * 10 + groove * 3) * 0.5 + 0.5;
+    const grain = Perlin.fbm(n, x / s * 40, y / s * 4, 3, 2, 0.5);
+    const v = 0.5 + lines * 0.2 + grain * 0.14;
+    rgb[i]     = br * (0.66 + v * 0.6) + r() * 14;
+    rgb[i + 1] = bg * (0.66 + v * 0.6) + r() * 12;
+    rgb[i + 2] = bb * (0.66 + v * 0.6) + r() * 10;
+    rgb[i + 3] = 255;
+    return lines * 1.1 + grain * 0.3;
+  }, relief);
+}
+function genLogTopC(seed, size, relief, br, bg, bb) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const ix = x / s, iy = y / s;
+    const cx = 0.5 + Perlin.fbm(n, ix * 3, iy * 3, 2, 2, 0.5) * 0.08;
+    const cy = 0.5 + Perlin.fbm(n, ix * 3 + 30, iy * 3 + 30, 2, 2, 0.5) * 0.08;
+    const d = Math.hypot(ix - cx, iy - cy);
+    const ring = 0.5 + 0.5 * Math.sin(d * Math.PI * 26);
+    const v = 0.45 + ring * 0.3 + Perlin.fbm(n, ix * 46, iy * 46, 2, 2, 0.5) * 0.12;
+    rgb[i]     = br * (0.7 + v * 0.5) + r() * 14;
+    rgb[i + 1] = bg * (0.7 + v * 0.5) + r() * 12;
+    rgb[i + 2] = bb * (0.7 + v * 0.5) + r() * 10;
+    rgb[i + 3] = 255;
+    return ring * 1.1 + 0.2;
+  }, relief);
+}
+// Colored leaves.
+function genLeavesC(seed, size, relief, br, bg, bb) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const blades = Perlin.fbm(n, x / s * 24, y / s * 24, 4, 2, 0.5);
+    const hole = Perlin.ridged(n, x / s * 12, y / s * 12, 2, 2, 0.6);
+    const v = 0.5 + blades * 0.2;
+    let a = 235 + r() * 20;
+    if (hole > 0.78) a = 60;
+    rgb[i]     = br * (0.8 + v * 0.3);
+    rgb[i + 1] = bg * (0.8 + v * 0.3);
+    rgb[i + 2] = bb * (0.8 + v * 0.3);
+    rgb[i + 3] = a;
+    return blades * 0.9 + hole * 0.3;
+  }, relief);
+}
+// Solid colors (concrete / terracotta paint) with subtle surface pores.
+function genConcreteC(seed, size, relief, r, g, b) {
+  return synthesizeTexture(seed, size, (x, y, s, n, rnd, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 20, y / s * 20, 3, 2, 0.5);
+    const pores = Perlin.ridged(n, x / s * 34, y / s * 34, 2, 2, 0.6);
+    const v = 0.5 + f * 0.12 - pores * 0.12;
+    rgb[i]     = r * (0.82 + v * 0.32) + rnd() * 4;
+    rgb[i + 1] = g * (0.82 + v * 0.32) + rnd() * 4;
+    rgb[i + 2] = b * (0.82 + v * 0.32) + rnd() * 4;
+    rgb[i + 3] = 255;
+    return pores * 0.5 + f * 0.25;
+  }, relief);
+}
+// Grainy concrete powder.
+function genConcretePowderC(seed, size, relief, r, g, b) {
+  return synthesizeTexture(seed, size, (x, y, s, n, rnd, rgb, i) => {
+    const grain = Perlin.ridged(n, x / s * 40, y / s * 40, 3, 2, 0.6);
+    const f = Perlin.fbm(n, x / s * 20, y / s * 20, 3, 2, 0.5);
+    const v = 0.5 + f * 0.1 + (grain - 0.5) * 0.4;
+    rgb[i]     = r * (0.8 + v * 0.34) + rnd() * 6;
+    rgb[i + 1] = g * (0.8 + v * 0.34) + rnd() * 6;
+    rgb[i + 2] = b * (0.8 + v * 0.34) + rnd() * 5;
+    rgb[i + 3] = 255;
+    return grain * 0.9 + f * 0.2;
+  }, relief);
+}
+// Terracotta colored (banded, earthen).
+function genTerracottaC(seed, size, relief, r, g, b) {
+  return synthesizeTexture(seed, size, (x, y, s, n, rnd, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 8, y / s * 8, 3, 2, 0.5);
+    const band = Math.sin(y / s * Math.PI * 8 + f * 2) * 0.5 + 0.5;
+    const v = 0.5 + f * 0.1 + band * 0.08;
+    rgb[i]     = r * (0.86 + v * 0.3) + rnd() * 5;
+    rgb[i + 1] = g * (0.86 + v * 0.3) + rnd() * 5;
+    rgb[i + 2] = b * (0.86 + v * 0.3) + rnd() * 5;
+    rgb[i + 3] = 255;
+    return f * 0.5 + band * 0.4;
+  }, relief);
+}
+// Glazed terracotta (diamond pattern with light seams).
+function genGlazedC(seed, size, relief, r, g, b) {
+  return synthesizeTexture(seed, size, (x, y, s, n, rnd, rgb, i) => {
+    const cell = Math.floor(x / (s / 4)) % 2 === Math.floor(y / (s / 4)) % 2;
+    const seam = (x % (s / 4) < s / 28 || y % (s / 4) < s / 28);
+    const f = Perlin.fbm(n, x / s * 14, y / s * 14, 2, 2, 0.5);
+    const v = 0.5 + f * 0.12 + (cell ? 0.1 : 0);
+    const lit = seam ? 1.25 : 1;
+    rgb[i]     = Math.min(255, r * (0.8 + v * 0.3) * lit + rnd() * 4);
+    rgb[i + 1] = Math.min(255, g * (0.8 + v * 0.3) * lit + rnd() * 4);
+    rgb[i + 2] = Math.min(255, b * (0.8 + v * 0.3) * lit + rnd() * 4);
+    rgb[i + 3] = 255;
+    return (cell ? 0.5 : 0.9) + seam * 1.6;
+  }, relief);
+}
+// Polished stone / granite / diorite / andesite / calcite.
+function genSpeckledStone(seed, size, relief, baseCol, accentCol) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const baseF = Perlin.fbm(n, x / s * 9, y / s * 9, 4, 2, 0.55);
+    const speck = Perlin.ridged(n, x / s * 34, y / s * 34, 3, 2, 0.6);
+    const accent = speck > 0.62 ? 1 : 0;
+    const v = 0.5 + baseF * 0.16 + accent * 0.1;
+    const cs = 1 + (accentCol[0] - baseCol[0]) / 512 * accent;
+    rgb[i]     = baseCol[0] * (0.8 + v * 0.4) + accentCol[0] * accent * 0.3 + r() * 6;
+    rgb[i + 1] = baseCol[1] * (0.8 + v * 0.4) + accentCol[1] * accent * 0.3 + r() * 6;
+    rgb[i + 2] = baseCol[2] * (0.8 + v * 0.4) + accentCol[2] * accent * 0.3 + r() * 5;
+    rgb[i + 3] = 255;
+    return baseF * 0.7 + accent * 0.9;
+  }, relief);
+}
+function genPolishedC(seed, size, relief, r, g, b) {
+  return synthesizeTexture(seed, size, (x, y, s, n, rnd, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 12, y / s * 12, 3, 2, 0.5);
+    const sheen = Math.sin((x + y) / s * Math.PI * 4) * 0.08;
+    const v = 0.5 + f * 0.08 + sheen;
+    rgb[i]     = r * (0.86 + v * 0.26) + rnd() * 4;
+    rgb[i + 1] = g * (0.86 + v * 0.26) + rnd() * 4;
+    rgb[i + 2] = b * (0.86 + v * 0.26) + rnd() * 4;
+    rgb[i + 3] = 255;
+    return f * 0.4 + sheen * 0.7;
+  }, relief);
+}
+// Stone bricks (with mortar grid), colorisable + crack variants.
+function genStoneBricksC(seed, size, relief, r, g, b, mossy, cracked) {
+  return synthesizeTexture(seed, size, (x, y, s, n, rnd, rgb, i) => {
+    const rows = 4, bw = s / 2;
+    const row = Math.floor(y / (s / rows));
+    const offset = row % 2 === 0 ? 0 : bw / 2;
+    const bx = (x + offset) % bw;
+    const mortar = (bx < s / 24 || bx > bw - s / 24 || (y % (s / rows)) < s / 24) ? 1 : 0;
+    const f = Perlin.fbm(n, x / s * 14, y / s * 14 + row, 3, 2, 0.5);
+    const v = 0.5 + f * 0.14 - mortar * 0.5;
+    const crack = cracked && Perlin.ridged(n, x / s * 12, y / s * 12, 2, 2, 0.7) > 0.72 ? 1 : 0;
+    const m = mossy && Perlin.ridged(n, x / s * 14, y / s * 14, 2, 2, 0.6) > 0.6 ? 1 : 0;
+    rgb[i]     = r * (0.8 + v * 0.4) * (1 - m) + m * 70 + crack * 20 + rnd() * 6;
+    rgb[i + 1] = g * (0.8 + v * 0.4) * (1 - m) + m * 110 + crack * 18 + rnd() * 6;
+    rgb[i + 2] = b * (0.8 + v * 0.4) * (1 - m) + m * 58 + crack * 16 + rnd() * 5;
+    rgb[i + 3] = 255;
+    return f * 0.6 + mortar * 1.7 + crack * 1.5 + m * 0.7;
+  }, relief);
+}
+// Nether: soul sand/soil, nylium, wart/blocks, shroomlight.
+function genSoulSand(seed, size, relief, dark) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const grain = Perlin.ridged(n, x / s * 16, y / s * 16, 3, 2, 0.6);
+    const f = Perlin.fbm(n, x / s * 30, y / s * 30, 3, 2, 0.5);
+    const v = 0.5 + grain * 0.14 + f * 0.1;
+    const base = dark ? 0.62 : 0.72;
+    rgb[i]     = (96 + v * 40 + r() * 8) * base;
+    rgb[i + 1] = (66 + v * 28 + r() * 7) * base;
+    rgb[i + 2] = (50 + v * 20 + r() * 6) * base;
+    rgb[i + 3] = 255;
+    return grain * 0.9 + f * 0.2;
+  }, relief);
+}
+function genNylium(seed, size, relief, r, g, b) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const blade = Perlin.fbm(n, x / s * 22, y / s * 22, 4, 2, 0.5);
+    const v = 0.5 + blade * 0.22;
+    rgb[i]     = r * (0.82 + v * 0.3) + r() * 8;
+    rgb[i + 1] = g * (0.82 + v * 0.3) + r() * 8;
+    rgb[i + 2] = b * (0.82 + v * 0.3) + r() * 8;
+    rgb[i + 3] = 255;
+    return blade * 0.9;
+  }, relief);
+}
+function genWartBlock(seed, size, relief, r, g, b) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const bump = Perlin.ridged(n, x / s * 16, y / s * 16, 3, 2, 0.6);
+    const f = Perlin.fbm(n, x / s * 24, y / s * 24, 2, 2, 0.5);
+    const v = 0.5 + bump * 0.22 + f * 0.1;
+    rgb[i]     = r * (0.8 + v * 0.4) + r() * 6;
+    rgb[i + 1] = g * (0.8 + v * 0.4) + r() * 6;
+    rgb[i + 2] = b * (0.8 + v * 0.4) + r() * 6;
+    rgb[i + 3] = 255;
+    return bump * 1.4 + f * 0.2;
+  }, relief);
+}
+function genShroomlight(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 8, y / s * 8, 3, 2, 0.5);
+    const v = 0.5 + f * 0.12;
+    rgb[i]     = 224 + v * 26 + r() * 6;
+    rgb[i + 1] = 188 + v * 30 + r() * 6;
+    rgb[i + 2] = 132 + v * 30 + r() * 6;
+    rgb[i + 3] = 255;
+    return f * 0.5;
+  }, relief);
+}
+// End: purpur, end stone bricks, purpur pillar.
+function genPurpur(seed, size, relief, rr, rg, rb) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const chip = Perlin.fbm(n, x / s * 9, y / s * 9, 3, 2, 0.6);
+    const v = 0.5 + chip * 0.2;
+    rgb[i]     = rr + v * 40 + r() * 8;
+    rgb[i + 1] = rg + v * 36 + r() * 8;
+    rgb[i + 2] = rb + v * 44 + r() * 8;
+    rgb[i + 3] = 255;
+    return chip * 0.8;
+  }, relief);
+}
+function genPurpurPillar(seed, size, relief, rr, rg, rb) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const band = Math.sin(y / s * Math.PI * 12 + Perlin.fbm(n, x / s * 6, y / s * 6, 2, 2, 0.5) * 2) * 0.5 + 0.5;
+    const f = Perlin.fbm(n, x / s * 16, y / s * 16, 3, 2, 0.5);
+    const v = 0.5 + band * 0.14 + f * 0.08;
+    rgb[i]     = rr + v * 44 + r() * 6;
+    rgb[i + 1] = rg + v * 38 + r() * 6;
+    rgb[i + 2] = rb + v * 48 + r() * 6;
+    rgb[i + 3] = 255;
+    return band * 0.9 + f * 0.3;
+  }, relief);
+}
+// Misc blocks: bookshelf, hay, bone, honey, dried kelp, slime.
+function genBookshelf(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const shelf = y % (s / 2) < s / 10;
+    const bookRow = Math.floor(y / (s / 2)) % 2;
+    const book = Perlin.fbm(n, x / s * 18, y / s * 18, 2, 2, 0.5);
+    const bx = Math.floor(x / (s / 6));
+    const rc = (bx % 3 === 0) ? (140 + book * 40) : (bookRow % 2 === 0 ? 60 + book * 20 : 30 + book * 12);
+    const wood = (0.6 + Math.sin(y / s * Math.PI * 6) * 0.1) * 180;
+    const v = shelf ? wood : rc;
+    rgb[i]     = shelf ? (v * 0.6 + r() * 8) : (v * 0.5 + 40 + r() * 10);
+    rgb[i + 1] = shelf ? (v * 0.42 + r() * 6) : (v * 0.4 + 30 + r() * 10);
+    rgb[i + 2] = shelf ? (v * 0.3 + r() * 5) : (v * 0.3 + 24 + r() * 8);
+    rgb[i + 3] = 255;
+    return shelf ? 0.2 : book * 0.7;
+  }, relief);
+}
+function genHay(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const straw = 0.5 + 0.5 * Math.sin((y + Perlin.fbm(n, x / s * 8, y / s * 3, 3, 2, 0.5) * 8) / s * Math.PI * 24);
+    const f = Perlin.fbm(n, x / s * 20, y / s * 20, 2, 2, 0.5);
+    const v = 0.5 + straw * 0.28 + f * 0.1;
+    rgb[i]     = 200 + v * 46 + r() * 8;
+    rgb[i + 1] = 168 + v * 42 + r() * 8;
+    rgb[i + 2] = 78 + v * 26 + r() * 6;
+    rgb[i + 3] = 255;
+    return straw * 1.2 + f * 0.2;
+  }, relief);
+}
+function genBoneBlock(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const ridged = Perlin.ridged(n, x / s * 8, y / s * 8, 3, 2, 0.6);
+    const f = Perlin.fbm(n, x / s * 24, y / s * 24, 3, 2, 0.5);
+    const v = 0.5 + ridged * 0.14 + f * 0.1;
+    rgb[i]     = 220 + v * 30 + r() * 5;
+    rgb[i + 1] = 212 + v * 30 + r() * 5;
+    rgb[i + 2] = 200 + v * 30 + r() * 5;
+    rgb[i + 3] = 255;
+    return ridged * 0.8 + f * 0.4;
+  }, relief);
+}
+function genHoney(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 12, y / s * 12, 3, 2, 0.5);
+    const v = 0.5 + f * 0.08;
+    rgb[i]     = 232 + v * 20 + r() * 4;
+    rgb[i + 1] = 150 + v * 30 + r() * 5;
+    rgb[i + 2] = 30 + v * 16 + r() * 4;
+    rgb[i + 3] = 255;
+    return f * 0.5;
+  }, relief);
+}
+function genDriedKelp(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const strand = 0.5 + 0.5 * Math.sin(x / s * Math.PI * 26 + Perlin.fbm(n, x / s * 10, y / s * 10, 2, 2, 0.5) * 4);
+    const f = Perlin.fbm(n, x / s * 24, y / s * 24, 3, 2, 0.5);
+    const v = 0.5 + strand * 0.18 + f * 0.08;
+    rgb[i]     = 60 + v * 30 + r() * 6;
+    rgb[i + 1] = 70 + v * 32 + r() * 6;
+    rgb[i + 2] = 44 + v * 22 + r() * 5;
+    rgb[i + 3] = 255;
+    return strand * 1.0 + f * 0.3;
+  }, relief);
+}
+function genSlime(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const bubble = Perlin.ridged(n, x / s * 14, y / s * 14, 3, 2, 0.7);
+    const f = Perlin.fbm(n, x / s * 30, y / s * 30, 2, 2, 0.5);
+    const v = 0.5 + f * 0.1;
+    rgb[i]     = 110 + v * 30 + r() * 6;
+    rgb[i + 1] = 180 + v * 40 + r() * 6;
+    rgb[i + 2] = 110 + v * 30 + r() * 6;
+    rgb[i + 3] = 255;
+    return bubble * 1.0 + f * 0.3;
+  }, relief);
+}
+// Ore-like nether: nether gold / nether quartz / ancient debris.
+const genNetherGoldOre = (s, sz, r) => genOre(s, sz, r, 224, 200, 70, 0.7);
+const genNetherQuartz = (s, sz, r) => genOre(s, sz, r, 230, 226, 214, 0.74);
+const genAncientDebris = (s, sz, r) => genOre(s, sz, r, 170, 120, 80, 0.72);
+
+// 16-color palettes for wool / concrete / terracotta / glazed terracotta.
+const COLOR16 = {
+  white:      [234, 236, 238], orange:    [240, 118, 19], magenta:  [189, 68, 179], light_blue: [58, 175, 217],
+  yellow:     [248, 197, 39], lime:      [112, 185, 25], pink:     [237, 141, 172], gray:      [62, 68, 71],
+  light_gray: [142, 142, 134],cyan:      [21, 137, 145], purple:   [121, 42, 172], blue:      [53, 57, 157],
+  brown:      [114, 71, 40],  green:     [84, 109, 27],  red:      [160, 38, 48],  black:     [8, 10, 15],
+};
+
 // register of generators keyed by texture id
 const TEXTURE_REGISTRY = {
   grass_top:   { title: 'Grass Top',   gen: genGrassTop,  block: 'grass' },
@@ -758,6 +1081,95 @@ const TEXTURE_REGISTRY = {
   dark_prismarine:   { title: 'Dark Prismarine',gen: genDarkPrismarine,  block: 'dark_prismarine' },
   sea_lantern:       { title: 'Sea Lantern',   gen: genSeaLantern,       block: 'sea_lantern' },
 };
+
+// ---------- batch 3 registrations: wood variants, colors, stone, nether & end ----------
+const PLANKS_COL = {
+  spruce: [82, 94, 64], birch: [216, 196, 152], jungle: [168, 124, 82],
+  acacia: [134, 78, 41], dark_oak: [78, 52, 34], mangrove: [104, 52, 32],
+  cherry: [214, 128, 122], crimson: [118, 46, 46], warped: [54, 92, 102],
+};
+const LEAVES_COL = {
+  spruce: [58, 92, 52], birch: [120, 160, 74], jungle: [58, 120, 44],
+  acacia: [176, 178, 74], dark_oak: [60, 90, 44], mangrove: [46, 78, 38],
+  cherry: [214, 120, 132], azalea: [70, 120, 56], flowering_azalea: [98, 120, 80],
+};
+const GRANITE = [120, 116, 116]; const GRANITE_ACC = [210, 120, 120];
+const DIORITE = [180, 182, 186]; const DIORITE_ACC = [60, 64, 70];
+const ANDESITE = [120, 122, 124]; const ANDESITE_ACC = [70, 72, 74];
+
+Object.assign(TEXTURE_REGISTRY, {
+  // planks
+  ...Object.fromEntries(Object.entries(PLANKS_COL).map(([k, rgb]) =>
+    [`${k}_planks`, { title: cap(k) + ' Planks', gen: (s, sz, r) => genPlankC(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `${k}_planks` }])),
+  // log side + top
+  ...Object.fromEntries(Object.entries(PLANKS_COL).flatMap(([k, rgb]) => [
+    [`${k}_log_side`, { title: cap(k) + ' Log Side', gen: (s, sz, r) => genLogSideC(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `${k}_log` }],
+    [`${k}_log_top`, { title: cap(k) + ' Log Top', gen: (s, sz, r) => genLogTopC(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `${k}_log` }],
+  ])),
+  // leaves
+  ...Object.fromEntries(Object.entries(LEAVES_COL).map(([k, rgb]) =>
+    [`leaves_${k}`, { title: cap(k) + ' Leaves', gen: (s, sz, r) => genLeavesC(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `leaves_${k}` }])),
+  // wool (16 colors)
+  ...Object.fromEntries(Object.entries(COLOR16).map(([k, rgb]) =>
+    [`wool_${k}`, { title: cap(k) + ' Wool', gen: (s, sz, r) => genWool(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `wool_${k}` }])),
+  // concrete (16)
+  ...Object.fromEntries(Object.entries(COLOR16).map(([k, rgb]) =>
+    [`concrete_${k}`, { title: cap(k) + ' Concrete', gen: (s, sz, r) => genConcreteC(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `concrete_${k}` }])),
+  // concrete powder (16)
+  ...Object.fromEntries(Object.entries(COLOR16).map(([k, rgb]) =>
+    [`concrete_powder_${k}`, { title: cap(k) + ' Concrete Powder', gen: (s, sz, r) => genConcretePowderC(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `concrete_powder_${k}` }])),
+  // terracotta colors (16)
+  ...Object.fromEntries(Object.entries(COLOR16).map(([k, rgb]) =>
+    [`terracotta_${k}`, { title: cap(k) + ' Terracotta', gen: (s, sz, r) => genTerracottaC(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `terracotta_${k}` }])),
+  // glazed terracotta (16)
+  ...Object.fromEntries(Object.entries(COLOR16).map(([k, rgb]) =>
+    [`glazed_terracotta_${k}`, { title: cap(k) + ' Glazed Terracotta', gen: (s, sz, r) => genGlazedC(s, sz, r, rgb[0], rgb[1], rgb[2]), block: `glazed_terracotta_${k}` }])),
+  // stone variants
+  granite: { title: 'Granite', gen: (s, sz, r) => genSpeckledStone(s, sz, r, GRANITE, GRANITE_ACC), block: 'granite' },
+  polished_granite: { title: 'Polished Granite', gen: (s, sz, r) => genPolishedC(s, sz, r, 150, 108, 104), block: 'polished_granite' },
+  diorite: { title: 'Diorite', gen: (s, sz, r) => genSpeckledStone(s, sz, r, DIORITE, DIORITE_ACC), block: 'diorite' },
+  polished_diorite: { title: 'Polished Diorite', gen: (s, sz, r) => genPolishedC(s, sz, r, 180, 182, 186), block: 'polished_diorite' },
+  andesite: { title: 'Andesite', gen: (s, sz, r) => genSpeckledStone(s, sz, r, ANDESITE, ANDESITE_ACC), block: 'andesite' },
+  polished_andesite: { title: 'Polished Andesite', gen: (s, sz, r) => genPolishedC(s, sz, r, 128, 126, 128), block: 'polished_andesite' },
+  calcite: { title: 'Calcite', gen: (s, sz, r) => genPolishedC(s, sz, r, 220, 222, 224), block: 'calcite' },
+  smooth_stone: { title: 'Smooth Stone', gen: (s, sz, r) => genPolishedC(s, sz, r, 116, 118, 120), block: 'smooth_stone' },
+  stone_bricks: { title: 'Stone Bricks', gen: (s, sz, r) => genStoneBricksC(s, sz, r, 128, 130, 132, false, false), block: 'stone_bricks' },
+  cracked_stone_bricks: { title: 'Cracked Stone Bricks', gen: (s, sz, r) => genStoneBricksC(s, sz, r, 128, 130, 132, false, true), block: 'cracked_stone_bricks' },
+  mossy_stone_bricks: { title: 'Mossy Stone Bricks', gen: (s, sz, r) => genStoneBricksC(s, sz, r, 128, 130, 132, true, false), block: 'mossy_stone_bricks' },
+  chiseled_stone_bricks: { title: 'Chiseled Stone Bricks', gen: (s, sz, r) => genPolishedC(s, sz, r, 132, 134, 136), block: 'chiseled_stone_bricks' },
+  deepslate_bricks: { title: 'Deepslate Bricks', gen: (s, sz, r) => genStoneBricksC(s, sz, r, 76, 74, 88, false, false), block: 'deepslate_bricks' },
+  cracked_deepslate_bricks: { title: 'Cracked Deepslate Bricks', gen: (s, sz, r) => genStoneBricksC(s, sz, r, 76, 74, 88, false, true), block: 'cracked_deepslate_bricks' },
+  chiseled_deepslate: { title: 'Chiseled Deepslate', gen: (s, sz, r) => genPolishedC(s, sz, r, 76, 74, 88), block: 'chiseled_deepslate' },
+  polished_deepslate: { title: 'Polished Deepslate', gen: (s, sz, r) => genPolishedC(s, sz, r, 76, 74, 88), block: 'polished_deepslate' },
+  // sandstone variants
+  smooth_sandstone: { title: 'Smooth Sandstone', gen: (s, sz, r) => genPolishedC(s, sz, r, 200, 184, 128), block: 'smooth_sandstone' },
+  cut_sandstone: { title: 'Cut Sandstone', gen: (s, sz, r) => genSandstoneBase(s, sz, r, 200, 184, 128), block: 'cut_sandstone' },
+  chiseled_sandstone: { title: 'Chiseled Sandstone', gen: (s, sz, r) => genPolishedC(s, sz, r, 202, 186, 130), block: 'chiseled_sandstone' },
+  // nether
+  soul_sand: { title: 'Soul Sand', gen: (s, sz, r) => genSoulSand(s, sz, r, false), block: 'soul_sand' },
+  soul_soil: { title: 'Soul Soil', gen: (s, sz, r) => genSoulSand(s, sz, r, true), block: 'soul_soil' },
+  crimson_nylium: { title: 'Crimson Nylium', gen: (s, sz, r) => genNylium(s, sz, r, 190, 78, 96), block: 'crimson_nylium' },
+  warped_nylium: { title: 'Warped Nylium', gen: (s, sz, r) => genNylium(s, sz, r, 78, 168, 168), block: 'warped_nylium' },
+  nether_wart_block: { title: 'Nether Wart Block', gen: (s, sz, r) => genWartBlock(s, sz, r, 150, 40, 44), block: 'nether_wart_block' },
+  warped_wart_block: { title: 'Warped Wart Block', gen: (s, sz, r) => genWartBlock(s, sz, r, 40, 120, 110), block: 'warped_wart_block' },
+  shroomlight: { title: 'Shroomlight', gen: genShroomlight, block: 'shroomlight' },
+  nether_gold_ore: { title: 'Nether Gold Ore', gen: genNetherGoldOre, block: 'nether_gold_ore' },
+  nether_quartz_ore: { title: 'Nether Quartz Ore', gen: genNetherQuartz, block: 'nether_quartz_ore' },
+  ancient_debris: { title: 'Ancient Debris', gen: genAncientDebris, block: 'ancient_debris' },
+  // end
+  end_stone_bricks: { title: 'End Stone Bricks', gen: (s, sz, r) => genStoneBricksC(s, sz, r, 210, 194, 140, false, false), block: 'end_stone_bricks' },
+  purpur_block: { title: 'Purpur Block', gen: (s, sz, r) => genPurpur(s, sz, r, 170, 130, 176), block: 'purpur_block' },
+  purpur_pillar: { title: 'Purpur Pillar', gen: (s, sz, r) => genPurpurPillar(s, sz, r, 170, 130, 176), block: 'purpur_pillar' },
+  // misc
+  bookshelf: { title: 'Bookshelf', gen: genBookshelf, block: 'bookshelf' },
+  hay_block: { title: 'Hay Block', gen: genHay, block: 'hay_block' },
+  bone_block: { title: 'Bone Block', gen: genBoneBlock, block: 'bone_block' },
+  honey_block: { title: 'Honey Block', gen: genHoney, block: 'honey_block' },
+  dried_kelp_block: { title: 'Dried Kelp Block', gen: genDriedKelp, block: 'dried_kelp_block' },
+  slime_block: { title: 'Slime Block', gen: genSlime, block: 'slime_block' },
+});
+
+function cap(s) { return s.split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '); }
 
 function getTexture(id, seed, size, relief) {
   return TEXTURE_REGISTRY[id].gen(seed, size, relief);

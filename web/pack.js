@@ -68,7 +68,94 @@ const BEDROCK_PATH = {
   prismarine:        'textures/blocks/prismarine.png',
   dark_prismarine:   'textures/blocks/prismarine_dark.png',
   sea_lantern:       'textures/blocks/sea_lantern.png',
+  // handful of official Bedrock asset names for the new palette; the rest fall back to a derived path below.
+  granite:            'textures/blocks/stone_granite.png',
+  polished_granite:   'textures/blocks/stone_granite_smooth.png',
+  diorite:            'textures/blocks/stone_diorite.png',
+  polished_diorite:   'textures/blocks/stone_diorite_smooth.png',
+  andesite:           'textures/blocks/stone_andesite.png',
+  polished_andesite:  'textures/blocks/stone_andesite_smooth.png',
+  stone_bricks:       'textures/blocks/stonebrick.png',
+  cracked_stone_bricks: 'textures/blocks/stonebrick_cracked.png',
+  mossy_stone_bricks: 'textures/blocks/stonebrick_mossy.png',
+  chiseled_stone_bricks: 'textures/blocks/stonebrick_carved.png',
+  end_stone_bricks:   'textures/blocks/end_bricks.png',
+  smooth_stone:       'textures/blocks/stone_smooth.png',
+  smooth_sandstone:   'textures/blocks/sandstone_smooth.png',
+  cut_sandstone:      'textures/blocks/sandstone_cut.png',
+  chiseled_sandstone: 'textures/blocks/sandstone_carved.png',
+  bookshelf:          'textures/blocks/bookshelf.png',
+  hay_block:          'textures/blocks/hay_block_side.png',
+  bone_block:         'textures/blocks/bone_block_side.png',
+  honey_block:        'textures/blocks/honey_block.png',
+  dried_kelp_block:   'textures/blocks/dried_kelp_block.png',
+  slime_block:        'textures/blocks/slime.png',
+  soul_sand:          'textures/blocks/soul_sand.png',
+  soul_soil:          'textures/blocks/soul_soil.png',
+  crimson_nylium:     'textures/blocks/crimson_nylium.png',
+  warped_nylium:      'textures/blocks/warped_nylium.png',
+  nether_wart_block:  'textures/blocks/nether_wart_block.png',
+  warped_wart_block:  'textures/blocks/warped_wart_block.png',
+  shroomlight:        'textures/blocks/shroomlight.png',
+  nether_gold_ore:    'textures/blocks/nether_gold_ore.png',
+  nether_quartz_ore:  'textures/blocks/quartz_ore.png',
+  ancient_debris:     'textures/blocks/ancient_debris_side.png',
+  purpur_block:       'textures/blocks/purpur_block.png',
+  purpur_pillar:      'textures/blocks/purpur_pillar.png',
+  calcite:            'textures/blocks/calcite.png',
+  deepslate_bricks:   'textures/blocks/deepslate_bricks.png',
+  cracked_deepslate_bricks: 'textures/blocks/deepslate_bricks_cracked.png',
+  chiseled_deepslate: 'textures/blocks/deepslate_chiseled.png',
+  polished_deepslate: 'textures/blocks/deepslate_polished.png',
 };
+
+// Derive a sensible Bedrock path for any block not explicitly listed above:
+// concrete_red -> textures/blocks/concrete_red.png, spruce_planks -> textures/blocks/planks_spruce.png,
+// gamed ids that ship under a generic name get a stable fallback file name.
+function bedrockPath(id) {
+  if (BEDROCK_PATH[id]) return BEDROCK_PATH[id];
+  const b = TEXTURE_REGISTRY[id] ? TEXTURE_REGISTRY[id].block : id;
+  // Official vanilla family names that differ from our internal ids.
+  const plankFamilies = ['spruce','birch','jungle','acacia','dark_oak','mangrove','cherry','crimson','warped'];
+  if (b.endsWith('_planks')) {
+    const fam = b.slice(0, -'_planks'.length);
+    return `textures/blocks/planks_${fam}.png`;
+  }
+  if (b.endsWith('_log_side')) {
+    const fam = b.slice(0, -'_log_side'.length);
+    return `textures/blocks/log_${fam}.png`;
+  }
+  if (b.endsWith('_log_top')) {
+    const fam = b.slice(0, -'_log_top'.length);
+    return `textures/blocks/log_${fam}_top.png`;
+  }
+  if (b.startsWith('leaves_')) {
+    const fam = b.slice('leaves_'.length);
+    return `textures/blocks/leaves_${fam}.png`;
+  }
+  if (b.startsWith('wool_')) {
+    const color = b.slice('wool_'.length);
+    return `textures/blocks/wool_colored_${color}.png`;
+  }
+  if (b.startsWith('glazed_terracotta_')) {
+    const color = b.slice('glazed_terracotta_'.length);
+    return `textures/blocks/glazed_terracotta_${color}.png`;
+  }
+  if (b.startsWith('concrete_powder_')) {
+    const color = b.slice('concrete_powder_'.length);
+    return `textures/blocks/concrete_powder_${color}.png`;
+  }
+  if (b.startsWith('concrete_')) {
+    const color = b.slice('concrete_'.length);
+    return `textures/blocks/concrete_${color}.png`;
+  }
+  if (b.startsWith('terracotta_')) {
+    const color = b.slice('terracotta_'.length);
+    return `textures/blocks/hardened_clay_stained_${color}.png`;
+  }
+  if (b.startsWith('purpur_pillar')) return 'textures/blocks/purpur_pillar.png';
+  return `textures/blocks/${b}.png`;
+}
 
 function makeResourceManifest(name, uuid, minEngine) {
   return {
@@ -143,17 +230,18 @@ function buildTexturePack(seed, size, realism, packName) {
 
     const rel = realism * 0.6 + 0.2; // pack relief clamping
     const relBundle = getTexture(id, seed, size, rel);
+    const relPath = bedrockPath(id);
     entries.push({
-      path: BEDROCK_PATH[id],
+      path: relPath,
       data: imageDataToCanvas(relBundle.color),
     });
     // optional PBR maps (documented — consumed when a matching shader wires them)
     entries.push({
-      path: BEDROCK_PATH[id].replace('.png', '_n.png'),
+      path: relPath.replace('.png', '_n.png'),
       data: imageDataToCanvas(relBundle.normal),
     });
     entries.push({
-      path: BEDROCK_PATH[id].replace('.png', '_roughness.png'),
+      path: relPath.replace('.png', '_roughness.png'),
       data: imageDataToCanvas(relBundle.shaded), // cheap roughness stand-in derived from shading
     });
   }

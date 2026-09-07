@@ -106,7 +106,33 @@ const PATH_OVERRIDE = {
   dark_prismarine: 'textures/blocks/prismarine_dark.png',
   basalt_side: 'textures/blocks/basalt_side.png',
 };
-const pathOf = (id) => PATH_OVERRIDE[id] || `textures/blocks/${id}.png`;
+function pathOf(id) {
+  if (PATH_OVERRIDE[id]) return PATH_OVERRIDE[id];
+  const b = PixelCraft.TEXTURE_REGISTRY[id] ? PixelCraft.TEXTURE_REGISTRY[id].block : id;
+  if (b.endsWith('_planks')) return `textures/blocks/planks_${b.slice(0, -7)}.png`;
+  if (b.endsWith('_log_side')) return `textures/blocks/log_${b.slice(0, -9)}.png`;
+  if (b.endsWith('_log_top')) return `textures/blocks/log_${b.slice(0, -8)}_top.png`;
+  if (b.startsWith('leaves_')) return `textures/blocks/leaves_${b.slice(7)}.png`;
+  if (b.startsWith('wool_')) return `textures/blocks/wool_colored_${b.slice(5)}.png`;
+  if (b.startsWith('glazed_terracotta_')) return `textures/blocks/glazed_terracotta_${b.slice(19)}.png`;
+  if (b.startsWith('concrete_powder_')) return `textures/blocks/concrete_powder_${b.slice(16)}.png`;
+  if (b.startsWith('concrete_')) return `textures/blocks/concrete_${b.slice(9)}.png`;
+  if (b.startsWith('terracotta_')) return `textures/blocks/hardened_clay_stained_${b.slice(11)}.png`;
+  if (b.startsWith('purpur_pillar')) return 'textures/blocks/purpur_pillar.png';
+  const single = {
+    stone_bricks: 'stonebrick', cracked_stone_bricks: 'stonebrick_cracked',
+    mossy_stone_bricks: 'stonebrick_mossy', chiseled_stone_bricks: 'stonebrick_carved',
+    end_stone_bricks: 'end_bricks', smooth_stone: 'stone_smooth',
+    smooth_sandstone: 'sandstone_smooth', cut_sandstone: 'sandstone_cut',
+    chiseled_sandstone: 'sandstone_carved', quartz_block: 'quartz_block_top',
+    bookshelf: 'bookshelf', hay_block: 'hay_block_side', bone_block: 'bone_block_side',
+    honey_block: 'honey_block', dried_kelp_block: 'dried_kelp_block', slime_block: 'slime',
+    polished_granite: 'stone_granite_smooth', polished_diorite: 'stone_diorite_smooth',
+    polished_andesite: 'stone_andesite_smooth', granite: 'stone_granite',
+    diorite: 'stone_diorite', andesite: 'stone_andesite',
+  };
+  return `textures/blocks/${single[b] || b}.png`;
+}
 const SEED = 1337; const SIZE = 128; const REL = 0.6;
 const manifest = `{
   "format_version": 2,

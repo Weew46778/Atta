@@ -82,7 +82,72 @@ class MainActivity : AppCompatActivity() {
         BlockDef("Lapis Block", "lapis_block"),
         BlockDef("Copper Block", "copper_block"),
         BlockDef("Netherite Block", "netherite_block"),
-    )
+    ) + expandedBlocks()
+
+    // Expanded block palette (batch 3): wood variants, colours, stone, nether & end.
+    private fun expandedBlocks(): List<BlockDef> {
+        val out = mutableListOf<BlockDef>()
+        val woods = listOf(
+            "spruce" to "Spruce", "birch" to "Birch", "jungle" to "Jungle", "acacia" to "Acacia",
+            "dark_oak" to "Dark Oak", "mangrove" to "Mangrove", "cherry" to "Cherry",
+            "crimson" to "Crimson", "warped" to "Warped"
+        )
+        for ((key, label) in woods) {
+            out += BlockDef("$label Log", "${key}_log")
+            out += BlockDef("$label Planks", "${key}_planks")
+            if (key != "crimson" && key != "warped") out += BlockDef("$label Leaves", "leaves_$key")
+        }
+        val colors = listOf(
+            "white" to "White", "orange" to "Orange", "magenta" to "Magenta", "light_blue" to "Light Blue",
+            "yellow" to "Yellow", "lime" to "Lime", "pink" to "Pink", "gray" to "Gray",
+            "light_gray" to "Light Gray", "cyan" to "Cyan", "purple" to "Purple", "blue" to "Blue",
+            "brown" to "Brown", "green" to "Green", "red" to "Red", "black" to "Black"
+        )
+        for ((key, label) in colors) {
+            out += BlockDef("$label Wool", "wool_$key")
+            out += BlockDef("$label Concrete", "concrete_$key")
+            out += BlockDef("$label Concrete Powder", "concrete_powder_$key")
+            out += BlockDef("$label Terracotta", "terracotta_$key")
+            out += BlockDef("$label Glazed Terracotta", "glazed_terracotta_$key")
+        }
+        out += BlockDef("Granite", "granite")
+        out += BlockDef("Polished Granite", "polished_granite")
+        out += BlockDef("Diorite", "diorite")
+        out += BlockDef("Polished Diorite", "polished_diorite")
+        out += BlockDef("Andesite", "andesite")
+        out += BlockDef("Polished Andesite", "polished_andesite")
+        out += BlockDef("Calcite", "calcite")
+        out += BlockDef("Smooth Stone", "smooth_stone")
+        out += BlockDef("Stone Bricks", "stone_bricks")
+        out += BlockDef("Mossy Stone Bricks", "mossy_stone_bricks")
+        out += BlockDef("Cracked Stone Bricks", "cracked_stone_bricks")
+        out += BlockDef("Chiseled Stone Bricks", "chiseled_stone_bricks")
+        out += BlockDef("Deepslate Bricks", "deepslate_bricks")
+        out += BlockDef("Polished Deepslate", "polished_deepslate")
+        out += BlockDef("Smooth Sandstone", "smooth_sandstone")
+        out += BlockDef("Cut Sandstone", "cut_sandstone")
+        out += BlockDef("Chiseled Sandstone", "chiseled_sandstone")
+        out += BlockDef("End Stone Bricks", "end_stone_bricks")
+        out += BlockDef("Soul Sand", "soul_sand")
+        out += BlockDef("Soul Soil", "soul_soil")
+        out += BlockDef("Crimson Nylium", "crimson_nylium")
+        out += BlockDef("Warped Nylium", "warped_nylium")
+        out += BlockDef("Nether Wart Block", "nether_wart_block")
+        out += BlockDef("Warped Wart Block", "warped_wart_block")
+        out += BlockDef("Shroomlight", "shroomlight")
+        out += BlockDef("Nether Gold Ore", "nether_gold_ore")
+        out += BlockDef("Nether Quartz Ore", "nether_quartz_ore")
+        out += BlockDef("Ancient Debris", "ancient_debris")
+        out += BlockDef("Purpur Block", "purpur_block")
+        out += BlockDef("Purpur Pillar", "purpur_pillar")
+        out += BlockDef("Bookshelf", "bookshelf")
+        out += BlockDef("Hay Block", "hay_block")
+        out += BlockDef("Bone Block", "bone_block")
+        out += BlockDef("Honey Block", "honey_block")
+        out += BlockDef("Dried Kelp Block", "dried_kelp_block")
+        out += BlockDef("Slime Block", "slime_block")
+        return out
+    }
 
     private val resolutions = intArrayOf(16, 32, 64)
 
@@ -170,11 +235,17 @@ class MainActivity : AppCompatActivity() {
         b.reliefLabel.text = "Relief (bump strength)  ·  ${(relief * 100).toInt()}%"
     }
 
+    private val logWoods = listOf("spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry", "crimson", "warped")
+
     private fun faceIds(key: String): Triple<String, String, String> = when (key) {
         "grass" -> Triple("grass_top", "grass_side", "grass_bottom")
         "oak_log" -> Triple("oak_log_top", "oak_log_side", "oak_log_top")
         "mycelium" -> Triple("mycelium_top", "mycelium_side", "mycelium_top")
-        else -> Triple(key, key, key)
+        else -> {
+            val w = key.removeSuffix("_log")
+            if (key.endsWith("_log") && w in logWoods) Triple("${w}_log_top", "${w}_log_side", "${w}_log_top")
+            else Triple(key, key, key)
+        }
     }
 
     private fun regeneratePreview() {
