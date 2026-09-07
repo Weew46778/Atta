@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 class VoiceAssistantActivity : AppCompatActivity() {
 
     private lateinit var tts: TextToSpeechManager
-    private val stt = SpeechRecognitionManager(this)
+    private val stt by lazy { SpeechRecognitionManager(this) }
     private lateinit var messages: LinearLayout
     private lateinit var input: EditText
     private lateinit var scroll: ScrollView

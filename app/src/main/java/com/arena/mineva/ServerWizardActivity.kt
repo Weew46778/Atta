@@ -51,12 +51,12 @@ class ServerWizardActivity : AppCompatActivity() {
     private var target = ServerTarget.LOCAL
     private var edition = ServerEdition.BEDROCK
 
-    private val javaCheck = CheckBox(this)
-    private val bedrockCheck = CheckBox(this).apply { isChecked = true }
-    private val geyserCheck = CheckBox(this)
-    private val bungeeCheck = CheckBox(this)
+    private val javaCheck by lazy { CheckBox(this) }
+    private val bedrockCheck by lazy { CheckBox(this).apply { isChecked = true } }
+    private val geyserCheck by lazy { CheckBox(this) }
+    private val bungeeCheck by lazy { CheckBox(this) }
 
-    private val catalog = PackageCatalog(this)
+    private val catalog by lazy { PackageCatalog(this) }
     private lateinit var pluginChecks: MutableList<CheckBox>
     private lateinit var modChecks: MutableList<CheckBox>
     private lateinit var packChecks: MutableList<CheckBox>

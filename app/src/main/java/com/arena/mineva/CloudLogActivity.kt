@@ -35,7 +35,7 @@ import java.io.File
 class CloudLogActivity : AppCompatActivity() {
 
     private val tts by lazy { TextToSpeechManager(this) }
-    private val onDevice = OnDeviceServerManager(this)
+    private val onDevice by lazy { OnDeviceServerManager(this) }
     private lateinit var config: ServerConfig
     private lateinit var output: LinearLayout
     private lateinit var filterInput: EditText

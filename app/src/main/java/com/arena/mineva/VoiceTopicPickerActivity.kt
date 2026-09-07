@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 class VoiceTopicPickerActivity : AppCompatActivity() {
 
     private lateinit var tts: TextToSpeechManager
-    private val stt = SpeechRecognitionManager(this)
+    private val stt by lazy { SpeechRecognitionManager(this) }
     private lateinit var list: LinearLayout
     private lateinit var titleInput: EditText
     private lateinit var detailInput: EditText

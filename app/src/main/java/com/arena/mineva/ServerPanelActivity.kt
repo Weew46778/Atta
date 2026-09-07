@@ -42,7 +42,7 @@ class ServerPanelActivity : AppCompatActivity() {
     private lateinit var rconPasswordInput: EditText
     private lateinit var rconEnabled: CheckBox
     private var rcon: RconClient? = null
-    private val onDevice = OnDeviceServerManager(this)
+    private val onDevice by lazy { OnDeviceServerManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

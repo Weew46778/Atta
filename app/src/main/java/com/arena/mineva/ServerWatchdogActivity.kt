@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 class ServerWatchdogActivity : AppCompatActivity() {
 
     private val tts by lazy { TextToSpeechManager(this) }
-    private val watchdog = ServerWatchdog(this)
+    private val watchdog by lazy { ServerWatchdog(this) }
     private lateinit var output: LinearLayout
     private lateinit var autoRestart: CheckBox
     private lateinit var backgroundCheck: CheckBox

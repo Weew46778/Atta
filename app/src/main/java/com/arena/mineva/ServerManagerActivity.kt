@@ -27,8 +27,8 @@ import kotlinx.coroutines.withContext
 class ServerManagerActivity : AppCompatActivity() {
 
     private val tts by lazy { TextToSpeechManager(this) }
-    private val onDevice = OnDeviceServerManager(this)
-    private val onDeviceJava = OnDeviceJavaServerManager(this)
+    private val onDevice by lazy { OnDeviceServerManager(this) }
+    private val onDeviceJava by lazy { OnDeviceJavaServerManager(this) }
     private lateinit var remotePassword: EditText
     private lateinit var remoteKeyPass: EditText
     private lateinit var output: LinearLayout
