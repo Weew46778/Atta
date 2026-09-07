@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">PixelCraft Studio</string>
+    <string name="export_texture">Export Texture Pack (.mcpack)</string>
+    <string name="export_shader">Export Shader Pack (.mcpack)</string>
+    <string name="realism">Realism / Detail</string>
+    <string name="relief">Relief (bump strength)</string>
+    <string name="resolution">Base resolution</string>
+    <string name="seed">Seed</string>
+    <string name="randomize">Random</string>
+    <string name="pack_name">Pack name</string>
+    <string name="block_title" translatable="false">Grass Block</string>
+    <string name="hint_drag">Drag to rotate · pinch to zoom</string>
+    <string name="generated">Generated ✨</string>
+</resources>

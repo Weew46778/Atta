@@ -1,0 +1,138 @@
+#!/usr/bin/env node
+/*
+ * PixelCraft Studio — sample pack generator (Node, offline).
+ * Regenerates the procedural textures and packs them into a real, importable
+ * Bedrock `.mcpack` (ZIP of RGBA PNGs + manifest). Pure Node: no deps beyond
+ * the built-in zlib. Run:  node tools/generate_sample_pack.js
+ */
+const fs = require('fs');
+const path = require('path');
+const zlib = require('zlib');
+
+// ---- shared-global load of the browser engine ----
+global.window = global;
+class ImageData { constructor(w, h) { this.width = w; this.height = h; this.data = new Uint8ClampedArray(w * h * 4); } }
+global.ImageData = ImageData;
+const src = ['noise.js', 'texturegen.js'].map((f) => fs.readFileSync(path.join(__dirname, '..', 'web', f), 'utf8')).join('\n');
+const PixelCraft = new Function(src + '\nreturn window.PixelCraft;')();
+
+// ---- minimal RGBA PNG encoder ----
+const CRC_TABLE = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+function crc32(bytes) {
+  let c = 0xFFFFFFFF;
+  for (const b of bytes) c = CRC_TABLE[(c ^ b) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function chunk(type, data) {
+  const len = Buffer.alloc(4); len.writeUInt32BE(data.length, 0);
+  const td = Buffer.concat([Buffer.from(type, 'ascii'), data]);
+  const crc = Buffer.alloc(4); crc.writeUInt32BE(crc32(td), 0);
+  return Buffer.concat([len, td, crc]);
+}
+function encodePNG(img) {
+  const { width: w, height: h } = img;
+  const raw = Buffer.alloc((w * 4 + 1) * h);
+  let o = 0;
+  for (let y = 0; y < h; y++) {
+    raw[o++] = 0; // filter: none
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4;
+      raw[o++] = img.data[i]; raw[o++] = img.data[i + 1]; raw[o++] = img.data[i + 2]; raw[o++] = img.data[i + 3];
+    }
+  }
+  const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(w, 0); ihdr.writeUInt32BE(h, 4);
+  ihdr[8] = 8; ihdr[9] = 6; ihdr[10] = 0; ihdr[11] = 0; ihdr[12] = 0; // 8-bit RGBA
+  const idat = zlib.deflateSync(raw);
+  return Buffer.concat([sig, chunk('IHDR', ihdr), chunk('IDAT', idat), chunk('IEND', Buffer.alloc(0))]);
+}
+
+// ---- minimal ZIP writer (store) ----
+const ZIP_CRC = CRC_TABLE;
+function zipCrc(bytes) {
+  let c = 0xFFFFFFFF;
+  for (const b of bytes) c = ZIP_CRC[(c ^ b) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+const u16 = (v) => [v & 0xFF, (v >>> 8) & 0xFF];
+const u32 = (v) => [v & 0xFF, (v >>> 8) & 0xFF, (v >>> 16) & 0xFF, (v >>> 24) & 0xFF];
+function buildZip(files) {
+  const out = []; const central = []; let offset = 0;
+  const dt = [0x21, 0x0E]; const dd = [0x21, 0xA9];
+  for (const f of files) {
+    const name = Buffer.from(f.path, 'utf8');
+    const data = Buffer.from(f.data);
+    const crc = zipCrc(data);
+    const lfh = [0x50, 0x4B, 0x03, 0x04, ...u16(20), ...u16(0x0800), ...u16(0), ...dt, ...dd, ...u32(crc), ...u32(data.length), ...u32(data.length), ...u16(name.length), ...u16(0), ...name, ...data];
+    out.push(Buffer.from(lfh));
+    central.push({ name, crc, size: data.length, offset, nameLen: name.length });
+    offset += lfh.length;
+  }
+  const cdStart = offset;
+  let cd = [];
+  for (const c of central) {
+    cd = cd.concat([0x50, 0x4B, 0x01, 0x02, ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...dt, ...dd, ...u32(c.crc), ...u32(c.size), ...u32(c.size), ...u16(c.nameLen), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(c.offset), ...c.name]);
+  }
+  const cdLen = cd.length;
+  const eocd = [0x50, 0x4B, 0x05, 0x06, ...u16(0), ...u16(0), ...u16(central.length), ...u16(central.length), ...u32(cdLen), ...u32(cdStart), ...u16(0)];
+  return Buffer.concat([...out, Buffer.from(cd), Buffer.from(eocd)]);
+}
+
+// ---- build the sample texture pack ----
+const BEDROCK_PATH = {
+  grass_top: 'textures/blocks/grass_top.png',
+  grass_side: 'textures/blocks/grass_side.png',
+  grass_bottom: 'textures/blocks/grass_bottom.png',
+  dirt: 'textures/blocks/dirt.png',
+  stone: 'textures/blocks/stone.png',
+  cobblestone: 'textures/blocks/cobblestone.png',
+  oak_log_side: 'textures/blocks/log_oak.png',
+  oak_log_top: 'textures/blocks/log_oak_top.png',
+  oak_planks: 'textures/blocks/planks_oak.png',
+  sand: 'textures/blocks/sand.png',
+  bricks: 'textures/blocks/brick.png',
+  snow: 'textures/blocks/snow.png',
+  oak_leaves: 'textures/blocks/leaves_oak.png',
+  water: 'textures/blocks/water_still.png',
+};
+const SEED = 1337; const SIZE = 128; const REL = 0.6;
+const manifest = `{
+  "format_version": 2,
+  "header": {
+    "name": "PixelCraft Sample Realistic Pack",
+    "description": "PixelCraft Studio - ultra realistic procedural texture pack",
+    "uuid": "2f7c9b1e-0c1f-4a9b-8c3d-5f1a2e4b6c7d",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 26, 0]
+  },
+  "modules": [
+    { "type": "resources", "uuid": "0a6b2c3e-1d2f-4e9a-9b1c-3d2f4e5a6b7c", "version": [1, 0, 0] }
+  ],
+  "settings": { "textures": { "brightness": 1.0, "num_mip_levels": 4 } }
+}
+`;
+
+const files = [{ path: 'manifest.json', data: manifest }];
+for (const id of Object.keys(BEDROCK_PATH)) {
+  const b = PixelCraft.getTexture(id, SEED, SIZE, REL);
+  files.push({ path: BEDROCK_PATH[id], data: encodePNG(b.color) });
+  files.push({ path: BEDROCK_PATH[id].replace('.png', '_n.png'), data: encodePNG(b.normal) });
+  files.push({ path: BEDROCK_PATH[id].replace('.png', '_roughness.png'), data: encodePNG(b.shaded) });
+  console.log(' +', id);
+}
+
+const outDir = path.join(__dirname, '..', 'art', 'sample');
+fs.mkdirSync(outDir, { recursive: true });
+const blob = buildZip(files);
+const outPath = path.join(outDir, 'PixelCraft_Sample_Texture.mcpack');
+fs.writeFileSync(outPath, blob);
+console.log('\nWrote', outPath, `(${blob.length} bytes, ${files.length} files)`);
