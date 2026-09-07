@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.guide.GuideController
+import com.arena.mineva.system.CrashReporter
 import com.arena.mineva.service.OverlayService
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +27,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tts = TextToSpeechManager(this)
-        tts.init { tts.speak("سلام! من آوا هستم، دستیار ماینکرافت تو. منوی اصلی آماده است.") }
+        runCatching {
+            tts.init { tts.speak("سلام! من آوا هستم، دستیار ماینکرافت تو. منوی اصلی آماده است.") }
+        }
 
         if (!AppPrefs.onboarded) {
             startActivity(Intent(this, OnboardingActivity::class.java))
@@ -51,6 +54,13 @@ class MainActivity : AppCompatActivity() {
         ))
 
         root.addView(assistantHeader())
+
+        val crash = CrashReporter.latestCrash()
+        if (crash != null) {
+            root.addView(
+                Ui.text(this, "⚠️ اجرای قبلی با خطا متوقف شد: ${crash.lineSequence().firstOrNull()?.take(120) ?: crash.take(120)}", 12f, 0xFFFF5A5A.toInt())
+            )
+        }
 
         root.addView(sectionTitle("لانچر"))
         root.addView(

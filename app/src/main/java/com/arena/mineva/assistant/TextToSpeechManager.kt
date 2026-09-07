@@ -41,23 +41,28 @@ class TextToSpeechManager(private val context: Context) {
         }
 
     fun init(onReady: () -> Unit) {
-        tts = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                ready = true
-                persianVoiceAvailable = configurePersian()
-                onReady()
-            } else {
-                ready = false
-                onReady()
+        runCatching {
+            tts = TextToSpeech(context) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    ready = true
+                    persianVoiceAvailable = configurePersian()
+                    onReady()
+                } else {
+                    ready = false
+                    onReady()
+                }
             }
+            tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String?) {}
+                override fun onDone(utteranceId: String?) {}
+                @Deprecated("Deprecated in Java")
+                override fun onError(utteranceId: String?) {}
+                override fun onError(utteranceId: String?, errorCode: Int) {}
+            })
+        }.onFailure {
+            ready = false
+            onReady()
         }
-        tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(utteranceId: String?) {}
-            override fun onDone(utteranceId: String?) {}
-            @Deprecated("Deprecated in Java")
-            override fun onError(utteranceId: String?) {}
-            override fun onError(utteranceId: String?, errorCode: Int) {}
-        })
     }
 
     private fun configurePersian(): Boolean {

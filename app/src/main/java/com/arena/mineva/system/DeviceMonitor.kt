@@ -73,12 +73,13 @@ object DeviceMonitor {
     }
 
     private class PushStats {
-        val cpu = File("/proc/stat").readText()
+        val cpu: String = runCatching { File("/proc/stat").readText() }.getOrDefault("")
         val time = System.nanoTime()
     }
 
     private fun cpuLoadPercent(start: PushStats): Int {
         return try {
+            if (start.cpu.isBlank()) return 0
             val a = start.cpu.split("\n").firstOrNull()?.trim()?.split("\\s+".toRegex())
                 ?.mapNotNull { it.toLongOrNull() } ?: return 0
             val end = File("/proc/stat").readText()

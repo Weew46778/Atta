@@ -54,7 +54,7 @@ object Diagnostics {
         checks += check(
             "stt",
             "تشخیص گفتار (STT)",
-            SpeechRecognizer.isRecognitionAvailable(context),
+            runCatching { SpeechRecognizer.isRecognitionAvailable(context) }.getOrDefault(false),
             "در صورت نبود، Google Speech Service یا پکیج فارسی لازم است."
         )
 
@@ -82,7 +82,7 @@ object Diagnostics {
         checks += check(
             "knowledge",
             "دایرهالمعارف محلی",
-            KnowledgeRepository(context).search("netherite") != null,
+            runCatching { KnowledgeRepository(context).search("netherite") != null }.getOrDefault(false),
             "فایل دانش محلی باید بارگذاری شود."
         )
 
@@ -93,7 +93,8 @@ object Diagnostics {
             "برای جواب کامل آنلاین، کلید Gemini در تنظیمات لازم است."
         )
 
-        val snap = DeviceMonitor.snapshot(context)
+        val snap = runCatching { DeviceMonitor.snapshot(context) }.getOrNull()
+        if (snap != null) {
         checks += check(
             "ram",
             "حافظه رم",
@@ -115,6 +116,7 @@ object Diagnostics {
             if (snap.temperatureC > 0) "${snap.temperatureC} درجه سانتیگراد" else "در دسترس نیست."
         )
 
+        }
         return checks
     }
 

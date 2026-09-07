@@ -55,6 +55,7 @@ jobs:
             fi
           } 2>&1 | tee /tmp/build.log
           echo "== exit=${PIPESTATUS[0]} =="
+          exit "${PIPESTATUS[0]}"
 
       - name: Show build outputs
         if: always()

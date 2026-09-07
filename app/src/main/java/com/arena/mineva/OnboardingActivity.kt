@@ -23,10 +23,12 @@ class OnboardingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tts = TextToSpeechManager(this)
-        tts.init {
-            tts.speak(
-                "سلام! من آوا هستم. اول چند دسترسی لازم دارم و یک تست کوتاه میگیرم تا مطمئن شویم همه چیز آماده است."
-            )
+        runCatching {
+            tts.init {
+                tts.speak(
+                    "سلام! من آوا هستم. اول چند دسترسی لازم دارم و یک تست کوتاه میگیرم تا مطمئن شویم همه چیز آماده است."
+                )
+            }
         }
 
         val root = Ui.fill(this)
@@ -53,7 +55,12 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun renderChecks() {
         list.removeAllViews()
-        val checks = Diagnostics.run(this)
+        val checks = runCatching { Diagnostics.run(this) }.getOrElse {
+            val e = it
+            list.addView(Ui.text(this, "در بررسی سیستم خطا پیش آمد", 14f, 0xFFFF5A5A.toInt()))
+            list.addView(Ui.text(this, e.message ?: e.javaClass.simpleName, 12f, 0xFF9FB2C2.toInt()))
+            return
+        }
         checks.forEach { c ->
             val symbol = if (c.ok) "✓" else "✗"
             val color = if (c.ok) 0xFF35D07F.toInt() else 0xFFFF5A5A.toInt()
