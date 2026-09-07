@@ -63,8 +63,10 @@ class ServerWizardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tts.init {
-            tts.speak("ساخت سرور خودکار. بگو سرور را کجا بسازم یا از گزینهها انتخاب کن.")
+        runCatching {
+                tts.init {
+                    tts.speak("ساخت سرور خودکار. بگو سرور را کجا بسازم یا از گزینهها انتخاب کن.")
+                }
         }
         val root = Ui.fill(this)
         root.addView(Ui.text(this, "🛠 ساخت سرور خودکار", 22f, 0xFF2E70B8.toInt(), bold = true))
@@ -295,27 +297,33 @@ class ServerWizardActivity : AppCompatActivity() {
     )
 
     private fun buildServer() {
-        val config = createConfig()
-        val recipe = ServerRecipeGenerator.generate(this, config)
-        val profileId = ServerProfileStore.add(config, profileNameField.text.toString().trim().ifBlank { null })
-        ServerProfileStore.setActive(profileId)
-        AppPrefs.lastServerConfigJson = config.toJson()
-        AppPrefs.homeServerTarget = config.target.name
-
         result.removeAllViews()
-        result.addView(Ui.text(this, "✅ سرور آماده شد", 20f, 0xFF35D07F.toInt(), bold = true))
-        result.addView(Ui.text(this, "فایل: ${recipe.fileName}", 14f))
-        result.addView(Ui.text(this, "مسیر: ${recipe.path}", 12f, 0xFF9FB2C2.toInt()))
-        result.addView(Ui.text(this, recipe.notes, 13f, 0xFFD8E3EC.toInt()))
-        result.addView(
-            Ui.button(this, "📋 کپی اسکریپت", 0xFF2E70B8.toInt(), 46f) {
-                val cm = getSystemService(ClipboardManager::class.java)
-                cm.setPrimaryClip(android.content.ClipData.newPlainText("mineava_server", recipe.script))
-                tts.speak("دستورات سرور در کلیپبورد کپی شد.")
-            }
-        )
-        GuideController.markStepDone("server", this, tts)
-        tts.speak("آماده شد. فایل دستورات ساخته شد و در کلیپبورد میتوانی کپی کنی. برای ساخت واقعی روی VPS از دکمه «ساخت و اجرای خودکار روی VPS» استفاده کن.")
+        try {
+            val config = createConfig()
+            val recipe = ServerRecipeGenerator.generate(this, config)
+            val profileId = ServerProfileStore.add(config, profileNameField.text.toString().trim().ifBlank { null })
+            ServerProfileStore.setActive(profileId)
+            AppPrefs.lastServerConfigJson = config.toJson()
+            AppPrefs.homeServerTarget = config.target.name
+
+            result.addView(Ui.text(this, "✅ سرور آماده شد", 20f, 0xFF35D07F.toInt(), bold = true))
+            result.addView(Ui.text(this, "فایل: ${recipe.fileName}", 14f))
+            result.addView(Ui.text(this, "مسیر: ${recipe.path}", 12f, 0xFF9FB2C2.toInt()))
+            result.addView(Ui.text(this, recipe.notes, 13f, 0xFFD8E3EC.toInt()))
+            result.addView(
+                Ui.button(this, "📋 کپی اسکریپت", 0xFF2E70B8.toInt(), 46f) {
+                    val cm = getSystemService(ClipboardManager::class.java)
+                    cm.setPrimaryClip(android.content.ClipData.newPlainText("mineava_server", recipe.script))
+                    tts.speak("دستورات سرور در کلیپ‌بورد کپی شد.")
+                }
+            )
+            GuideController.markStepDone("server", this, tts)
+            tts.speak("آماده شد. فایل دستورات ساخته شد و در کلیپ‌بورد می‌توانی کپی کنی. برای ساخت واقعی روی VPS از دکمه «ساخت و اجرای خودکار روی VPS» استفاده کن.")
+        } catch (e: Exception) {
+            result.addView(Ui.text(this, "❌ در ساخت سرور خطا پیش آمد", 18f, 0xFFFF5A5A.toInt(), bold = true))
+            result.addView(Ui.text(this, (e.message ?: e.javaClass.simpleName).take(400), 12f, 0xFFD8E3EC.toInt()))
+            runCatching { tts.speak("در ساخت سرور خطایی رخ داد. متن خطا را از صفحه ببین.") }
+        }
     }
 
     private fun pickKeyFile() {
@@ -347,10 +355,22 @@ class ServerWizardActivity : AppCompatActivity() {
     }
 
     private fun deployVps() {
+        result.removeAllViews()
+        try {
+            buildVps()
+        } catch (e: Exception) {
+            deployButton.isEnabled = true
+            deployButton.text = "🖥 ساخت و اجرای خودکار روی VPS (SSH)"
+            result.addView(Ui.text(this, "❌ خطا در شروع استقرار", 18f, 0xFFFF5A5A.toInt(), bold = true))
+            result.addView(Ui.text(this, (e.message ?: e.javaClass.simpleName).take(400), 12f, 0xFFD8E3EC.toInt()))
+            runCatching { tts.speak("در شروع استقرار خطایی رخ داد.") }
+        }
+    }
+
+    private fun buildVps() {
         val config = createConfig()
         if (config.host.isBlank() || config.user.isBlank()) {
             tts.speak("اول آدرس VPS و نام کاربری SSH را وارد کن.")
-            result.removeAllViews()
             result.addView(Ui.text(this, "آدرس VPS و نام کاربری SSH را وارد کن.", 14f, 0xFFFF5A5A.toInt()))
             return
         }

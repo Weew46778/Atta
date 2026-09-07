@@ -20,15 +20,25 @@ object ServerRecipeGenerator {
         val shell = buildScript(config)
         val md = buildMarkdown(config, shell)
         val fileName = "MineAva-server-${System.currentTimeMillis()}.sh"
-        val saved = saveDownload(context, fileName, shell)
+        val saved = saveDownloadSafe(context, fileName, shell)
         return RecipeResult(
             fileName = saved?.name ?: fileName,
             script = shell,
             markdown = md,
-            path = saved?.absolutePath ?: "Download/MineAva/$fileName",
+            path = saved?.absolutePath ?: "فایل‌های اپ/recipes/$fileName",
             notes = buildNotes(config)
         )
     }
+
+    private fun saveDownloadSafe(context: Context, name: String, content: String): File? =
+        runCatching { saveDownload(context, name, content) }.getOrElse {
+            runCatching {
+                val dir = File(context.filesDir, "recipes").apply { mkdirs() }
+                val file = File(dir, name)
+                file.writeText(content)
+                file
+            }.getOrNull()
+        }
 
     fun buildScript(c: ServerConfig): String {
         val sb = StringBuilder()
