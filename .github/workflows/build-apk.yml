@@ -39,8 +39,10 @@ jobs:
         continue-on-error: true
         run: |
           cd android
-          gradle assembleDebug --no-daemon --stacktrace > /tmp/build.log 2>&1 || true
+          gradle assembleDebug --no-daemon --stacktrace > /tmp/build.log 2>&1
+          code=$?
           tail -140 /tmp/build.log
+          exit $code
 
       - name: Report failure to PR
         if: always() && steps.build.outcome == 'failure'
