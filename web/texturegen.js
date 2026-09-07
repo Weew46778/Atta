@@ -15,21 +15,81 @@ function makeImage(size) {
   return new ImageData(size, size);
 }
 
+// Global quality / realism settings, mutated by the UI. synthesizeTexture reads these
+// so every generator benefits from detail, AO, contrast and saturation tuning.
+const TEXTURE_CONFIG = {
+  detail: 0.55,     // high-frequency micro-detail added to the height field (0..1)
+  contrast: 0.5,    // 0..1
+  saturation: 0.62, // 0..1
+  ao: 0.58,         // cavity ambient-occlusion strength (0..1)
+};
+
 // Build a full texture bundle. `genFn(px, py, size, noise2, rand)` writes RGBA into `rgba`,
 // and returns a height value in [-1,1]. We use the returned height for the normal map.
+// `relief` scales the normal bump strength. Quality comes from TEXTURE_CONFIG.
 function synthesizeTexture(seed, size, genFn, relief) {
   const noise2 = Perlin.make(seed);
   const rand = mulberry32((seed * 2654435761) >>> 0);
+
+  const detail = TEXTURE_CONFIG.detail || 0;
+  const aoAmt = TEXTURE_CONFIG.ao * 0.7;
+  const contrast = 0.5 + (TEXTURE_CONFIG.contrast - 0.5) * 1.9; // maps 0..1 -> ~0.55..1.45
+  const sat = 1 + (TEXTURE_CONFIG.saturation - 0.5) * 0.9;      // 0..1 -> ~0.55..1.45
 
   const color = makeImage(size);
   const rgb = color.data;
   const height = new Float32Array(size * size);
 
+  // Multi-scale, PIXEL-space micro detail. Because this uses raw pixel coordinates
+  // (not x/s), the grain stays crisp and photographic at every resolution — this is
+  // what makes a 512/1024/2048 texture read as "real" instead of a smooth blur.
+  const micro = detail;
+  const micA = Perlin.make(seed * 7919 + 13);
+  const micB = Perlin.make(seed * 104729 + 29);
+  const micC = Perlin.make(seed * 15485863 + 7);
+
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const i = (y * size + x) * 4;
-      const h = genFn(x, y, size, noise2, rand, rgb, i);
-      height[y * size + x] = h;
+      let h = genFn(x, y, size, noise2, rand, rgb, i);
+      if (micro > 0) {
+        // fine + coarser sub-texel strata, in pixel space, resolution independent.
+        // Amplitude is comparable to the base generator so surfaces read as textured
+        // (rock, grain, blades) instead of a smooth blur at high resolution.
+        const g1 = micA(x * 0.45, y * 0.45);
+        const g2 = micB(x * 1.4 + 50, y * 1.4 + 50);
+        const g3 = micC(x * 3.6 + 90, y * 3.6 + 90);
+        const g4 = micA(x * 9.1 + 200, y * 9.1 + 200);
+        h += (g1 * 0.4 + g2 * 0.3 + g3 * 0.2 + g4 * 0.12) * micro * 1.15;
+      }
+      height[(y * size + x)] = h;
+    }
+  }
+
+  // color micro-grain + grading: saturation + contrast
+  if (size >= 16) {
+    const grainN = size >= 64 ? Perlin.make(seed * 31 + 5) : null;
+    const grainAmp = size >= 64 ? (0.035 + detail * 0.06) : 0;
+    for (let p = 0; p < rgb.length; p += 4) {
+      let r = rgb[p], g = rgb[p + 1], b = rgb[p + 2];
+      // saturation (luminance-preserving)
+      const l = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      r = l + (r - l) * sat;
+      g = l + (g - l) * sat;
+      b = l + (b - l) * sat;
+      // contrast around mid-grey
+      r = (r - 128) * contrast + 128;
+      g = (g - 128) * contrast + 128;
+      b = (b - 128) * contrast + 128;
+      // photographic film grain (per-pixel, resolution independent)
+      if (grainN) {
+        const px = (p >> 2) % size, py = ((p >> 2) / size) | 0;
+        const gn = grainN(px, py) * grainAmp * 255;
+        r += gn; g += gn; b += gn;
+      }
+      rgb[p] = Math.max(0, Math.min(255, r));
+      rgb[p + 1] = Math.max(0, Math.min(255, g));
+      rgb[p + 2] = Math.max(0, Math.min(255, b));
     }
   }
 
@@ -38,14 +98,15 @@ function synthesizeTexture(seed, size, genFn, relief) {
   const shaded = makeImage(size);
   const nrm = normal.data, shd = shaded.data;
   const ambient = 0.42;
+  const cav = aoAmt;
 
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const i = (y * size + x);
-      const xl = i === 0 ? i : i - 1;
-      const xr = i === size * size - 1 ? i : i + 1;
-      const yl = i - size < 0 ? i : i - size;
-      const yr = i + size >= size * size ? i : i + size;
+      const xl = (x === 0) ? i : i - 1;
+      const xr = (x === size - 1) ? i : i + 1;
+      const yl = (y === 0) ? i : i - size;
+      const yr = (y === size - 1) ? i : i + size;
 
       const dhx = (height[xr] - height[xl]) * relief;
       const dhy = (height[yr] - height[yl]) * relief;
@@ -58,10 +119,16 @@ function synthesizeTexture(seed, size, genFn, relief) {
       nrm[i4 + 2] = Math.round((N.z * 0.5 + 0.5) * 255);
       nrm[i4 + 3] = 255;
 
+      // cavity / ambient-occlusion: pixels lower than their neighbourhood read darker
+      const h = height[i];
+      const av = (height[xl] + height[xr] + height[yl] + height[yr]) * 0.25;
+      const cavity = Math.max(-1, Math.min(1, (av - h) * 2.2)) * cav; // + => divot
+      const ao = 1 - Math.max(0, cavity) * 0.5;
+
       // bump-lit shading with a touch of specular
       const diff = Math.max(0, N.x * LIGHT.x + N.y * LIGHT.y + N.z * LIGHT.z);
       const spec = Math.pow(Math.max(0, diff), 14) * 0.35;
-      const light = ambient + diff * 0.7 + spec;
+      const light = (ambient + diff * 0.7 + spec) * ao;
 
       shd[i4]     = Math.max(0, Math.min(255, rgb[i4] * light));
       shd[i4 + 1] = Math.max(0, Math.min(255, rgb[i4 + 1] * light));
@@ -122,13 +189,15 @@ function genStone(seed, size, relief) {
   return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
     const ridged = Perlin.ridged(n, x / s * 5, y / s * 5, 4, 2.0, 0.55);
     const fine = Perlin.fbm(n, x / s * 22, y / s * 22, 3, 2.0, 0.5);
-    const v = 0.55 + ridged * 0.28 + fine * 0.12;
+    const crack = Perlin.ridged(n, x / s * 14, y / s * 14, 2, 2.0, 0.7);
+    const c = crack > 0.62 ? 1 : 0; // darker fissures for rock depth
+    const v = 0.55 + ridged * 0.26 + fine * 0.12 - c * 0.16;
     const q = v * 255;
-    rgb[i]     = Math.round(q * 0.82 + r() * 10);
-    rgb[i + 1] = Math.round(q * 0.83 + r() * 10);
-    rgb[i + 2] = Math.round(q * 0.86 + r() * 8);
+    rgb[i]     = Math.round(q * 0.8 + r() * 10 + c * 8);
+    rgb[i + 1] = Math.round(q * 0.81 + r() * 10 + c * 7);
+    rgb[i + 2] = Math.round(q * 0.84 + r() * 8 + c * 6);
     rgb[i + 3] = 255;
-    return ridged * 1.1 + fine * 0.2;
+    return ridged * 1.15 + fine * 0.2 + c * 1.4;
   }, relief);
 }
 
@@ -717,12 +786,13 @@ function genLogSideC(seed, size, relief, br, bg, bb) {
     const groove = Perlin.fbm(n, y / s * 9, x / s * 1.6, 3, 2, 0.5);
     const lines = Math.sin(y / s * Math.PI * 10 + groove * 3) * 0.5 + 0.5;
     const grain = Perlin.fbm(n, x / s * 40, y / s * 4, 3, 2, 0.5);
-    const v = 0.5 + lines * 0.2 + grain * 0.14;
-    rgb[i]     = br * (0.66 + v * 0.6) + r() * 14;
-    rgb[i + 1] = bg * (0.66 + v * 0.6) + r() * 12;
-    rgb[i + 2] = bb * (0.66 + v * 0.6) + r() * 10;
+    const streak = Math.sin(y / s * Math.PI * 46 + groove * 5) * 0.5 + 0.5;
+    const v = 0.5 + lines * 0.26 + grain * 0.14 + streak * 0.08;
+    rgb[i]     = br * (0.62 + v * 0.72) + r() * 12;
+    rgb[i + 1] = bg * (0.62 + v * 0.72) + r() * 10;
+    rgb[i + 2] = bb * (0.62 + v * 0.72) + r() * 8;
     rgb[i + 3] = 255;
-    return lines * 1.1 + grain * 0.3;
+    return lines * 1.3 + streak * 0.6 + grain * 0.3;
   }, relief);
 }
 function genLogTopC(seed, size, relief, br, bg, bb) {
@@ -1178,7 +1248,7 @@ function getTexture(id, seed, size, relief) {
 // Expose to browser global scope (classic scripts load in order).
 window.PixelCraft = window.PixelCraft || {};
 Object.assign(window.PixelCraft, {
-  synthesizeTexture, getTexture, TEXTURE_REGISTRY,
+  synthesizeTexture, getTexture, TEXTURE_REGISTRY, TEXTURE_CONFIG,
   Perlin, mulberry32, vec3normalize,
   genGrassTop, genGrassSide, genDirt, genStone, genCobble,
   genWoodSide, genWoodTop, genSand, genPlank, genBrick,

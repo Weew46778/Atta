@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
         return out
     }
 
-    private val resolutions = intArrayOf(16, 32, 64)
+    private val resolutions = intArrayOf(16, 32, 64, 128, 256, 512, 1024, 2048)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -8,12 +8,13 @@
 </head>
 <body>
 <div id="app">
+  <!-- ===================== SIDEBAR ===================== -->
   <aside class="sidebar">
     <div class="brand">
       <div class="logo">PC</div>
       <div class="brand-text">
         <h1>PixelCraft <span>Studio</span></h1>
-        <p>Bedrock texture &amp; shader pack maker</p>
+        <p>Photoreal Bedrock pack generator</p>
       </div>
     </div>
 
@@ -30,27 +31,49 @@
       </div>
     </div>
 
+    <!-- Resolution: 16 → 2048 -->
     <div class="card">
-      <label class="lab">Resolution</label>
-      <div class="seg" id="resSeg">
-        <button data-v="128" class="on" title="16x — closest to vanilla look">16×</button>
-        <button data-v="256" title="32x — crisp realism">32×</button>
-        <button data-v="512" title="64x — maximum detail">64×</button>
-      </div>
+      <label class="lab">Texture resolution <span id="resVal" class="mono"></span></label>
+      <div class="seg seg-scroll" id="resSeg"></div>
+      <p class="fineprint">Every block is generated at this size (16 × 16 up to 2048 × 2048).</p>
     </div>
 
     <div class="card">
       <label class="lab">Realism / Detail <span id="realismVal" class="mono"></span></label>
-      <input id="realism" type="range" min="0" max="100" value="75" />
+      <input id="realism" type="range" min="0" max="100" value="82" />
     </div>
 
     <div class="card">
-      <label class="lab">Relief (bump strength)</label>
+      <label class="lab">Relief (bump strength) <span id="reliefVal" class="mono"></span></label>
       <input id="relief" type="range" min="0" max="100" value="60" />
     </div>
 
+    <!-- Advanced / effective settings -->
     <div class="card">
-      <label class="lab">Blocks in pack <span id="blockCount" class="mono">30+</span></label>
+      <div class="card-head">
+        <label class="lab">Advanced quality</label>
+        <button id="advToggle" class="chev">▾</button>
+      </div>
+      <div id="advanced">
+        <label class="lab sub">Detail (octaves) <span id="detailVal" class="mono"></span></label>
+        <input id="detail" type="range" min="0" max="100" value="55" />
+
+        <label class="lab sub">Contrast <span id="contrastVal" class="mono"></span></label>
+        <input id="contrast" type="range" min="0" max="100" value="50" />
+
+        <label class="lab sub">Saturation <span id="satVal" class="mono"></span></label>
+        <input id="sat" type="range" min="0" max="100" value="62" />
+
+        <label class="lab sub">Shadow / AO <span id="aoVal" class="mono"></span></label>
+        <input id="ao" type="range" min="0" max="100" value="58" />
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="lab">Blocks in pack <span id="blockCount" class="mono"></span></label>
+      <div class="search-row">
+        <input id="blockSearch" type="text" placeholder="Search blocks…" />
+      </div>
       <div id="blockList" class="block-list"></div>
       <p class="fineprint">Tap a block to preview it on the 3D cube. All blocks are included in the exported pack.</p>
     </div>
@@ -62,6 +85,7 @@
     </div>
   </aside>
 
+  <!-- ===================== MAIN ===================== -->
   <main class="main">
     <section class="preview-card">
       <div class="preview-head">
@@ -71,40 +95,44 @@
             <button data-mode="day" class="on" title="Daylight">☀️</button>
             <button data-mode="night" title="Night">🌙</button>
           </div>
-          <button id="toggleAuto" class="ghost active">Auto-spin</button>
+          <button id="toggleGrid" class="ghost active" title="Toggle floor grid">▦</button>
+          <button id="toggleAuto" class="ghost active">⟳ Auto</button>
+          <button id="zoomIn" class="ghost" title="Zoom in">＋</button>
+          <button id="zoomOut" class="ghost" title="Zoom out">−</button>
+          <button id="resetView" class="ghost" title="Reset view">⌂</button>
           <span class="hint">drag · scroll</span>
         </div>
       </div>
-      <canvas id="blockCanvas"></canvas>
+
+      <div class="canvas-wrap">
+        <canvas id="blockCanvas"></canvas>
+        <div class="overlay-label" id="overlayRes"></div>
+      </div>
+
       <div class="faces">
-        <div class="face-row">
-          <div class="face-tag">Top</div>
-          <canvas id="faceTop" class="thumbs"></canvas>
-        </div>
-        <div class="face-row">
-          <div class="face-tag">Side</div>
-          <canvas id="faceSide" class="thumbs"></canvas>
-        </div>
-        <div class="face-row">
-          <div class="face-tag">Bottom</div>
-          <canvas id="faceBottom" class="thumbs"></canvas>
-        </div>
+        <div class="face-row"><div class="face-tag">Top</div><canvas id="faceTop" class="thumbs"></canvas></div>
+        <div class="face-row"><div class="face-tag">Side</div><canvas id="faceSide" class="thumbs"></canvas></div>
+        <div class="face-row"><div class="face-tag">Bottom</div><canvas id="faceBottom" class="thumbs"></canvas></div>
       </div>
     </section>
 
     <section class="right-col">
       <div class="texture-grid">
-        <h3>Texture atlas <span class="mono">30 blocks · <span id="texCount"></span> faces</span></h3>
+        <div class="grid-head">
+          <h3>Texture atlas</h3>
+          <div class="filters" id="filters"></div>
+          <span class="mono" id="texCount"></span>
+        </div>
         <div id="grid" class="grid"></div>
       </div>
 
       <div class="settings-card">
         <h3>Shaders <span class="badge">RenderDragon · realistic · no Ray</span></h3>
-        <div id="shaderSettings" class="settings"><!-- populated dynamically --></div>
+        <div id="shaderSettings" class="settings"></div>
         <p class="fineprint">
-          Shader pack targets Bedrock RenderDragon pipeline. Deferred lighting, exposure,
-          fog, water reflection and PBR maps are configured on export. True ray-tracing is
-          not used — realism comes from baked relief, normal maps and procedural lighting.
+          Shader pack targets Bedrock RenderDragon. Deferred lighting, exposure,
+          fog, water reflection and PBR maps are configured on export. No ray-tracing —
+          realism comes from baked relief, normal maps and procedural lighting.
         </p>
       </div>
     </section>

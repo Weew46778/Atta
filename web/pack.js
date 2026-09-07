@@ -257,7 +257,78 @@ function buildTexturePack(seed, size, realism, packName) {
   return { files, preview, icon };
 }
 
+/*
+ * Async, incremental pack builder — generates one texture id at a time and yields
+ * back to the browser so the UI stays responsive even at 512/1024/2048 resolution.
+ * `onProgress(done, total)` is called after each id.
+ */
+async function buildTexturePackAsync(seed, size, realism, packName, onProgress) {
+  const entries = [];
+  const preview = [];
+  const ids = Object.keys(TEXTURE_REGISTRY);
+  const throttle = typeof onProgress === 'function';
+
+  for (let idx = 0; idx < ids.length; idx++) {
+    const id = ids[idx];
+    const bundle = getTexture(id, seed, size, realism);
+    preview.push({
+      id,
+      title: TEXTURE_REGISTRY[id].title,
+      block: TEXTURE_REGISTRY[id].block,
+      colorCanvas: imageDataToCanvas(bundle.color),
+      normalCanvas: imageDataToCanvas(bundle.normal),
+      shadedCanvas: imageDataToCanvas(bundle.shaded),
+    });
+
+    const rel = realism * 0.6 + 0.2;
+    const relBundle = getTexture(id, seed, size, rel);
+    const relPath = bedrockPath(id);
+    entries.push({ path: relPath, data: imageDataToCanvas(relBundle.color) });
+    entries.push({ path: relPath.replace('.png', '_n.png'), data: imageDataToCanvas(relBundle.normal) });
+    entries.push({ path: relPath.replace('.png', '_roughness.png'), data: imageDataToCanvas(relBundle.shaded) });
+
+    // yield to the event loop periodically so the page never freezes
+    if (idx % 2 === 1) await new Promise((r) => setTimeout(r, 0));
+    if (throttle) onProgress(idx + 1, ids.length);
+  }
+
+  const icon = drawPackIcon(document.createElement('canvas'), realism);
+  const manifest = makeResourceManifest(packName, ShaderGen.genUuid(), [1, 26, 0]);
+  const files = [
+    { path: 'manifest.json', data: JSON.stringify(manifest, null, 2) },
+    { path: 'pack_icon.png', data: icon },
+    ...entries,
+  ];
+
+  return { files, preview, icon };
+}
+
+/*
+ * Lightweight single-pass preview: generates each texture ONCE (no PBR duplicate)
+ * and yields between batches, so the live atlas stays responsive. The 3D cube is
+ * rendered separately from a full-res face, and export uses buildTexturePackAsync.
+ */
+async function buildPreviewPack(seed, size, realism, onProgress) {
+  const preview = [];
+  const ids = Object.keys(TEXTURE_REGISTRY);
+  for (let idx = 0; idx < ids.length; idx++) {
+    const id = ids[idx];
+    const bundle = getTexture(id, seed, size, realism);
+    preview.push({
+      id,
+      title: TEXTURE_REGISTRY[id].title,
+      block: TEXTURE_REGISTRY[id].block,
+      colorCanvas: imageDataToCanvas(bundle.color),
+      normalCanvas: imageDataToCanvas(bundle.normal),
+      shadedCanvas: imageDataToCanvas(bundle.shaded),
+    });
+    if (idx % 2 === 1) await new Promise((r) => setTimeout(r, 0));
+    if (onProgress) onProgress(idx + 1, ids.length);
+  }
+  return { preview, icon: drawPackIcon(document.createElement('canvas'), realism) };
+}
+
 // Simple JSON pretty printer used by the preview "settings" card.
 function prettyJson(o) { return JSON.stringify(o, null, 2); }
 
-window.Pack = { buildTexturePack, BEDROCK_PATH, drawPackIcon };
+window.Pack = { buildTexturePack, buildTexturePackAsync, buildPreviewPack, BEDROCK_PATH, drawPackIcon };

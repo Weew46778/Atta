@@ -31,8 +31,12 @@ class BlockPreviewView @JvmOverloads constructor(
     private var yaw = Math.PI.toFloat() / 6f
     private var pitch = 0.55f
     private var scale = 0f
+    private var cx = 0f
+    private var cy = 0f
+    private var zoom = 1f
     private var autoSpin = true
     private var night = false
+    private var showGrid = true
 
     private var dragging = false
     private var lastX = 0f
@@ -104,22 +108,102 @@ class BlockPreviewView @JvmOverloads constructor(
         return floatArrayOf(v[0] / l, v[1] / l, v[2] / l)
     }
 
+    // rotate a model-space point to camera space
+    private fun toCam(v: FloatArray): FloatArray = rotX(rotY(v))
+
     private fun project(v: FloatArray): FloatArray {
-        var p = rotY(v)
-        p = rotX(p)
-        return floatArrayOf(width / 2f + p[0] * scale, height / 2f - p[1] * scale, p[2])
+        val p = toCam(v)
+        return floatArrayOf(cx + p[0] * scale, cy - p[1] * scale, p[2])
+    }
+
+    // Projected 2D bounds of the rotated unit cube corners (at scale = 1).
+    private fun cubeBounds(): FloatArray {
+        val corners = arrayOf(
+            floatArrayOf(-1f, -1f, -1f), floatArrayOf(1f, -1f, -1f),
+            floatArrayOf(1f, -1f, 1f), floatArrayOf(-1f, -1f, 1f),
+            floatArrayOf(-1f, 1f, -1f), floatArrayOf(1f, 1f, -1f),
+            floatArrayOf(1f, 1f, 1f), floatArrayOf(-1f, 1f, 1f))
+        var minX = Float.MAX_VALUE; var maxX = -Float.MAX_VALUE
+        var minY = Float.MAX_VALUE; var maxY = -Float.MAX_VALUE
+        for (c in corners) {
+            val p = toCam(c)
+            if (p[0] < minX) minX = p[0]
+            if (p[0] > maxX) maxX = p[0]
+            if (p[1] < minY) minY = p[1]
+            if (p[1] > maxY) maxY = p[1]
+        }
+        return floatArrayOf(minX, maxX, minY, maxY)
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        computeFit()
+    }
+
+    private fun computeFit() {
+        if (width == 0 || height == 0) return
+        val b = cubeBounds()
+        val spanX = (b[1] - b[0]).coerceAtLeast(1e-4f)
+        val spanY = (b[3] - b[2]).coerceAtLeast(1e-4f)
+        val marginX = width * 0.12f
+        val marginTop = height * 0.10f
+        val marginBottom = height * 0.26f
+        val availW = width - marginX * 2
+        val availH = height - marginTop - marginBottom
+        scale = minOf(availW / spanX, availH / spanY) * zoom
+        val midX = (b[0] + b[1]) / 2f
+        val midY = (b[2] + b[3]) / 2f
+        cx = width / 2f - midX * scale
+        cy = marginTop + availH / 2f + midY * scale
+    }
+
+    fun setShowGrid(value: Boolean) { showGrid = value; invalidate() }
+
+    private fun drawFloor(canvas: Canvas) {
+        val gridPaint = overlay.apply {
+            color = if (night) 0x2A70E6.toInt() else 0x3A6BB8.toInt()
+            alpha = if (night) 70 else 60
+            style = Paint.Style.STROKE
+            strokeWidth = 1.5f
+        }
+        // ground plane y = -1
+        fun gp(x: Float, z: Float): FloatArray = toCam(floatArrayOf(x, -1f, z))
+        val n = 4
+        for (i in -n..n) {
+            // lines parallel to X
+            var a = gp(i / 2f, -n.toFloat()); var b = gp(i / 2f, n.toFloat())
+            canvas.drawLine(cx + a[0] * scale, cy - a[1] * scale, cx + b[0] * scale, cy - b[1] * scale, gridPaint)
+            // lines parallel to Z
+            a = gp(-n.toFloat(), i / 2f); b = gp(n.toFloat(), i / 2f)
+            canvas.drawLine(cx + a[0] * scale, cy - a[1] * scale, cx + b[0] * scale, cy - b[1] * scale, gridPaint)
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        // backdrop glow
-        val cx = width / 2f
-        val cy = height / 2f
+        computeFit() // recompute each frame (yaw/pitch change with spin/drag)
+
+        // backdrop gradient
+        val bg = android.graphics.LinearGradient(0f, 0f, 0f, height.toFloat(),
+            if (night) intArrayOf(0xFF04091A.toInt(), 0xFF081227.toInt(), 0xFF14233F.toInt())
+            else intArrayOf(0xFF5B93E6.toInt(), 0xFF8FB6F0.toInt(), 0xFFD7E8FB.toInt()),
+            floatArrayOf(0f, 0.5f, 1f), android.graphics.Shader.TileMode.CLAMP)
+        val bgPaint = Paint().apply { shader = bg }
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
+
+        if (showGrid) drawFloor(canvas)
+
+        // contact shadow under the cube
+        val base = project(floatArrayOf(0f, -1f, 0f))
+        overlay.color = 0x060B18.toInt()
+        overlay.alpha = if (night) 130 else 96
+        overlay.style = Paint.Style.FILL
+        canvas.drawOval(base[0] - scale * 1.05f, base[1] + scale * 0.12f,
+            base[0] + scale * 1.05f, base[1] + scale * 0.44f, overlay)
 
         // gather visible faces
         val list = ArrayList<DrawFace>()
         for (f in faces) {
-            val n = normalize(rotX(rotY(f.normal)))
+            val n = normalize(toCam(f.normal))
             if (n[2] <= 0.05f) continue
             val pts = ArrayList<FloatArray>()
             var depth = 0f
@@ -160,7 +244,6 @@ class BlockPreviewView @JvmOverloads constructor(
             if (matrix.setPolyToPoly(srcQuad, 0, dst, 0, 4)) {
                 canvas.drawBitmap(bmp, matrix, paint)
             } else {
-                // fallback: fill color
                 path.reset()
                 path.moveTo(dst[0], dst[1]); path.lineTo(dst[2], dst[3])
                 path.lineTo(dst[4], dst[5]); path.lineTo(dst[6], dst[7]); path.close()
@@ -184,13 +267,6 @@ class BlockPreviewView @JvmOverloads constructor(
                 canvas.drawPath(path, overlay)
             }
         }
-        // draw a subtle highlight ring
-        overlay.color = 0x144F8CFF
-        overlay.alpha = 255
-        overlay.style = Paint.Style.STROKE
-        overlay.strokeWidth = 2f
-        canvas.drawCircle(cx, cy, minOf(width, height) * 0.24f, overlay)
-        overlay.style = Paint.Style.FILL
     }
 
     private class DrawFace(val face: Face, val n: FloatArray, val pts: ArrayList<FloatArray>, val depth: Float)
@@ -208,8 +284,8 @@ class BlockPreviewView @JvmOverloads constructor(
                     val dy = event.getY(0) - event.getY(1)
                     val dist = hypot(dx.toDouble(), dy.toDouble()).toFloat()
                     if (lastDist > 0) {
-                        scale *= (dist / lastDist).coerceIn(0.5f, 2f)
-                        scale = scale.coerceIn(60f, minOf(width, height) * 1.2f)
+                        zoom *= (dist / lastDist).coerceIn(0.85f, 1.18f)
+                        zoom = zoom.coerceIn(1f, 3f)
                     }
                     lastDist = dist
                 } else if (dragging) {
