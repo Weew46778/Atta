@@ -14,6 +14,10 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         vectorDrawables.useSupportLibrary = true
+        ndk {
+            // Ship only phone ABIs; keeps the embedded speech/ASR runtime small.
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+        }
     }
 
     buildTypes {
@@ -33,11 +37,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
-    }
-
-    ndk {
-        // Ship only phone ABIs; keeps the embedded speech/ASR runtime small.
-        abiFilters += listOf("arm64-v8a", "armeabi-v7a")
     }
 
     androidResources {
