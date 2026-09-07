@@ -1,0 +1,111 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: "8.7"
+
+      - name: Configure SDK
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+          cat android/local.properties
+          ls -d "$ANDROID_HOME"/platforms/android-* 2>/dev/null | head || true
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+
+      - name: Build debug APK
+        id: build
+        continue-on-error: true
+        run: |
+          cd android
+          gradle assembleDebug --no-daemon --stacktrace > /tmp/build.log 2>&1
+          code=$?
+          tail -140 /tmp/build.log
+          exit $code
+
+      - name: Report failure to PR
+        if: always() && steps.build.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          import re
+          try:
+              log = open('/tmp/build.log').read()
+          except Exception:
+              log = "no build log"
+          # the failing task(s), Kotlin compiler error lines, and the "What went wrong" block
+          failed = re.findall(r'> Task :[^\s]+ FAILED', log)
+          errs = [l for l in log.split('\n') if re.match(r'^\s*e:\s', l) or 'error:' in l.lower()]
+          block = ("Failed task(s):\n" + "\n".join(failed) + "\n\n") if failed else ""
+          if errs:
+              block += "Compiler errors:\n" + "\n".join(errs[:50]) + "\n\n"
+          i = log.find('What went wrong')
+          if i >= 0:
+              block += log[i:i + 900]
+          else:
+              block += log[-1500:]
+          body = "### ⚠️ PixelCraft APK build failed\n```\n" + block + "\n```"
+          pr = os.environ.get('PR_NUMBER')
+          if not pr:
+              print("no PR_NUMBER; skipping comment")
+              raise SystemExit(0)
+          repo = os.environ['GITHUB_REPOSITORY']
+          data = json.dumps({"body": body}).encode()
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/issues/{pr}/comments",
+              data=data, method="POST",
+              headers={"Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+                       "Accept": "application/vnd.github+json"})
+          try:
+              urllib.request.urlopen(req)
+              print("comment posted")
+          except Exception as e:
+              print("comment failed:", e)
+          PY
+
+      - name: Upload APK artifact
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixelcraft-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+
+      - name: Create GitHub Release
+        if: steps.build.outcome == 'success'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "pixelcraft-apk-v${{ github.run_number }}"
+          name: "PixelCraft Studio APK build #${{ github.run_number }}"
+          body: |
+            **PixelCraft Studio — Bedrock texture & shader pack generator**
+            Automatic debug APK build. Install on an Android device (allow "install from unknown sources").
+          files: android/app/build/outputs/apk/debug/*.apk
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail the job if build failed
+        if: steps.build.outcome == 'failure'
+        run: exit 1

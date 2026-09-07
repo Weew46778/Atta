@@ -1,0 +1,17 @@
+# Android build outputs
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+*.iml
+*.apk
+*.aab
+.cxx/
+
+# Node / web
+web/node_modules/
+*.log
+
+# Live preview & scratch
+.DS_Store
