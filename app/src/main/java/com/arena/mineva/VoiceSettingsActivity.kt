@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.assistant.VoicePackDownloader
 import com.arena.mineva.assistant.VoicePackSample
+import com.arena.mineva.guide.GuideController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -140,6 +141,7 @@ class VoiceSettingsActivity : AppCompatActivity() {
             runOnUiThread {
                 renderVoices(list)
                 refreshBundledState()
+                GuideController.markStepDone("voice", this@VoiceSettingsActivity, m)
             }
         }
     }

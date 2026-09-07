@@ -2,6 +2,7 @@ package com.arena.mineva.assistant
 
 import com.arena.mineva.AppPrefs
 import com.arena.mineva.knowledge.KnowledgeRepository
+import com.arena.mineva.knowledge.UserTopicStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -45,6 +46,58 @@ class AssistantEngine(
         }.getOrElse { e ->
             "خطا در اتصال به هوش مصنوعی: ${e.message ?: "نامشخص"}. اینترنت و کلید را بررسی کن."
         }
+    }
+
+    /**
+     * Handles "یاد بگیر / به خاطر بسپار / اضافه کن به دانش" requests from chat.
+     * The assistant extracts the topic, optionally researches it online, and stores it
+     * both as a user topic and in the personal encyclopedia for future offline answers.
+     */
+    suspend fun learn(rawQuestion: String): String = withContext(Dispatchers.IO) {
+        val q = rawQuestion.trim()
+        val topic = extractLearnTopic(q)
+        if (topic.isBlank()) {
+            return@withContext "متوجه نشدم چه چیزی را یاد بگیرم. بگو: «یاد بگیر: نام موضوع»."
+        }
+
+        val key = AppPrefs.geminiApiKey
+        val answer = if (key.isBlank()) {
+            "موضوع «$topic» را ثبت کردم. برای توضیح کامل‌تر در آینده، کلید هوش مصنوعی را اضافه کن."
+        } else {
+            runCatching {
+                GeminiAssistantEngine.ask(
+                    apiKey = key,
+                    system = "تو «آوا» هستی. برای این موضوع به فارسی پاسخ کامل، دقیق و مرحله‌به‌مرحله بده.",
+                    question = topic,
+                    timeoutMs = 35_000
+                )
+            }.getOrElse { e -> "نتوانستم آنلاین اطلاعات پیدا کنم: ${e.message ?: "نامشخص"}" }
+        }
+
+        if (answer.isNotBlank() && answer.length > 20) {
+            knowledge.addLearned(topic, answer, "یادگیری توسط کاربر")
+        }
+        UserTopicStore.add(topic, "دایرةالمعارف کاربر", answer)
+
+        "یاد گرفتم: «$topic». دفعه بعد همین را بپرسی، همین‌جا جواب دارم."
+    }
+
+    private fun extractLearnTopic(q: String): String {
+        val prefixes = listOf(
+            "یاد بگیر", "یاد بگیر:", "یاد بده", "این را یاد بگیر",
+            "به خاطر بسپار", "اضافه کن به دانش", "اضافه کن به دایرةالمعارف",
+            "یادم بده", "ذخیره کن"
+        )
+        var topic = q
+        for (prefix in prefixes) {
+            if (topic.startsWith(prefix, ignoreCase = true)) {
+                topic = topic.removePrefix(prefix)
+                topic = topic.removePrefix(":").removePrefix(":").trim()
+            }
+        }
+        // Also strip common lead phrases.
+        topic = topic.trim().removePrefix("بگو").removePrefix("خواهش").trim()
+        return topic
     }
 
     fun localAnswer(rawQuestion: String): String? = knowledge.search(rawQuestion)

@@ -13,6 +13,7 @@ import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
+import com.arena.mineva.guide.GuideController
 import com.arena.mineva.server.OnDeviceServerManager
 import com.arena.mineva.server.RconClient
 import com.arena.mineva.server.ServerConfig

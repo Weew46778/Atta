@@ -116,11 +116,19 @@ class VoiceAssistantActivity : AppCompatActivity() {
         input.setText("")
         addBubble("👤", "من", question, user = true)
         lifecycleScope.launch {
-            val answer = engine.respond(question)
+            val answer = if (isLearnRequest(question)) engine.learn(question) else engine.respond(question)
             addBubble("🤖", "آوا", answer, user = false)
             tts.speak(answer)
             scroll.post { scroll.fullScroll(View.FOCUS_DOWN) }
         }
+    }
+
+    private fun isLearnRequest(q: String): Boolean {
+        val text = q.trim().lowercase()
+        return listOf(
+            "یاد بگیر", "یاد بده", "این را یاد بگیر", "به خاطر بسپار",
+            "اضافه کن به دانش", "اضافه کن به دایرةالمعارف", "یادم بده", "ذخیره کن"
+        ).any { text.startsWith(it) }
     }
 
     private fun addBubble(avatar: String, name: String, text: String, user: Boolean) {

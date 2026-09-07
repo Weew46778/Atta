@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.arena.mineva.assistant.TextToSpeechManager
+import com.arena.mineva.guide.GuideController
 import com.arena.mineva.service.OverlayService
 
 class MainActivity : AppCompatActivity() {
@@ -173,6 +174,7 @@ class MainActivity : AppCompatActivity() {
         if (launch != null) {
             launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(launch)
+            GuideController.markStepDone("launch", this, tts)
             tts.speak("ماینکرافت در حال باز شدن است. برای پنل اورلای از لبه چپ صفحه بکش.")
         } else {
             tts.speak("ماینکرافت بدراک را پیدا نکردم. لطفاً آن را نصب کن.")
@@ -192,6 +194,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 startService(intent)
             }
+            GuideController.markStepDone("overlay", this, tts)
             tts.speak("پنل اورلای فعال شد. داخل بازی از لبه چپ صفحه به راست بکش.")
             return
         }

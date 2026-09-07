@@ -18,6 +18,7 @@ import com.arena.mineva.assistant.TextToSpeechManager
  * explain what to do).
  */
 data class GuideStep(
+    val key: String,
     val title: String,
     val speech: String,
     val description: String,
@@ -29,6 +30,7 @@ object GuideController {
 
     val steps = listOf(
         GuideStep(
+            key = "launch",
             title = "۱. باز کردن ماین‌کرافت",
             speech = "اول بازی ماین کرافت بدراک را باز کن. اگر نصب نیست من به فروشگاه می روم.",
             description = "از منوی اصلی دکمه «باز کردن Minecraft Bedrock» را بزن.",
@@ -36,6 +38,7 @@ object GuideController {
             targetClass = com.arena.mineva.MainActivity::class.java
         ),
         GuideStep(
+            key = "overlay",
             title = "۲. پنل اورلای",
             speech = "حالا پنل اورلای را فعال کن. از لبه چپ صفحه داخل بازی به سمت راست بکش.",
             description = "دکمه «فعال‌کردن پنل اورلای داخل بازی» را بزن، سپس داخل بازی از لبه چپ بکش.",
@@ -43,6 +46,7 @@ object GuideController {
             targetClass = com.arena.mineva.MainActivity::class.java
         ),
         GuideStep(
+            key = "voice",
             title = "۳. صدا و تنظیمات",
             speech = "واجبی صدای فارسی و زن را چک کن. می توانی بسته صوتی را هم نصب کنی.",
             description = "از منوی اصلی → تنظیمات هوش مصنوعی → تنظیمات صوتی.",
@@ -50,6 +54,7 @@ object GuideController {
             targetClass = com.arena.mineva.VoiceSettingsActivity::class.java
         ),
         GuideStep(
+            key = "server",
             title = "۴. ساخت سرور",
             speech = "حالا بیا یک سرور بسازیم. روی گوشی یا سرور مجازی. تو فقط جواب بده.",
             description = "از منوی اصلی «ساخت خودکار سرور» را بزن؛ نوع و نسخه را انتخاب کن.",
@@ -57,6 +62,7 @@ object GuideController {
             targetClass = com.arena.mineva.ServerWizardActivity::class.java
         ),
         GuideStep(
+            key = "panel",
             title = "۵. پنل و پایش",
             speech = "سرور که ساخت، از «پنل حرفه‌ای» او را روشن کن و «پایش خودکار» را فعال کن.",
             description = "از پیشخوان یا منوی اصلی: پنل حرفه‌ای → پایش و ریاستارت خودکار.",
@@ -64,6 +70,7 @@ object GuideController {
             targetClass = com.arena.mineva.ServerPanelActivity::class.java
         ),
         GuideStep(
+            key = "encyclopedia",
             title = "۶. اصطلاحات و دائرةالمعارف",
             speech = "هرچه نمی دانی از «آوا» بپرس. من جواب را در دائرةالمعارف خودم ذخیره می کنم و دفعه بعد آفلاین می گویم.",
             description = "از «دائرةالمعارف آوا» می‌توانی موضوعات را ببینی و اضافه کنی.",
@@ -79,6 +86,23 @@ object GuideController {
     fun complete(context: Context, tts: TextToSpeechManager?) {
         AppPrefs.guideIndex = steps.size
         runCatching { tts?.speak("شروع کامل شد. من همیشه همین‌جا کنار تو هستم.") }
+    }
+
+    /**
+     * Called by real screens when a step is actually completed (not just "next").
+     * Advances the tour only forward; jumping ahead is allowed.
+     */
+    fun markStepDone(key: String, context: Context, tts: TextToSpeechManager?) {
+        val idx = steps.indexOfFirst { it.key == key }
+        if (idx < 0) return
+        if (AppPrefs.guideIndex <= idx) {
+            AppPrefs.guideIndex = (idx + 1).coerceAtMost(steps.size)
+            if (AppPrefs.guideIndex <= steps.size - 1) {
+                runCatching { tts?.speak("این مرحله انجام شد. " + current().speech) }
+            } else {
+                runCatching { tts?.speak("این مرحله انجام شد. شروع کامل شد.") }
+            }
+        }
     }
 
     fun advance(context: Context, tts: TextToSpeechManager?): GuideStep {

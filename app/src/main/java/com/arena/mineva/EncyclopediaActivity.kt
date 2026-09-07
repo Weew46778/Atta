@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.knowledge.KnowledgeRepository
 import com.arena.mineva.knowledge.KnowledgeResearchWorker
+import com.arena.mineva.guide.GuideController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

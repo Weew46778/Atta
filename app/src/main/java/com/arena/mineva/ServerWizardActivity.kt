@@ -19,6 +19,7 @@ import com.arena.mineva.server.ServerEdition
 import com.arena.mineva.server.ServerRecipeGenerator
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.VpsProvisioner
+import com.arena.mineva.guide.GuideController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -313,6 +314,7 @@ class ServerWizardActivity : AppCompatActivity() {
                 tts.speak("دستورات سرور در کلیپبورد کپی شد.")
             }
         )
+        GuideController.markStepDone("server", this, tts)
         tts.speak("آماده شد. فایل دستورات ساخته شد و در کلیپبورد میتوانی کپی کنی. برای ساخت واقعی روی VPS از دکمه «ساخت و اجرای خودکار روی VPS» استفاده کن.")
     }
 
@@ -378,6 +380,7 @@ class ServerWizardActivity : AppCompatActivity() {
         deployButton.isEnabled = true
         deployButton.text = "🖥 ساخت و اجرای خودکار روی VPS (SSH)"
         appendProgress(if (outcome.success) "✅ ساخت سرور روی VPS تمام شد." else "⚠️ نیاز به بررسی.")
+        if (outcome.success) GuideController.markStepDone("server", this, tts)
         result.addView(
             Ui.text(
                 this,
