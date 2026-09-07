@@ -1,0 +1,45 @@
+{
+  "format_version": "1.21.90",
+  "minecraft:color_grading_settings": {
+    "description": {
+      "identifier": "atta:atta_color_grading"
+    },
+    "color_grading": {
+      "midtones": {
+        "contrast": [
+          1.22,
+          1.22,
+          1.22
+        ],
+        "gain": [
+          1.02,
+          1.02,
+          1.02
+        ],
+        "gamma": [
+          2.2,
+          2.2,
+          2.2
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "saturation": [
+          1.14,
+          1.14,
+          1.14
+        ]
+      },
+      "temperature": {
+        "enabled": true,
+        "temperature": 6400,
+        "type": "color_temperature"
+      }
+    },
+    "tone_mapping": {
+      "operator": "generic"
+    }
+  }
+}

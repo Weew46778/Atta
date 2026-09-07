@@ -1,0 +1,31 @@
+{
+  "format_version": "1.21.120",
+  "minecraft:water_settings": {
+    "description": {
+      "identifier": "atta:atta_water"
+    },
+    "particle_concentrations": {
+      "chlorophyll": 0.18,
+      "suspended_sediment": 0.06,
+      "cdom": 0.12
+    },
+    "caustics": {
+      "enabled": true,
+      "frame_length": 0.09,
+      "scale": 0.45,
+      "power": 1.15
+    },
+    "waves": {
+      "enabled": true,
+      "frequency": 1.2,
+      "octaves": 24,
+      "depth": 0.8,
+      "speed": 1.6,
+      "shape": 1.5,
+      "pull": 0.38,
+      "mix": 0.2,
+      "frequency_scaling": 1.2,
+      "speed_scaling": 1.03
+    }
+  }
+}
