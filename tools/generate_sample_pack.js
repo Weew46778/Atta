@@ -102,6 +102,9 @@ const PATH_OVERRIDE = {
   terracotta: 'textures/blocks/hardened_clay.png',
   mycelium_top: 'textures/blocks/mycelium_top.png',
   mycelium_side: 'textures/blocks/mycelium_side.png',
+  mossy_cobblestone: 'textures/blocks/cobblestone_mossy.png',
+  dark_prismarine: 'textures/blocks/prismarine_dark.png',
+  basalt_side: 'textures/blocks/basalt_side.png',
 };
 const pathOf = (id) => PATH_OVERRIDE[id] || `textures/blocks/${id}.png`;
 const SEED = 1337; const SIZE = 128; const REL = 0.6;

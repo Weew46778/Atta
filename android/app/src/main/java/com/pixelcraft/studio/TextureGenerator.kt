@@ -209,6 +209,34 @@ object TextureGenerator {
         "terracotta" -> terracotta
         "mycelium_top" -> myceliumTop
         "mycelium_side" -> stone
+        "gold_ore" -> ore(232, 190, 70)
+        "iron_ore" -> ore(214, 150, 112)
+        "coal_ore" -> ore(40, 40, 46)
+        "diamond_ore" -> ore(170, 232, 235)
+        "redstone_ore" -> ore(226, 40, 40)
+        "emerald_ore" -> ore(60, 220, 90)
+        "lapis_ore" -> ore(50, 90, 220)
+        "copper_ore" -> ore(214, 120, 90)
+        "gold_block" -> metal(220f, 170f, 40f)
+        "iron_block" -> metal(200f, 202f, 208f)
+        "diamond_block" -> metal(140f, 220f, 232f)
+        "emerald_block" -> metal(60f, 200f, 120f)
+        "redstone_block" -> metal(200f, 40f, 40f)
+        "lapis_block" -> metal(40f, 70f, 180f)
+        "copper_block" -> metal(196f, 116f, 82f)
+        "netherite_block" -> metal(70f, 64f, 74f)
+        "sandstone" -> sand(190f, 176f, 120f)
+        "red_sandstone" -> sand(168f, 86f, 54f)
+        "mossy_cobblestone" -> mossyCobble
+        "moss_block" -> springMoss
+        "mud" -> mud
+        "packed_mud" -> mud
+        "basalt_side" -> basaltSide
+        "blackstone" -> PixelGen { x, y, s, n, r, rgb, off -> blackstonePixel(x, y, s, n, r, rgb, off, false) }
+        "gilded_blackstone" -> PixelGen { x, y, s, n, r, rgb, off -> blackstonePixel(x, y, s, n, r, rgb, off, true) }
+        "prismarine" -> prism(false)
+        "dark_prismarine" -> prism(true)
+        "sea_lantern" -> seaLantern
         else -> stone
     }
 
@@ -217,7 +245,12 @@ object TextureGenerator {
         "deepslate", "tuff", "gravel", "sand", "red_sand", "clay", "bricks",
         "oak_log_side", "oak_log_top", "oak_planks", "oak_leaves", "snow", "ice", "packed_ice",
         "water", "netherrack", "glowstone", "obsidian", "quartz_block", "end_stone", "magma",
-        "sponge", "wool_blue", "wool_purple", "terracotta", "mycelium_top", "mycelium_side"
+        "sponge", "wool_blue", "wool_purple", "terracotta", "mycelium_top", "mycelium_side",
+        "gold_ore", "iron_ore", "coal_ore", "diamond_ore", "redstone_ore", "emerald_ore",
+        "lapis_ore", "copper_ore", "gold_block", "iron_block", "diamond_block", "emerald_block",
+        "redstone_block", "lapis_block", "copper_block", "netherite_block", "sandstone",
+        "red_sandstone", "mossy_cobblestone", "moss_block", "mud", "packed_mud", "basalt_side",
+        "blackstone", "gilded_blackstone", "prismarine", "dark_prismarine", "sea_lantern"
     )
 
     fun title(id: String): String = when (id) {
@@ -584,6 +617,114 @@ object TextureGenerator {
         f * 0.7f + speck * 0.5f
     }
 
+    // ---- batch 2: ores, metals & more (photoreal) ----
+    private fun ore(sr: Int, sg: Int, sb: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val ridged = n.ridged(x / s * 5f, y / s * 5f, 4, 2f, 0.55f)
+        val fine = n.fbm(x / s * 22f, y / s * 22f, 3, 2f, 0.5f)
+        val v = 0.55f + ridged * 0.28f + fine * 0.12f
+        val q = v * 255
+        val cluster = n.ridged(x / s * 3f + 100f, y / s * 3f + 100f, 2, 2f, 0.7f)
+        val spot = if (cluster > 0.7f) 1f else 0f
+        val shade = 0.9f + ridged * 0.1f
+        rgb[off] = pack((q * 0.82f * (1 - spot) * shade + sr * spot + r() * 6).toInt(),
+            (q * 0.83f * (1 - spot) * shade + sg * spot + r() * 6).toInt(),
+            (q * 0.86f * (1 - spot) * shade + sb * spot + r() * 5).toInt(), 255)
+        ridged * 1.1f + fine * 0.2f + spot * 0.9f
+    }
+
+    private fun metal(m0: Float, m1: Float, m2: Float): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val brush = n.fbm(x / s * 30f, y / s * 3f, 4, 2f, 0.5f)
+        val dent = n.ridged(x / s * 9f, y / s * 9f, 3, 2f, 0.7f)
+        val v = 0.5f + brush * 0.22f - dent * 0.14f
+        val sheen = Math.pow((Math.sin((x + y.toFloat()) / s * Math.PI.toFloat() * 3f + brush * 3f).toDouble()).coerceAtLeast(0.0), 6.0).toFloat() * 0.5f
+        rgb[off] = pack((m0 * (0.62f + v * 0.5f) + sheen * 255 + r() * 8).toInt(),
+            (m1 * (0.62f + v * 0.5f) + sheen * 250 + r() * 8).toInt(),
+            (m2 * (0.62f + v * 0.5f) + sheen * 240 + r() * 8).toInt(), 255)
+        brush * 0.9f + dent * 0.7f
+    }
+
+    private fun sand(rr: Float, rg: Float, rb: Float): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val band = (sin(y / s * Math.PI.toFloat() * 9f + n.fbm(x / s * 6f, y / s * 6f, 2, 2f, 0.5f) * 2f) * 0.5f + 0.5f)
+        val f = n.fbm(x / s * 16f, y / s * 16f, 3, 2f, 0.5f)
+        val v = 0.5f + band * 0.12f + f * 0.08f
+        rgb[off] = pack((rr + v * 40 + r() * 6).toInt(), (rg + v * 36 + r() * 6).toInt(),
+            (rb + v * 30 + r() * 5).toInt(), 255)
+        band * 0.7f + f * 0.4f
+    }
+
+    private val mossyCobble = PixelGen { x, y, s, n, r, rgb, off ->
+        val cell = n.fbm(x / s * 3.3f, y / s * 3.3f, 3, 2f, 0.5f)
+        val ridge = n.ridged(x / s * 18f, y / s * 18f, 3, 2f, 0.6f)
+        val mos = n.ridged(x / s * 12f, y / s * 12f, 3, 2f, 0.6f)
+        val moss = mos > 0.42f
+        val v = 0.5f + cell * 0.22f + ridge * 0.12f
+        val q = v * 255
+        rgb[off] = pack((if (moss) 70 + r() * 20 else q * 0.78f + r() * 12).toInt(),
+            (if (moss) 104 + r() * 22 else q * 0.79f + r() * 12).toInt(),
+            (if (moss) 58 + r() * 18 else q * 0.8f + r() * 10).toInt(), 255)
+        ridge * 1.3f + cell * 0.2f + (if (moss) 0.8f else 0f)
+    }
+
+    private val springMoss = PixelGen { x, y, s, n, r, rgb, off ->
+        val blades = n.fbm(x / s * 22f, y / s * 22f, 4, 2f, 0.5f)
+        val hole = n.ridged(x / s * 12f, y / s * 12f, 2, 2f, 0.6f)
+        val v = 0.5f + blades * 0.22f
+        rgb[off] = pack((62 + v * 40 + r() * 10).toInt(), (96 + v * 60 + r() * 12).toInt(),
+            (48 + v * 30 + r() * 8).toInt(), 255)
+        blades * 0.9f + hole * 0.3f
+    }
+
+    private val mud = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 9f, y / s * 9f, 5, 2f, 0.5f)
+        val lumps = n.ridged(x / s * 22f, y / s * 22f, 2, 2f, 0.7f)
+        val v = 0.5f + f * 0.2f + lumps * 0.14f
+        rgb[off] = pack((92 + v * 40 + r() * 8).toInt(), (66 + v * 30 + r() * 7).toInt(),
+            (48 + v * 22 + r() * 6).toInt(), 255)
+        f * 0.8f + lumps * 0.9f
+    }
+
+    private val basaltSide = PixelGen { x, y, s, n, r, rgb, off ->
+        val col = (sin(x / s * Math.PI.toFloat() * 10f + n.fbm(x / s * 20f, y / s * 2f, 3, 2f, 0.5f) * 2f) * 0.5f + 0.5f)
+        val f = n.fbm(x / s * 16f, y / s * 16f, 3, 2f, 0.5f)
+        val v = 0.4f + col * 0.26f + f * 0.12f
+        val q = v * 255
+        rgb[off] = pack((q * 0.42f + r() * 6).toInt(), (q * 0.42f + r() * 6).toInt(),
+            (q * 0.46f + r() * 6).toInt(), 255)
+        col * 1.2f + f * 0.3f
+    }
+
+    private fun blackstonePixel(x: Int, y: Int, s: Int, n: Noise, r: () -> Float,
+                                rgb: IntArray, off: Int, gilded: Boolean): Float {
+        val f = n.fbm(x / s * 10f, y / s * 10f, 4, 2f, 0.55f)
+        val v = 0.24f + f * 0.2f
+        val q = v * 255
+        val gold = n.ridged(x / s * 6f + 30f, y / s * 6f + 30f, 3, 2f, 0.7f)
+        val g = if (gilded && gold > 0.62f) 1f else 0f
+        rgb[off] = pack((q * 0.5f + g * 200 + r() * 4).toInt(), (q * 0.5f + g * 175 + r() * 4).toInt(),
+            (q * 0.56f + g * 70 + r() * 4).toInt(), 255)
+        f * 0.9f + g * 1.4f
+    }
+
+    private fun prism(dark: Boolean): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+        val chip = n.fbm(x / s * 8f, y / s * 8f, 3, 2f, 0.6f)
+        val v = 0.5f + chip * 0.2f
+        val mult = if (dark) 0.72f else 1.0f
+        rgb[off] = pack(((56 + chip * 30 + r() * 8) * mult).toInt(),
+            ((120 + chip * 60 + r() * 10) * mult).toInt(),
+            ((130 + chip * 60 + r() * 10) * mult).toInt(), 255)
+        chip * 0.8f
+    }
+
+    private val seaLantern = PixelGen { x, y, s, n, r, rgb, off ->
+        val grid = (Math.floor(x / (s / 6f)).toInt() % 2 == 0 && Math.floor(y / (s / 6f)).toInt() % 2 == 0)
+        val f = n.fbm(x / s * 20f, y / s * 20f, 2, 2f, 0.5f)
+        val v = 0.5f + f * 0.1f
+        rgb[off] = pack((if (grid) 190 + v * 40 + r() * 8 else 40 + r() * 6).toInt(),
+            (if (grid) 216 + v * 30 + r() * 8 else 42 + r() * 6).toInt(),
+            (if (grid) 216 + v * 20 + r() * 8 else 46 + r() * 6).toInt(), 255)
+        if (grid) 1.0f else f * 0.4f
+    }
+
     // Expected Bedrock texture file path for an id.
     fun bedrockPath(id: String): String = when (id) {
         "grass_top" -> "textures/blocks/grass_top.png"
@@ -608,6 +749,9 @@ object TextureGenerator {
         "terracotta" -> "textures/blocks/hardened_clay.png"
         "mycelium_top" -> "textures/blocks/mycelium_top.png"
         "mycelium_side" -> "textures/blocks/mycelium_side.png"
+        "mossy_cobblestone" -> "textures/blocks/cobblestone_mossy.png"
+        "dark_prismarine" -> "textures/blocks/prismarine_dark.png"
+        "basalt_side" -> "textures/blocks/basalt_side.png"
         else -> "textures/blocks/$id.png"
     }
 }

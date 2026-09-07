@@ -17,6 +17,7 @@
     yaw: Math.PI / 6,
     pitch: 0.55,
     zoom: 1,
+    mode: 'day',
     dragging: false,
     lastX: 0, lastY: 0,
   };
@@ -28,13 +29,15 @@
   // Curated order: each entry is a representative texture id; the "block" it belongs to
   // drives the 3-face cube preview. These map to the 30+ blocks in the pack.
   const BLOCK_CHIPS = [
-    'grass_top', 'dirt', 'coarse_dirt', 'mycelium_top',
-    'stone', 'cobblestone', 'deepslate', 'tuff', 'gravel',
-    'sand', 'red_sand', 'clay', 'terracotta',
+    'grass_top', 'dirt', 'coarse_dirt', 'mycelium_top', 'moss_block', 'mud', 'packed_mud',
+    'stone', 'cobblestone', 'mossy_cobblestone', 'deepslate', 'tuff', 'gravel', 'basalt_side', 'blackstone', 'gilded_blackstone',
+    'sand', 'red_sand', 'clay', 'terracotta', 'sandstone', 'red_sandstone',
     'oak_log_side', 'oak_planks', 'oak_leaves',
     'bricks', 'snow', 'ice', 'packed_ice', 'water',
     'netherrack', 'glowstone', 'obsidian', 'quartz_block', 'end_stone', 'magma',
-    'sponge', 'wool_blue', 'wool_purple',
+    'sponge', 'wool_blue', 'wool_purple', 'prismarine', 'dark_prismarine', 'sea_lantern',
+    'gold_ore', 'iron_ore', 'coal_ore', 'diamond_ore', 'redstone_ore', 'emerald_ore', 'lapis_ore', 'copper_ore',
+    'gold_block', 'iron_block', 'diamond_block', 'emerald_block', 'redstone_block', 'lapis_block', 'copper_block', 'netherite_block',
   ];
 
   function buildBlockList() {
@@ -196,6 +199,7 @@
         yaw: state.yaw, pitch: state.pitch,
         cx: w / 2, cy: h / 2,
         zoom: state.zoom,
+        mode: state.mode,
       });
     }
   }
@@ -235,6 +239,14 @@
     $('toggleAuto').addEventListener('click', () => {
       autoSpin = !autoSpin;
       $('toggleAuto').classList.toggle('active', autoSpin);
+    });
+
+    // day / night light toggle
+    document.querySelectorAll('#lightToggle button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.mode = btn.dataset.mode;
+        document.querySelectorAll('#lightToggle button').forEach((x) => x.classList.toggle('on', x === btn));
+      });
     });
 
     // cube drag / zoom

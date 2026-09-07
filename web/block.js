@@ -35,32 +35,68 @@ function toCam(p, yaw, pitch) {
   return v;
 }
 
+// Day / night lighting presets.
+const LIGHT_PRESETS = {
+  day: {
+    skyTop: '#7fb3ff', skyMid: '#a9ccff', skyBot: '#dff0ff',
+    light: norm([0.42, 0.82, 0.42]),
+    sunIntensity: 1.0, ambient: 0.34, contactAlpha: 0.34,
+    glow: 'rgba(120,150,230,0.10)',
+    grid: 'rgba(120,150,230,0.12)',
+    edge: 'rgba(255,255,255,0.10)',
+  },
+  night: {
+    skyTop: '#050a1c', skyMid: '#0a1228', skyBot: '#16233f',
+    light: norm([-0.32, 0.72, 0.6]),   // cool moonlight from upper-left
+    sunIntensity: 0.55, ambient: 0.5, contactAlpha: 0.5,
+    glow: 'rgba(90,120,210,0.12)',
+    grid: 'rgba(100,140,230,0.14)',
+    edge: 'rgba(160,190,255,0.10)',
+  },
+};
+
 /*
  * Draw one frame. `ctx` must already be scaled for DPR.
  * textures: { top, side, bottom } canvases (bump-lit shaded)
- * opts: { cx, cy, yaw, pitch, floor } — scale is auto-fitted from canvas size.
+ * opts: { cx, cy, yaw, pitch, mode ('day'|'night'), zoom } — scale auto-fitted.
  */
 function renderBlock(ctx, textures, opts) {
   const w = ctx.canvas.width;
   const h = ctx.canvas.height;
+  const mode = opts.mode || 'day';
+  const P = LIGHT_PRESETS[mode] || LIGHT_PRESETS.day;
 
   // auto-fit: cube half-extent is 1 → full cube spans 2*scale px.
-  // Use 92% of the smaller dimension so the block + floor fits with a margin.
   const scale = Math.min(w, h) * 0.46 * (opts.zoom || 1);
   const cx = opts.cx != null ? opts.cx : w / 2;
   const cy = opts.cy != null ? opts.cy : h / 2;
 
   const yaw = opts.yaw || 0;
   const pitch = opts.pitch || 0.5;
-  const ambient = 0.34;
-  const light = norm([0.42, 0.82, 0.42]); // camera-space light (upper-left, toward viewer)
+  const ambient = P.ambient;
+  const light = P.light;
 
   ctx.save();
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
+  // ---- sky gradient (mood matches day/night) ----
+  const sky = ctx.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, P.skyTop);
+  sky.addColorStop(0.5, P.skyMid);
+  sky.addColorStop(1, P.skyBot);
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, w, h);
+
+  // soft radial glow behind the block (a silhouette rim for night)
+  const rim = ctx.createRadialGradient(cx, cy, scale * 0.2, cx, cy, scale * 1.8);
+  rim.addColorStop(0, P.glow);
+  rim.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = rim;
+  ctx.fillRect(0, 0, w, h);
+
   // ---- floor grid (ground plane y = -1) ----
-  drawFloor(ctx, w, h, yaw, pitch, scale, cx, cy);
+  drawFloor(ctx, w, h, yaw, pitch, scale, cx, cy, P.grid, P.glow);
 
   function project(p) {
     const v = toCam(p, yaw, pitch);
@@ -71,7 +107,7 @@ function renderBlock(ctx, textures, opts) {
   const base = project([0, -1, 0]);
   ctx.beginPath();
   ctx.ellipse(base.x, base.y + scale * 0.16, scale * 1.02, scale * 0.34, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(5,8,20,0.34)';
+  ctx.fillStyle = `rgba(5,8,20,${P.contactAlpha})`;
   ctx.fill();
 
   // ---- back-face cull + painter's sort ----
@@ -85,8 +121,8 @@ function renderBlock(ctx, textures, opts) {
   }
   drawFaces.sort((a, b) => a.depth - b.depth);
 
-  // draw an outline helper (crisp edges)
-  const edgeCss = 'rgba(255,255,255,0.10)';
+  // outline helper (crisp edges) using the preset
+  const edgeCss = P.edge;
 
   for (const df of drawFaces) {
     const ftex =
@@ -107,7 +143,7 @@ function renderBlock(ctx, textures, opts) {
 
     // face-level directional shading that follows rotation
     const d = Math.max(0, df.n[0] * light[0] + df.n[1] * light[1] + df.n[2] * light[2]);
-    const brightness = ambient + d * 0.78;
+    const brightness = ambient + d * 0.78 * P.sunIntensity;
     const shadowAlpha = Math.max(0, Math.min(0.62, 1 - brightness));
     if (shadowAlpha > 0.004) {
       ctx.beginPath();
@@ -132,11 +168,11 @@ function renderBlock(ctx, textures, opts) {
 }
 
 // Draw an isometric floor grid + a soft glow beneath the block.
-function drawFloor(ctx, w, h, yaw, pitch, scale, cx, cy) {
+function drawFloor(ctx, w, h, yaw, pitch, scale, cx, cy, gridCss, glowCss) {
   ctx.save();
   // soft radial glow centred under the block
   const g = ctx.createRadialGradient(cx, cy, scale * 0.1, cx, cy, scale * 1.6);
-  g.addColorStop(0, 'rgba(120,150,230,0.10)');
+  g.addColorStop(0, glowCss);
   g.addColorStop(0.55, 'rgba(60,80,150,0.05)');
   g.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g;
@@ -145,7 +181,7 @@ function drawFloor(ctx, w, h, yaw, pitch, scale, cx, cy) {
   // project ground-plane points (y = -1)
   function gp(x, z) { return toCam([x, -1, z], yaw, pitch); }
   const gridN = 4; // half-extent grid (lines from -gridN..gridN)
-  ctx.strokeStyle = 'rgba(120,150,230,0.10)';
+  ctx.strokeStyle = gridCss;
   ctx.lineWidth = 1;
 
   ctx.beginPath();
@@ -163,4 +199,4 @@ function drawFloor(ctx, w, h, yaw, pitch, scale, cx, cy) {
   ctx.restore();
 }
 
-window.Block3D = { renderBlock, CUBE_FACES };
+window.Block3D = { renderBlock, CUBE_FACES, LIGHT_PRESETS };

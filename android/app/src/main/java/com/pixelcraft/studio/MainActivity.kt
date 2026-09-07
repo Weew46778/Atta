@@ -30,14 +30,22 @@ class MainActivity : AppCompatActivity() {
         BlockDef("Dirt", "dirt"),
         BlockDef("Coarse Dirt", "coarse_dirt"),
         BlockDef("Mycelium", "mycelium"),
+        BlockDef("Moss Block", "moss_block"),
+        BlockDef("Mud", "mud"),
         BlockDef("Stone", "stone"),
         BlockDef("Cobblestone", "cobblestone"),
+        BlockDef("Mossy Cobble", "mossy_cobblestone"),
         BlockDef("Deepslate", "deepslate"),
         BlockDef("Tuff", "tuff"),
         BlockDef("Gravel", "gravel"),
+        BlockDef("Basalt", "basalt"),
+        BlockDef("Blackstone", "blackstone"),
         BlockDef("Sand", "sand"),
         BlockDef("Red Sand", "red_sand"),
         BlockDef("Clay", "clay"),
+        BlockDef("Terracotta", "terracotta"),
+        BlockDef("Sandstone", "sandstone"),
+        BlockDef("Red Sandstone", "red_sandstone"),
         BlockDef("Oak Log", "oak_log"),
         BlockDef("Oak Planks", "oak_planks"),
         BlockDef("Oak Leaves", "oak_leaves"),
@@ -55,7 +63,25 @@ class MainActivity : AppCompatActivity() {
         BlockDef("Sponge", "sponge"),
         BlockDef("Blue Wool", "wool_blue"),
         BlockDef("Purple Wool", "wool_purple"),
-        BlockDef("Terracotta", "terracotta"),
+        BlockDef("Prismarine", "prismarine"),
+        BlockDef("Dark Prismarine", "dark_prismarine"),
+        BlockDef("Sea Lantern", "sea_lantern"),
+        BlockDef("Gold Ore", "gold_ore"),
+        BlockDef("Iron Ore", "iron_ore"),
+        BlockDef("Coal Ore", "coal_ore"),
+        BlockDef("Diamond Ore", "diamond_ore"),
+        BlockDef("Redstone Ore", "redstone_ore"),
+        BlockDef("Emerald Ore", "emerald_ore"),
+        BlockDef("Lapis Ore", "lapis_ore"),
+        BlockDef("Copper Ore", "copper_ore"),
+        BlockDef("Gold Block", "gold_block"),
+        BlockDef("Iron Block", "iron_block"),
+        BlockDef("Diamond Block", "diamond_block"),
+        BlockDef("Emerald Block", "emerald_block"),
+        BlockDef("Redstone Block", "redstone_block"),
+        BlockDef("Lapis Block", "lapis_block"),
+        BlockDef("Copper Block", "copper_block"),
+        BlockDef("Netherite Block", "netherite_block"),
     )
 
     private val resolutions = intArrayOf(16, 32, 64)
@@ -106,6 +132,10 @@ class MainActivity : AppCompatActivity() {
 
         b.exportTextureBtn.setOnClickListener { export(kind = "texture") }
         b.exportShaderBtn.setOnClickListener { export(kind = "shader") }
+
+        b.nightToggle.setOnCheckedChangeListener { _, isChecked ->
+            b.blockPreview.setNightMode(isChecked)
+        }
 
         updateLabels()
         regeneratePreview()

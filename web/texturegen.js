@@ -518,6 +518,181 @@ function genMyceliumSide(seed, size, relief) {
   }, relief);
 }
 
+// ---------- batch 2: ores, metals & more blocks (photoreal) ----------
+
+// Generic stone-with-ore: medium-grey stone base with sparse embedded ore veins
+// ("photographic" stone, not flat grey). The cluster noise is band-limited and the
+// threshold is high so the ore reads as discreet veins, not a flood of colour.
+function genOre(seed, size, relief, sr, sg, sb, th) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const base = Perlin.fbm(n, x / s * 7, y / s * 7, 4, 2, 0.55);
+    const crack = Perlin.ridged(n, x / s * 5, y / s * 5, 3, 2, 0.6);
+    const fine = Perlin.fbm(n, x / s * 24, y / s * 24, 3, 2, 0.5);
+    // mid-grey stone (0.35..0.7) with soft variation + dark cracks
+    const stone = 0.42 + base * 0.18 + crack * 0.12 - fine * 0.06;
+    const q = Math.max(0, Math.min(1, stone)) * 255;
+    // sparse ore veins: narrow band of cluster noise above a high threshold
+    const cluster = Perlin.ridged(n, x / s * 9 + 100, y / s * 9 + 100, 2, 2, 0.6);
+    const spot = cluster > th ? 1 : 0;
+    const vein = Perlin.fbm(n, x / s * 5 + 55, y / s * 5 + 55, 2, 2, 0.5);
+    const veinLight = spot * (0.75 + vein * 0.3);
+    rgb[i]     = q * 0.82 * (1 - spot) + sr * veinLight + r() * 5;
+    rgb[i + 1] = q * 0.83 * (1 - spot) + sg * veinLight + r() * 5;
+    rgb[i + 2] = q * 0.86 * (1 - spot) + sb * veinLight + r() * 4;
+    rgb[i + 3] = 255;
+    return base * 0.7 + crack * 0.9 + spot * 1.2;
+  }, relief);
+}
+
+const genGoldOre   = (s, sz, r) => genOre(s, sz, r, 232, 190, 70,  0.70);
+const genIronOre   = (s, sz, r) => genOre(s, sz, r, 214, 150, 112, 0.72);
+const genCoalOre   = (s, sz, r) => genOre(s, sz, r, 40,  40,  46,  0.68);
+const genDiamondOre= (s, sz, r) => genOre(s, sz, r, 170, 232, 235, 0.74);
+const genRedstoneOre=(s,sz, r) => genOre(s, sz, r, 226, 40,  40,  0.70);
+const genEmeraldOre= (s, sz, r) => genOre(s, sz, r, 60,  220, 90,  0.74);
+const genLapisOre  = (s, sz, r) => genOre(s, sz, r, 50,  90,  220, 0.72);
+const genCopperOre = (s, sz, r) => genOre(s, sz, r, 214, 120, 90,  0.72);
+
+// Polished metal block: strong anisotropic sheen + subtle dents.
+function genMetal(seed, size, relief, m0, m1, m2) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const brush = Perlin.fbm(n, x / s * 30, y / s * 3, 4, 2, 0.5);
+    const dent = Perlin.ridged(n, x / s * 9, y / s * 9, 3, 2, 0.7);
+    const v = 0.5 + brush * 0.22 - dent * 0.14;
+    const sheen = Math.pow(Math.max(0, Math.sin((x + y) / s * Math.PI * 3 + brush * 3)), 6) * 0.5;
+    rgb[i]     = (m0 * (0.62 + v * 0.5) + sheen * 255 + r() * 8) ;
+    rgb[i + 1] = (m1 * (0.62 + v * 0.5) + sheen * 250 + r() * 8) ;
+    rgb[i + 2] = (m2 * (0.62 + v * 0.5) + sheen * 240 + r() * 8) ;
+    rgb[i + 3] = 255;
+    return brush * 0.9 + dent * 0.7;
+  }, relief);
+}
+
+const genGoldBlock     = (s, sz, r) => genMetal(s, sz, r, 220, 170, 40);
+const genIronBlock     = (s, sz, r) => genMetal(s, sz, r, 200, 202, 208);
+const genDiamondBlock  = (s, sz, r) => genMetal(s, sz, r, 140, 220, 232);
+const genEmeraldBlock  = (s, sz, r) => genMetal(s, sz, r, 60, 200, 120);
+const genRedstoneBlock = (s, sz, r) => genMetal(s, sz, r, 200, 40, 40);
+const genLapisBlock    = (s, sz, r) => genMetal(s, sz, r, 40, 70, 180);
+const genCopperBlock   = (s, sz, r) => genMetal(s, sz, r, 196, 116, 82);
+const genNetheriteBlock= (s, sz, r) => genMetal(s, sz, r, 70, 64, 74);
+
+// Layered sandstone (top ring-like, side banded).
+function genSandstoneBase(seed, size, relief, rr, rg, rb) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const band = Math.sin(y / s * Math.PI * 9 + Perlin.fbm(n, x / s * 6, y / s * 6, 2, 2, 0.5) * 2) * 0.5 + 0.5;
+    const f = Perlin.fbm(n, x / s * 16, y / s * 16, 3, 2, 0.5);
+    const v = 0.5 + band * 0.12 + f * 0.08;
+    rgb[i]     = rr + v * 40 + r() * 6;
+    rgb[i + 1] = rg + v * 36 + r() * 6;
+    rgb[i + 2] = rb + v * 30 + r() * 5;
+    rgb[i + 3] = 255;
+    return band * 0.7 + f * 0.4;
+  }, relief);
+}
+const genSandstone     = (s, sz, r) => genSandstoneBase(s, sz, r, 190, 176, 120);
+const genRedSandstone  = (s, sz, r) => genSandstoneBase(s, sz, r, 168, 86, 54);
+
+// Mossy / stone-brick variants.
+function genMossyCobble(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const cell = Perlin.fbm(n, x / s * 3.3, y / s * 3.3, 3, 2, 0.5);
+    const ridge = Perlin.ridged(n, x / s * 18, y / s * 18, 3, 2, 0.6);
+    const mos = Perlin.ridged(n, x / s * 12, y / s * 12, 3, 2, 0.6);
+    const moss = mos > 0.42;
+    const v = 0.5 + cell * 0.22 + ridge * 0.12;
+    const q = v * 255;
+    rgb[i]     = moss ? 70 + r() * 20 : q * 0.78 + r() * 12;
+    rgb[i + 1] = moss ? 104 + r() * 22 : q * 0.79 + r() * 12;
+    rgb[i + 2] = moss ? 58 + r() * 18 : q * 0.8 + r() * 10;
+    rgb[i + 3] = 255;
+    return ridge * 1.3 + cell * 0.2 + moss * 0.8;
+  }, relief);
+}
+
+function genSpringMoss(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const blades = Perlin.fbm(n, x / s * 22, y / s * 22, 4, 2, 0.5);
+    const hole = Perlin.ridged(n, x / s * 12, y / s * 12, 2, 2, 0.6);
+    const v = 0.5 + blades * 0.22;
+    rgb[i]     = 62 + v * 40 + r() * 10;
+    rgb[i + 1] = 96 + v * 60 + r() * 12;
+    rgb[i + 2] = 48 + v * 30 + r() * 8;
+    rgb[i + 3] = 255;
+    return blades * 0.9 + hole * 0.3;
+  }, relief);
+}
+
+function genMud(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 9, y / s * 9, 5, 2, 0.5);
+    const lumps = Perlin.ridged(n, x / s * 22, y / s * 22, 2, 2, 0.7);
+    const v = 0.5 + f * 0.2 + lumps * 0.14;
+    rgb[i]     = 92 + v * 40 + r() * 8;
+    rgb[i + 1] = 66 + v * 30 + r() * 7;
+    rgb[i + 2] = 48 + v * 22 + r() * 6;
+    rgb[i + 3] = 255;
+    return f * 0.8 + lumps * 0.9;
+  }, relief);
+}
+const genPackedMud = (s, sz, r) => genMud(s, sz, r);
+
+function genBasaltSide(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const col = Math.sin(x / s * Math.PI * 10 + Perlin.fbm(n, x / s * 20, y / s * 2, 3, 2, 0.5) * 2) * 0.5 + 0.5;
+    const f = Perlin.fbm(n, x / s * 16, y / s * 16, 3, 2, 0.5);
+    const v = 0.4 + col * 0.26 + f * 0.12;
+    const q = v * 255;
+    rgb[i]     = q * 0.42 + r() * 6;
+    rgb[i + 1] = q * 0.42 + r() * 6;
+    rgb[i + 2] = q * 0.46 + r() * 6;
+    rgb[i + 3] = 255;
+    return col * 1.2 + f * 0.3;
+  }, relief);
+}
+function genBlackstone(seed, size, relief, gilded) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 10, y / s * 10, 4, 2, 0.55);
+    const v = 0.24 + f * 0.2;
+    const q = v * 255;
+    const gold = Perlin.ridged(n, x / s * 6 + 30, y / s * 6 + 30, 3, 2, 0.7);
+    const g = gilded && gold > 0.62 ? 1 : 0;
+    rgb[i]     = q * 0.5 + g * 200 + r() * 4;
+    rgb[i + 1] = q * 0.5 + g * 175 + r() * 4;
+    rgb[i + 2] = q * 0.56 + g * 70 + r() * 4;
+    rgb[i + 3] = 255;
+    return f * 0.9 + g * 1.4;
+  }, relief);
+}
+
+function genPrismarineBase(seed, size, relief, dark) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const chip = Perlin.fbm(n, x / s * 8, y / s * 8, 3, 2, 0.6);
+    const v = 0.5 + chip * 0.2;
+    const base = dark ? 0.45 : 0.62;
+    rgb[i]     = (56 + chip * 30 + r() * 8) * (base * 1.6);
+    rgb[i + 1] = (120 + chip * 60 + r() * 10) * (base * 1.6);
+    rgb[i + 2] = (130 + chip * 60 + r() * 10) * (base * 1.6);
+    rgb[i + 3] = 255;
+    return chip * 0.8;
+  }, relief);
+}
+const genPrismarine = (s, sz, r) => genPrismarineBase(s, sz, r, false);
+const genDarkPrismarine = (s, sz, r) => genPrismarineBase(s, sz, r, true);
+
+function genSeaLantern(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const grid = (Math.floor(x / (s / 6)) % 2 === 0 && Math.floor(y / (s / 6)) % 2 === 0);
+    const f = Perlin.fbm(n, x / s * 20, y / s * 20, 2, 2, 0.5);
+    const v = 0.5 + f * 0.1;
+    rgb[i]     = grid ? 190 + v * 40 + r() * 8 : 40 + r() * 6;
+    rgb[i + 1] = grid ? 216 + v * 30 + r() * 8 : 42 + r() * 6;
+    rgb[i + 2] = grid ? 216 + v * 20 + r() * 8 : 46 + r() * 6;
+    rgb[i + 3] = 255;
+    return grid ? 1.0 : f * 0.4;
+  }, relief);
+}
+
 // register of generators keyed by texture id
 const TEXTURE_REGISTRY = {
   grass_top:   { title: 'Grass Top',   gen: genGrassTop,  block: 'grass' },
@@ -554,6 +729,34 @@ const TEXTURE_REGISTRY = {
   terracotta:  { title: 'Terracotta',  gen: genTerracotta,  block: 'terracotta' },
   mycelium_top:{ title: 'Mycelium Top',   gen: genMyceliumTop,   block: 'mycelium' },
   mycelium_side:{title: 'Mycelium Side',  gen: genMyceliumSide,  block: 'mycelium' },
+  gold_ore:    { title: 'Gold Ore',    gen: genGoldOre,    block: 'gold_ore' },
+  iron_ore:    { title: 'Iron Ore',    gen: genIronOre,    block: 'iron_ore' },
+  coal_ore:    { title: 'Coal Ore',    gen: genCoalOre,    block: 'coal_ore' },
+  diamond_ore: { title: 'Diamond Ore', gen: genDiamondOre, block: 'diamond_ore' },
+  redstone_ore:{ title: 'Redstone Ore',gen: genRedstoneOre,block: 'redstone_ore' },
+  emerald_ore: { title: 'Emerald Ore', gen: genEmeraldOre, block: 'emerald_ore' },
+  lapis_ore:   { title: 'Lapis Ore',   gen: genLapisOre,   block: 'lapis_ore' },
+  copper_ore:  { title: 'Copper Ore',  gen: genCopperOre,  block: 'copper_ore' },
+  gold_block:    { title: 'Gold Block',    gen: genGoldBlock,    block: 'gold_block' },
+  iron_block:    { title: 'Iron Block',    gen: genIronBlock,    block: 'iron_block' },
+  diamond_block: { title: 'Diamond Block', gen: genDiamondBlock, block: 'diamond_block' },
+  emerald_block: { title: 'Emerald Block', gen: genEmeraldBlock, block: 'emerald_block' },
+  redstone_block:{ title: 'Redstone Block',gen: genRedstoneBlock,block: 'redstone_block' },
+  lapis_block:   { title: 'Lapis Block',   gen: genLapisBlock,   block: 'lapis_block' },
+  copper_block:  { title: 'Copper Block',  gen: genCopperBlock,  block: 'copper_block' },
+  netherite_block:{title:'Netherite Block',gen: genNetheriteBlock,block:'netherite_block' },
+  sandstone:     { title: 'Sandstone',     gen: genSandstone,    block: 'sandstone' },
+  red_sandstone: { title: 'Red Sandstone', gen: genRedSandstone, block: 'red_sandstone' },
+  mossy_cobblestone:{ title: 'Mossy Cobble', gen: genMossyCobble, block: 'mossy_cobblestone' },
+  moss_block:    { title: 'Moss Block',    gen: genSpringMoss,   block: 'moss_block' },
+  mud:           { title: 'Mud',           gen: genMud,          block: 'mud' },
+  packed_mud:    { title: 'Packed Mud',    gen: genPackedMud,    block: 'packed_mud' },
+  basalt_side:   { title: 'Basalt Side',   gen: genBasaltSide,   block: 'basalt' },
+  blackstone:    { title: 'Blackstone',    gen: (s,sz,r)=>genBlackstone(s,sz,r,false), block: 'blackstone' },
+  gilded_blackstone:{title:'Gilded Blackstone',gen:(s,sz,r)=>genBlackstone(s,sz,r,true), block:'gilded_blackstone' },
+  prismarine:        { title: 'Prismarine',    gen: genPrismarine,       block: 'prismarine' },
+  dark_prismarine:   { title: 'Dark Prismarine',gen: genDarkPrismarine,  block: 'dark_prismarine' },
+  sea_lantern:       { title: 'Sea Lantern',   gen: genSeaLantern,       block: 'sea_lantern' },
 };
 
 function getTexture(id, seed, size, relief) {
@@ -572,4 +775,9 @@ Object.assign(window.PixelCraft, {
   genPackedIce, genNetherrack, genGlowstone, genObsidian, genQuartz, genEndStone,
   genMagma, genSponge, genBlueWool, genPurpleWool, genTerracotta, genMyceliumTop,
   genMyceliumSide,
+  genGoldOre, genIronOre, genCoalOre, genDiamondOre, genRedstoneOre, genEmeraldOre,
+  genLapisOre, genCopperOre, genGoldBlock, genIronBlock, genDiamondBlock, genEmeraldBlock,
+  genRedstoneBlock, genLapisBlock, genCopperBlock, genNetheriteBlock, genSandstone,
+  genRedSandstone, genMossyCobble, genSpringMoss, genMud, genPackedMud, genBasaltSide,
+  genBlackstone, genPrismarine, genDarkPrismarine, genSeaLantern,
 });

@@ -19,7 +19,8 @@ isometric 3D block right in the app**, and exports a complete, Bedrock-compatibl
 
 | Feature | Web preview | Android app |
 |--------|:-:|:-:|
-| Procedural realistic block textures (**30 blocks / 34 faces** — grass, dirt, coarse dirt, stone, cobble, deepslate, tuff, gravel, sand, red sand, clay, logs, planks, leaves, brick, snow, ice, packed ice, water, netherrack, glowstone, obsidian, quartz, end stone, magma, sponge, wool, terracotta, mycelium) | ✅ | ✅ |
+| Procedural realistic block textures (**58 blocks / 62 faces** — grass, dirt, coarse dirt, stone, cobble, mossy cobble, deepslate, tuff, gravel, basalt, blackstone, gilded blackstone, sand, red sand, clay, terracotta, sandstone, red sandstone, logs, planks, moss, mud, brick, snow, ice, packed ice, water, netherrack, glowstone, obsidian, quartz, end stone, magma, sponge, wool, prismarine, sea lantern, **all ores (gold, iron, coal, diamond, redstone, emerald, lapis, copper)** and **all metal blocks (gold, iron, diamond, emerald, redstone, lapis, copper, netherite)**) | ✅ | ✅ |
+| **Day / night preview** toggle (warm sunlight vs cool moonlight) | ✅ | ✅ |
 | Per-pixel **height map → normal map + bump-lit** shading (real depth & roughness) | ✅ | ✅ |
 | **Rotating isometric 3D block preview** — a grass block shows all 3 of its textures (top / side / bottom) mapped onto the cube simultaneously | ✅ | ✅ |
 | Realism & relief (bump strength) **sliders** | ✅ | ✅ |

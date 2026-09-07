@@ -73,13 +73,32 @@
                 android:orientation="vertical"
                 android:padding="12dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="3D Block Preview"
-                    android:textColor="@color/text"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="3D Block Preview"
+                        android:textColor="@color/text"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <ToggleButton
+                        android:id="@+id/nightToggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/accent"
+                        android:text="☀️ Day"
+                        android:textOff="☀️ Day"
+                        android:textOn="🌙 Night"
+                        android:textColor="@color/onAccent"
+                        android:textSize="13sp" />
+                </LinearLayout>
 
                 <com.pixelcraft.studio.BlockPreviewView
                     android:id="@+id/blockPreview"

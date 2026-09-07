@@ -32,6 +32,7 @@ class BlockPreviewView @JvmOverloads constructor(
     private var pitch = 0.55f
     private var scale = 0f
     private var autoSpin = true
+    private var night = false
 
     private var dragging = false
     private var lastX = 0f
@@ -70,6 +71,11 @@ class BlockPreviewView @JvmOverloads constructor(
     }
 
     fun setAutoSpin(value: Boolean) { autoSpin = value }
+
+    fun setNightMode(value: Boolean) {
+        night = value
+        invalidate()
+    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -128,9 +134,11 @@ class BlockPreviewView @JvmOverloads constructor(
         }
         list.sortBy { it.depth }
 
-        // ambient + light
-        val ambient = 0.32f
-        val light = normalize(floatArrayOf(0.5f, 0.82f, 0.45f))
+        // ambient + light (adjust for night = cool moonlight, brighter block ambient)
+        val ambient = if (night) 0.5f else 0.32f
+        val light = if (night) normalize(floatArrayOf(-0.32f, 0.72f, 0.6f))
+                    else normalize(floatArrayOf(0.5f, 0.82f, 0.45f))
+        val sunIntensity = if (night) 0.55f else 1.0f
 
         for (df in list) {
             val bmp = when (df.face.tag) {
@@ -162,7 +170,7 @@ class BlockPreviewView @JvmOverloads constructor(
             // face lighting (use transformed normal so brightness follows rotation)
             val d = (df.n[0] * light[0] + df.n[1] * light[1] + df.n[2] * light[2])
                 .coerceAtLeast(0f)
-            val brightness = ambient + d * 0.75f
+            val brightness = ambient + d * 0.75f * sunIntensity
             val shadow = (1f - brightness).coerceIn(0f, 0.65f)
             if (shadow > 0.01f) {
                 path.reset()
