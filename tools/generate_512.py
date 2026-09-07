@@ -275,10 +275,9 @@ def main():
     slate2 = ph("slate2")
 
     # ================================================================ stone
-    stone_soft = np.asarray(Image.fromarray(to_u8(ph("stone"))).filter(
-        ImageFilter.GaussianBlur(PIX // 2)), np.float32)
-    stone = grade(stone_soft, sat=0.55, contrast=0.9, bright=0.05,
-                  gamma=1.05)
+    stone_soft = ph("stone")
+    stone = grade(stone_soft, sat=0.5, contrast=1.0, bright=0.02,
+                  gamma=0.97)
     emit("stone", stone, height_from(stone, blur=5), rough=0.86,
          rough_map=rough_from(stone, 0.86, 0.10))
     andes = grade(ph("stone"), sat=0.6, contrast=0.95, bright=0.02)
@@ -287,7 +286,8 @@ def main():
     dio = grade(ph("lime2"), sat=0.35, bright=0.04, contrast=0.92)
     emit("stone_diorite", dio, height_from(dio, blur=5), rough=0.86,
          rough_map=rough_from(dio, 0.86, 0.08))
-    gran = grade(ph("redtuff"), sat=0.45, bright=0.02, mult=(1.06, 0.9, 0.82))
+    gran = grade(ph("redtuff"), sat=0.4, bright=0.0, mult=(1.05, 0.9, 0.85),
+                 contrast=1.02)
     emit("stone_granite", gran, height_from(gran, blur=5), rough=0.86,
          rough_map=rough_from(gran, 0.86, 0.1))
     for nm, src, tint in (
@@ -394,7 +394,7 @@ def main():
     emit("coarse_dirt", coarse, height_from(coarse, blur=4), rough=0.98)
     emit("dirt_with_roots", roots_overlay(dirt.copy(), 46),
          height_from(dirt, blur=4), rough=0.98, sub=0.05)
-    gtop = grade(ph("grass"), sat=1.12, mult=(0.94, 1.02, 0.86))
+    gtop = grade(ph("grass"), sat=1.05, mult=(0.94, 1.02, 0.86))
     emit("grass_top", gtop, height_from(gtop, blur=4), rough=0.9, sub=0.12,
          rough_map=rough_from(gtop, 0.9, 0.06))
     emit("grass_side", lip_side(dirt, gtop, 36, blades=True),
@@ -445,8 +445,8 @@ def main():
     sand = ph("sand")
     emit("sand", sand, height_from(sand, blur=4), rough=0.96,
          rough_map=rough_from(sand, 0.96, 0.05))
-    rsand = grade(ph("sand2"), sat=0.9, mult=(1.32, 0.78, 0.55), warmth=0.05,
-                  bright=-0.02)
+    rsand = grade(ph("sand2"), sat=0.75, mult=(1.28, 0.8, 0.58), warmth=0.03,
+                  bright=-0.01)
     emit("red_sand", rsand, height_from(rsand, blur=4), rough=0.96)
     print("ground ok")
 
@@ -462,9 +462,9 @@ def main():
     ssm = np.asarray(Image.fromarray(to_u8(sed)).filter(
         ImageFilter.GaussianBlur(PIX)), np.float32)
     emit("sandstone_smooth", ssm, height_from(ssm, blur=6), rough=0.9)
-    rs_mult = (1.35, 0.72, 0.5)
-    rsed = grade(sed, sat=0.45, mult=rs_mult, bright=0.02)
-    rst2 = grade(st2, sat=0.45, mult=rs_mult, bright=0.02)
+    rs_mult = (1.32, 0.75, 0.52)
+    rsed = grade(sed, sat=0.4, mult=rs_mult, bright=0.0)
+    rst2 = grade(st2, sat=0.4, mult=rs_mult, bright=0.0)
     emit("red_sandstone_top", rsed, height_from(rsed, blur=5), rough=0.95)
     emit("red_sandstone_normal", rsed, height_from(rsed, blur=5), rough=0.96)
     emit("red_sandstone_bottom", rst2, height_from(rst2, blur=5), rough=0.96)
@@ -581,8 +581,8 @@ def main():
         ("log_big_oak", grade(pine2, sat=0.5, bright=-0.12, mult=(0.72, 0.62, 0.5))),
         ("mangrove_log_side", grade(barkOak, sat=0.95, bright=-0.04,
                                     mult=(1.15, 0.5, 0.42))),
-        ("cherry_log_side", grade(bark2, sat=0.55, bright=0.06,
-                                  mult=(1.0, 0.8, 0.82))),
+        ("cherry_log_side", grade(bark2, sat=0.45, bright=0.04,
+                                  mult=(0.95, 0.8, 0.8))),
         ("pale_oak_log_side", grade(barkOak, sat=0.22, bright=0.10,
                                     contrast=0.9)),
     ]
@@ -721,17 +721,17 @@ def main():
         ("planks_acacia",     dict(sat=1.05, mult=(1.2, 0.74, 0.52))),
         ("planks_big_oak",    dict(sat=0.7, bright=-0.1, mult=(0.72, 0.6, 0.48))),
         ("mangrove_planks",   dict(sat=0.95, mult=(1.2, 0.6, 0.45))),
-        ("cherry_planks",     dict(sat=0.8, bright=0.06, mult=(1.08, 0.88, 0.86))),
+        ("cherry_planks",     dict(sat=0.6, bright=0.04, mult=(1.05, 0.85, 0.82))),
         ("pale_oak_planks",   dict(sat=0.25, bright=0.1)),
     ]
     for nm, kw in PLANK_GRADES:
         arr = grade(plank, **kw)
         emit(nm, arr, height_from(arr, blur=3), rough=0.8,
              rough_map=rough_from(arr, 0.8, 0.08))
-    cpl = grade(plank, sat=1.2, mult=(1.25, 0.45, 0.75), bright=-0.05)
+    cpl = grade(plank, sat=1.0, mult=(1.2, 0.5, 0.8), bright=-0.04)
     emit("crimson_planks", cpl, height_from(cpl, blur=3), rough=0.82,
          subdir="huge_fungus")
-    wpl = grade(plank, sat=1.15, mult=(0.45, 1.1, 0.95), bright=-0.03)
+    wpl = grade(plank, sat=0.9, mult=(0.5, 1.05, 0.95), bright=-0.04)
     emit("warped_planks", wpl, height_from(wpl, blur=3), rough=0.82,
          subdir="huge_fungus")
     bpl = grade(plank, sat=1.0, bright=0.05, mult=(1.15, 1.05, 0.6))

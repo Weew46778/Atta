@@ -40,14 +40,14 @@ MAN_TEX = {
         "name": "§6Atta UltraReal §7— §b512x Real Photos",
         "description": "§l512x§r real-photo PBR textures + heightmaps, true material sounds. Vibrant Visuals required. Apply ABOVE the shader pack.",
         "uuid": U["textures_header"],
-        "version": [2, 0, 0],
+        "version": [2, 1, 0],
         "min_engine_version": [1, 21, 120],
     },
     "modules": [{
         "type": "resources",
         "description": "Atta UltraReal 512x resources",
         "uuid": U["textures_module"],
-        "version": [2, 0, 0],
+        "version": [2, 1, 0],
     }],
     "capabilities": ["pbr"],
 }
@@ -58,14 +58,14 @@ MAN_SH = {
         "name": "§dAtta Vibrant §bUltra Shader",
         "description": "Realistic lighting, atmosphere, color grading & water for Vibrant Visuals. Place BELOW Atta UltraReal.",
         "uuid": U["shader_header"],
-        "version": [2, 0, 0],
+        "version": [2, 1, 0],
         "min_engine_version": [1, 21, 120],
     },
     "modules": [{
         "type": "resources",
         "description": "Atta Vibrant Shader resources",
         "uuid": U["shader_module"],
-        "version": [2, 0, 0],
+        "version": [2, 1, 0],
     }],
     "capabilities": ["pbr"],
 }
