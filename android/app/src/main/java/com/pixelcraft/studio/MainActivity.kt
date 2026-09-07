@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun simpleSpinner(onSelected: (Int) -> Unit) =
         object : android.widget.AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p: android.view.View?, pos: Int, id: Long) {
-                if (pos >= 0) onSelected(pos)
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                if (position >= 0) onSelected(position)
             }
             override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
         }
