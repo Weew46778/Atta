@@ -70,22 +70,29 @@ jobs:
             /tmp/build.log
           if-no-files-found: warn
 
-      - name: Publish APK to GitHub Release
+      - name: Publish APK or diagnostic log to GitHub Release
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           APK="$(ls app/build/outputs/apk/debug/*.apk 2>/dev/null | head -1)"
-          if [ ! -f "$APK" ]; then
-            echo "No APK produced. Skipping release publish."
-            exit 0
+          if [ -f "$APK" ]; then
+            TAG="v0.1.0-build-${{ github.run_number }}"
+            ls -lh "$APK"
+            gh release create "$TAG" "$APK" \
+              --title "MineAva debug APK #${{ github.run_number }}" \
+              --notes "Automatic debug build from ${{ github.sha }}. This is an unsigned debug APK for testing." \
+              --target "${{ github.sha }}" \
+              --repo "$GITHUB_REPOSITORY" \
+              || gh release upload "$TAG" "$APK" --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            TAG="mineava-build-log-${{ github.run_number }}"
+            echo "No APK produced. Publishing diagnostic build log."
+            gh release create "$TAG" /tmp/build.log \
+              --title "MineAva build log #${{ github.run_number }}" \
+              --notes "No APK produced. Build log attached." \
+              --target "${{ github.sha }}" \
+              --repo "$GITHUB_REPOSITORY" \
+              || gh release upload "$TAG" /tmp/build.log --clobber --repo "$GITHUB_REPOSITORY"
           fi
-          ls -lh "$APK"
-          TAG="v0.1.0-build-${{ github.run_number }}"
-          gh release create "$TAG" "$APK" \
-            --title "MineAva debug APK #${{ github.run_number }}" \
-            --notes "Automatic debug build from ${{ github.sha }}. This is an unsigned debug APK for testing." \
-            --target "${{ github.sha }}" \
-            --repo "$GITHUB_REPOSITORY" \
-            || gh release upload "$TAG" "$APK" --clobber --repo "$GITHUB_REPOSITORY"
           gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets --jq '.tagName, (.assets[] | .name + " " + .url)'
