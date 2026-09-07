@@ -57,12 +57,15 @@ jobs:
               log = open('/tmp/build.log').read()
           except Exception:
               log = "no build log"
-          # the failing task(s) and the "What went wrong" block hold the root cause
+          # the failing task(s), Kotlin compiler error lines, and the "What went wrong" block
           failed = re.findall(r'> Task :[^\s]+ FAILED', log)
+          errs = [l for l in log.split('\n') if re.match(r'^\s*e:\s', l) or 'error:' in l.lower()]
           block = ("Failed task(s):\n" + "\n".join(failed) + "\n\n") if failed else ""
+          if errs:
+              block += "Compiler errors:\n" + "\n".join(errs[:50]) + "\n\n"
           i = log.find('What went wrong')
           if i >= 0:
-              block += log[i:i + 1300]
+              block += log[i:i + 900]
           else:
               block += log[-1500:]
           body = "### ⚠️ PixelCraft APK build failed\n```\n" + block + "\n```"
