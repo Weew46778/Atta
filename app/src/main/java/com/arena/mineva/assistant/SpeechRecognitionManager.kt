@@ -6,14 +6,18 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import com.arena.mineva.AppPrefs
+import com.arena.mineva.speech.BundledSttEngine
 import java.util.Locale
 
 /**
- * Wraps Android SpeechRecognizer for Persian voice input.
+ * Persian voice input with a fully bundled offline engine (Vosk) preferred whenever the
+ * speech model is present. Falls back to the platform recognizer only as a last resort.
  */
 class SpeechRecognitionManager(private val context: Context) {
 
     private var recognizer: SpeechRecognizer? = null
+    private val offline = BundledSttEngine(context)
 
     fun isAvailable(): Boolean = SpeechRecognizer.isRecognitionAvailable(context)
 
@@ -24,8 +28,15 @@ class SpeechRecognitionManager(private val context: Context) {
         onError: (String) -> Unit = {}
     ) {
         destroy()
+        // The whole point of MineAva is to be independent: use the bundled Vosk model first.
+        if (AppPrefs.useOfflineSpeech && offline.isReady()) {
+            val err = offline.startListening(onPartial, onResult, onError)
+            if (err == null) return
+            onError(err)
+            return
+        }
         if (!isAvailable()) {
-            onError("خدمت تشخیص گفتار روی این دستگاه نصب نیست.")
+            onError("خدمت تشخیص گفتار روی این دستگاه نصب نیست. از تنظیمات صوتی مدل آفلاین را نصب کن.")
             return
         }
 
@@ -88,10 +99,21 @@ class SpeechRecognitionManager(private val context: Context) {
 
     fun stop() {
         recognizer?.stopListening()
+        offline.stop()
     }
 
     fun destroy() {
         recognizer?.destroy()
+        standaloneDestroy()
+    }
+
+    fun offlineStatus(): String =
+        if (offline.isReady()) "مدل آفلاین آماده است." else "مدل آفلاین هنوز نصب نشده است."
+
+    fun offlineReady(): Boolean = offline.isReady()
+
+    private fun standaloneDestroy() {
         recognizer = null
+        offline.release()
     }
 }

@@ -61,6 +61,14 @@ object AppPrefs {
         get() = get().getBoolean("use_bundled_voice", false)
         set(value) = get().edit().putBoolean("use_bundled_voice", value).apply()
 
+    var useOfflineSpeech: Boolean
+        get() = get().getBoolean("use_offline_speech", true)
+        set(value) = get().edit().putBoolean("use_offline_speech", value).apply()
+
+    var useOfflineTts: Boolean
+        get() = get().getBoolean("use_offline_tts", true)
+        set(value) = get().edit().putBoolean("use_offline_tts", value).apply()
+
     var rconEnabled: Boolean
         get() = get().getBoolean("rcon_enabled", false)
         set(value) = get().edit().putBoolean("rcon_enabled", value).apply()

@@ -36,6 +36,14 @@ jobs:
         run: |
           sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" || true
 
+      - name: Fetch embedded speech runtime
+        run: |
+          mkdir -p app/libs
+          curl -L --fail --retry 3 \
+            -o app/libs/sherpa-onnx-1.13.5.aar \
+            "https://github.com/k2-fsa/sherpa-onnx/releases/download/v1.13.5/sherpa-onnx-1.13.5.aar"
+          ls -lh app/libs
+
       - name: Static health check
         run: python3 tools/static_check.py
 

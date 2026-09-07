@@ -5,7 +5,10 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.speech.tts.Voice
 import com.arena.mineva.AppPrefs
+import com.arena.mineva.speech.BundledTtsEngine
+import com.arena.mineva.speech.SpeechModelStore
 import java.util.Locale
+import java.util.concurrent.Executors
 
 /**
  * Persian TTS wrapper.
@@ -20,6 +23,8 @@ class TextToSpeechManager(private val context: Context) {
 
     private var tts: TextToSpeech? = null
     private val voicePack = VoicePack(context)
+    private val bundledTts = BundledTtsEngine(SpeechModelStore.ttsDir(context))
+    private val speechExecutor = Executors.newSingleThreadExecutor()
     var ready: Boolean = false
         private set
     var persianVoiceAvailable: Boolean = false
@@ -105,10 +110,25 @@ class TextToSpeechManager(private val context: Context) {
         availableVoices().filter { it.locale.language.equals("fa", ignoreCase = true) }
 
     /**
-     * When a bundled voice pack is installed and enabled, matching phrases are played
-     * directly from the embedded audio. Falls back to system TTS otherwise.
+     * Speech priority: bundled neural Piper voice -> installed phrase voice pack ->
+     * platform TTS. The bundled engine is fully inside the app, so once the Persian model
+     * is downloaded the assistant does not depend on a device TTS service.
      */
     fun speak(text: String, interrupt: Boolean = true) {
+        if (AppPrefs.useOfflineTts && bundledTts.isReady()) {
+            if (interrupt) {
+                tts?.stop()
+                voicePack.stop()
+                bundledTts.stop()
+            }
+            speechExecutor.execute {
+                runCatching {
+                    bundledTts.ensureLoaded()
+                    bundledTts.speak(text, speechRate.coerceIn(0.5f, 1.5f))
+                }
+            }
+            return
+        }
         if (AppPrefs.useBundledVoice && voicePack.isAvailable() && voicePack.speak(text)) {
             return
         }
@@ -132,14 +152,22 @@ class TextToSpeechManager(private val context: Context) {
         return "صدای «${voicePack.voiceName()}» — ${voicePack.phraseCount()} فریز"
     }
 
+    fun bundledTtsStatus(): String {
+        if (bundledTts.isReady()) return "موتور عصبی فارسی داخل اپ: آماده ✓"
+        return "موتور عصبی فارسی داخل اپ: مدل صوتی دانلود نشده است."
+    }
+
     fun installVoicePack(uri: android.net.Uri): VoicePackInstaller.InstallResult =
         VoicePackInstaller.install(context, uri)
 
     fun shutdown() {
         voicePack.stop()
         tts?.stop()
+        bundledTts.stop()
         tts?.shutdown()
         tts = null
         ready = false
+        speechExecutor.shutdownNow()
+        bundledTts.release()
     }
 }

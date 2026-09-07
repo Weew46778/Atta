@@ -39,6 +39,7 @@ class ServerWizardActivity : AppCompatActivity() {
     private lateinit var keyPassphraseField: EditText
     private lateinit var sshPortField: EditText
     private lateinit var sshPasswordField: EditText
+    private lateinit var playitField: EditText
     private lateinit var versionField: EditText
     private lateinit var memoryField: EditText
     private lateinit var playersField: EditText
@@ -102,6 +103,7 @@ class ServerWizardActivity : AppCompatActivity() {
         sshPortField = field("پورت SSH")
         sshPortField.setText("22")
         sshPasswordField = passwordField("رمز عبور SSH (اختیاری)")
+        playitField = passwordField("کلید Playit (اختیاری) — برای دسترسی از راه دور")
         val pickKey = Ui.button(this, "📂 انتخاب فایل کلید SSH", 0xFF2E70B8.toInt(), 46f) {
             pickKeyFile()
         }
@@ -112,6 +114,7 @@ class ServerWizardActivity : AppCompatActivity() {
         vpsFields.addView(keyPassphraseField)
         vpsFields.addView(sshPortField)
         vpsFields.addView(sshPasswordField)
+        vpsFields.addView(playitField)
         vpsFields.visibility = View.GONE
         root.addView(vpsFields)
 
@@ -286,6 +289,7 @@ class ServerWizardActivity : AppCompatActivity() {
         sshKeyPassphrase = keyPassphraseField.text.toString(),
         sshPort = sshPortField.text.toString().toIntOrNull() ?: 22,
         sshPassword = sshPasswordField.text.toString(),
+        playitSecret = playitField.text.toString(),
         port = if (edition == ServerEdition.JAVA) 25565 else 19132,
         maxPlayers = playersField.text.toString().toIntOrNull() ?: 10,
         memoryMb = memoryField.text.toString().toIntOrNull() ?: 2048,

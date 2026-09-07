@@ -35,6 +35,11 @@ android {
         jvmTarget = "11"
     }
 
+    ndk {
+        // Ship only phone ABIs; keeps the embedded speech/ASR runtime small.
+        abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+    }
+
     androidResources {
         noCompress += "json"
     }
@@ -50,4 +55,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     // SSH client for real VPS provisioning (JSch maintained fork).
     implementation("com.github.mwiede:jsch:0.2.19")
+    // Offline speech-to-text (Vosk) bundled with the app; no Google speech service needed.
+    implementation("com.alphacephei:vosk-android:0.3.38")
+    // Offline neural text-to-speech runtime (Sherpa-ONNX / Piper compatible).
+    // The AAR is fetched into app/libs by CI before Gradle runs.
+    implementation(files("libs/sherpa-onnx-1.13.5.aar"))
+    // Model archive extraction (tar.bz2 for the bundled Piper voice).
+    implementation("org.apache.commons:commons-compress:1.26.2")
+    implementation("org.tukaani:xz:1.9")
 }

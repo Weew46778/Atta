@@ -18,6 +18,7 @@ data class ServerConfig(
     // but never written to the persistent JSON config.
     val sshPassword: String = "",
     val sshKeyPassphrase: String = "",
+    val playitSecret: String = "",
     val port: Int = 19132,
     val maxPlayers: Int = 10,
     val memoryMb: Int = 2048,
@@ -41,6 +42,7 @@ data class ServerConfig(
         put("user", user)
         put("sshKeyPath", sshKeyPath)
         put("sshPort", sshPort)
+        put("playitSecret", playitSecret)
         put("port", port)
         put("maxPlayers", maxPlayers)
         put("memoryMb", memoryMb)
@@ -71,6 +73,7 @@ data class ServerConfig(
                 sshPort = o.optInt("sshPort", 22),
                 sshPassword = "",
                 sshKeyPassphrase = "",
+                playitSecret = o.optString("playitSecret", ""),
                 port = o.optInt("port", 19132),
                 maxPlayers = o.optInt("maxPlayers", 10),
                 memoryMb = o.optInt("memoryMb", 2048),

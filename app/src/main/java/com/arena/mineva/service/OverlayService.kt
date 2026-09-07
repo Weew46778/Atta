@@ -32,6 +32,7 @@ import com.arena.mineva.assistant.BedrockGameDetector
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.BedrockCommandBuilder
 import com.arena.mineva.server.InWorldAvaBuilder
+import com.arena.mineva.server.RconClient
 import com.arena.mineva.server.ServerConfig
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.SshClient
@@ -72,6 +73,7 @@ class OverlayService : Service() {
     private data class TabSpec(val title: String, val color: Int, val build: (ViewGroup) -> Unit)
 
     private val tabs = listOf(
+        TabSpec("اپراتور", 0xFFE0483C.toInt()) { c -> buildOperatorTab(c) },
         TabSpec("ابزار", 0xFF2E9B5B.toInt()) { c -> buildToolsTab(c) },
         TabSpec("کد/سازه", 0xFF2E70B8.toInt()) { c -> buildStructuresTab(c) },
         TabSpec("سلاح", 0xFFC97C22.toInt()) { c -> buildWeaponsTab(c) },
@@ -285,6 +287,66 @@ class OverlayService : Service() {
 
     // ------------------------------------------------------------------ pages
 
+    private fun buildOperatorTab(c: ViewGroup) {
+        c.addView(tabHeader("🎮 اپراتور داخل بازی"))
+        c.addView(Ui.text(
+            this,
+            "این دستورها از طریق RCON یا کنسول tmux به سرور ارسال میشوند (نه با هک داخل کلاینت). اگر سرور درحال اجرا باشد، بلافاصله در دنیای بازی اثر میکنند.",
+            11f,
+            0xFFD8E3EC.toInt()
+        ))
+
+        val commandBox = android.widget.EditText(this).apply {
+            hint = "/weather rain  یا هر دستور دلخواه"
+            setTextColor(Color.WHITE)
+            setHintTextColor(0xFF9FB2C2.toInt())
+            setSingleLine(true)
+            textSize = 13f
+            background = Ui.card(this@OverlayService).background
+            setPadding(
+                Ui.dp(this@OverlayService, 10f),
+                Ui.dp(this@OverlayService, 8f),
+                Ui.dp(this@OverlayService, 10f),
+                Ui.dp(this@OverlayService, 8f)
+            )
+        }
+        c.addView(commandBox)
+        c.addView(Ui.button(this, "⚡ ارسال دستور به کنسول سرور", 0xFFE0483C.toInt(), 46f) {
+            val raw = commandBox.text.toString().trim()
+            if (raw.isNotBlank()) {
+                sendConsoleAction(raw)
+                commandBox.setText("")
+            }
+        })
+
+        c.addView(Ui.text(this, "دستورهای سریع اپراتور", 15f, Color.WHITE, bold = true))
+        val quick = listOf(
+            "☔ باران بیار" to "/weather rain",
+            "☀️ آسمان صاف" to "/weather clear",
+            "🕐 صبح" to "/time set day",
+            "💎 ۶۴ الماس" to "/give @p diamond 64",
+            "🥇 اپراتور من" to "/op @p",
+            "🎮 حالت خلاق" to "/gamemode creative",
+            "🛠 حالت بقا" to "/gamemode survival",
+            "🩹 پر کردن سلامت" to "/effect @p minecraft:instant_health 1 10",
+            "🌦 اعلام آبوهوا به همه" to "/weather rain"
+        )
+        quick.forEach { (label, cmd) -> c.addView(commandRow(label, cmd)) }
+        c.addView(Ui.text(this, "برای اثرگذاری، باید اپراتور/سطح دسترسی (OP) در سرور فعال باشد.", 11f, 0xFFFF8A8A.toInt()))
+    }
+
+    private fun sendConsoleAction(command: String) {
+        val normalized = if (command.startsWith("/")) command else "/$command"
+        vibrate(25)
+        copyToClipboard(normalized)
+        val sent = trySendToServerConsole(normalized)
+        tts.speak(
+            if (sent) "دستور به کنسول سرور ارسال شد و در دنیا اعمال میشود."
+            else "دستور در کلیپبورد کپی شد؛ برای ارسال مستقیم باید سرور با RCON یا SSH تنظیم شده باشد."
+        )
+        scheduleAutoHide()
+    }
+
     private fun buildToolsTab(c: ViewGroup) {
         c.addView(tabHeader("ابزارهای سریع"))
         c.addView(commandRow(
@@ -399,25 +461,45 @@ class OverlayService : Service() {
     }
 
     private fun trySendToServerConsole(command: String): Boolean {
+        val clean = if (command.startsWith("/")) command else "/$command"
         val config = ServerConfig.fromJson(AppPrefs.lastServerConfigJson)
-            ?: return false
-        if (config.target != ServerTarget.VPS || config.host.isBlank() || config.sshKeyPath.isBlank()) {
-            return false
-        }
-        runCatching {
-            scope.launch {
+        val rconReady = AppPrefs.rconEnabled
+        val sshReady = config != null && config.target == ServerTarget.VPS &&
+            config.host.isNotBlank() && config.user.isNotBlank() &&
+            (config.sshKeyPath.isNotBlank() || config.sshPassword.isNotBlank())
+        if (!rconReady && !sshReady) return false
+
+        scope.launch {
+            // 1) Real RCON is the strongest path: works for on-device and VPS servers.
+            if (rconReady) {
+                val host = config?.host?.ifBlank { "127.0.0.1" } ?: "127.0.0.1"
+                runCatching {
+                    val rcon = RconClient()
+                    val auth = rcon.connect(host, AppPrefs.rconPort, AppPrefs.rconPassword, 6000)
+                    if (auth.success) {
+                        rcon.command(clean)
+                        rcon.disconnect()
+                        return@launch
+                    }
+                }
+            }
+
+            // 2) VPS console over SSH/tmux.
+            if (sshReady && config != null) {
                 runCatching {
                     val ssh = SshClient()
                     val session = ssh.connect(
                         host = config.host,
                         user = config.user,
-                        password = null,
+                        password = config.sshPassword.ifBlank { null },
                         keyPath = config.sshKeyPath.ifBlank { null },
-                        keyPassphrase = null,
+                        keyPassphrase = config.sshKeyPassphrase.ifBlank { null },
                         port = config.sshPort
                     )
-                    val quoted = "'" + command.replace("'", "'\\''") + "'"
+                    val quoted = "'" + clean.replace("'", "'\\''") + "'"
                     ssh.exec(session, "tmux send-keys -t MineAvaServer $quoted Enter")
+                    // Also drop the command into the on-screen game chat as a server-side message.
+                    ssh.exec(session, "tmux send-keys -t MineAvaServer \"say MineAva: $clean\" Enter")
                     session.disconnect()
                 }
             }

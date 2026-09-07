@@ -15,6 +15,7 @@ import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.assistant.VoicePackDownloader
 import com.arena.mineva.assistant.VoicePackSample
 import com.arena.mineva.guide.GuideController
+import com.arena.mineva.speech.SpeechModelStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,6 +27,8 @@ class VoiceSettingsActivity : AppCompatActivity() {
     private lateinit var bundledToggle: android.widget.TextView
     private lateinit var bundledStatus: android.widget.TextView
     private lateinit var voiceUrlField: EditText
+    private lateinit var modelStatus: android.widget.TextView
+    private lateinit var modelButton: android.widget.TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +44,20 @@ class VoiceSettingsActivity : AppCompatActivity() {
         )
         bundledStatus = Ui.text(this, "", 13f, 0xFF9FB2C2.toInt())
         root.addView(bundledStatus)
+        modelStatus = Ui.text(this, "", 13f, 0xFF9FB2C2.toInt())
+        root.addView(modelStatus)
+        modelButton = Ui.button(this, "🧠 دانلود موتور صوتی و تشخیص گفتار داخل اپ", 0xFF2E9BFF.toInt(), 50f) {
+            downloadSpeechModels()
+        }
+        root.addView(modelButton)
+        root.addView(
+            Ui.button(this, "🎤 استفاده از موتور داخل اپ: OFF", 0xFF35D07F.toInt(), 46f) {
+                AppPrefs.useOfflineTts = !AppPrefs.useOfflineTts
+                AppPrefs.useOfflineSpeech = AppPrefs.useOfflineTts
+                refreshModelState()
+                manager?.speak("موتور صوتی داخل اپ " + if (AppPrefs.useOfflineTts) "فعال شد." else "غیرفعال شد.")
+            }
+        )
         bundledButton = Ui.button(this, "📦 وارد کردن بستهٔ صوتی زن فارسی (ZIP)", 0xFF35D07F.toInt(), 48f) {
             pickVoicePack()
         }
@@ -152,6 +169,38 @@ class VoiceSettingsActivity : AppCompatActivity() {
         val exists = manager?.bundledVoiceStatus() ?: ""
         bundledStatus.text = if (AppPrefs.useBundledVoice) "صدای داخل اپ فعال: $exists" else "$exists"
         bundledToggle.text = if (AppPrefs.useBundledVoice) "🎤 صدای داخل اپ: ON" else "🎤 صدای داخل اپ: OFF"
+        refreshModelState()
+    }
+
+    private fun refreshModelState() {
+        val s = SpeechModelStore.status(this)
+        modelStatus.text = s.detail
+        modelButton.text = if (s.sttReady && s.ttsReady) "🧠 موتور داخل اپ کاملاً آماده ✓" else "🧠 دانلود موتور صوتی و تشخیص گفتار داخل اپ"
+        if (AppPrefs.useOfflineTts && s.sttReady && s.ttsReady) {
+            modelStatus.text = "✓ آفلاین فعال است\n" + s.detail
+        }
+    }
+
+    private fun downloadSpeechModels() {
+        modelButton.isEnabled = false
+        modelButton.text = "در حال دانلود... (اینترنت لازم است)"
+        modelStatus.text = "شروع دانلود مدلهای داخل اپ..."
+        lifecycleScope.launch(Dispatchers.IO) {
+            val result = SpeechModelStore.download(this@VoiceSettingsActivity) { progress ->
+                runOnUiThread { modelStatus.text = "در حال دانلود: $progress" }
+            }
+            withContext(Dispatchers.Main) {
+                modelButton.isEnabled = true
+                modelButton.text = if (result.success) "🧠 موتور داخل اپ آماده ✓" else "🧠 دوباره امتحان کن"
+                modelStatus.text = result.detail
+                if (result.success) {
+                    AppPrefs.useOfflineTts = true
+                    AppPrefs.useOfflineSpeech = true
+                }
+                ttsMessage(if (result.success) "موتور صوتی و تشخیص گفتار داخل اپ آماده شد." else result.detail)
+                refreshBundledState()
+            }
+        }
     }
 
     private fun pickVoicePack() {
