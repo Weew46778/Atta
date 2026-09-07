@@ -64,15 +64,22 @@ jobs:
           echo "== build.log tail =="
           tail -40 /tmp/build.log 2>/dev/null || true
 
-      - name: Commit build log for diagnostics
+      - name: Commit built APK for delivery
         if: always()
         run: |
           git config user.name "MineAva CI"
           git config user.email "actions@github.com"
           mkdir -p artifacts
-          cp /tmp/build.log artifacts/build-log.txt
-          git add -f artifacts/build-log.txt
-          git commit -m "ci: capture build log [skip ci]" || true
+          APK="$(ls app/build/outputs/apk/debug/*.apk 2>/dev/null | head -1)"
+          if [ -f "$APK" ]; then
+            cp "$APK" artifacts/mineava-debug.apk
+            git add -f artifacts/mineava-debug.apk
+            git commit -m "ci: attach mineava-debug.apk [skip ci]" || true
+          else
+            cp /tmp/build.log artifacts/build-log.txt
+            git add -f artifacts/build-log.txt
+            git commit -m "ci: capture build log [skip ci]" || true
+          fi
           git push origin HEAD:refs/heads/${{ github.ref_name }} || true
 
       - name: Upload APK or build log
