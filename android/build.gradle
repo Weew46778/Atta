@@ -1,4 +1,6 @@
 // Top-level build file
+// Repositories are declared centrally in settings.gradle
+// (dependencyResolutionManagement / FAIL_ON_PROJECT_REPOS).
 buildscript {
     repositories {
         google()
@@ -7,13 +9,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.5.2'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
     }
 }
 
