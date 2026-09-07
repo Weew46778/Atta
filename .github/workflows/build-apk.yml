@@ -53,9 +53,19 @@ jobs:
           python3 - <<'PY'
           import os, json, urllib.request
           try:
-              log = open('/tmp/build.log').read()[-6000:]
+              lines = open('/tmp/build.log').read().split('\n')
           except Exception:
-              log = "no build log"
+              lines = ["no build log"]
+          sel = []
+          for i, l in enumerate(lines):
+              if ('What went wrong' in l or l.startswith('> Task :') or 'FAILURE:' in l
+                      or 'Caused by:' in l or 'BUILD FAILED' in l or 'Could not' in l
+                      or 'error:' in l.lower() or 'e: ' in l or 'Unresolved' in l
+                      or 'Execution failed' in l or 'CausedBy' in l):
+                  sel.append(l)
+                  sel.extend(lines[i+1:i+5])
+                  sel.append('...')
+          log = '\n'.join(sel[:120]) if sel else '\n'.join(lines[-40:])
           body = "### ⚠️ PixelCraft APK build failed\n```\n" + log + "\n```"
           pr = os.environ.get('PR_NUMBER')
           if not pr:
