@@ -1,0 +1,488 @@
+== JAVA ==
+openjdk version "17.0.20.1" 2026-08-18
+OpenJDK Runtime Environment Temurin-17.0.20.1+1 (build 17.0.20.1+1)
+OpenJDK 64-Bit Server VM Temurin-17.0.20.1+1 (build 17.0.20.1+1, mixed mode, sharing)
+== GRADLE ==
+
+Welcome to Gradle 9.7.1!
+
+Here are the highlights of this release:
+ - Isolated Projects graduates to incubating
+ - Broader Configuration Cache compatibility
+ - Resilient Sync helps you fix broken builds
+ - More source locations in problem reports
+
+For more details see https://docs.gradle.org/9.7.1/release-notes.html
+
+
+------------------------------------------------------------
+Gradle 9.7.1
+------------------------------------------------------------
+
+Build time:    2026-08-19 14:16:09 UTC
+Revision:      92f0512e7f06d84621afba191f75e265363890cf
+
+Kotlin:        2.4.0
+Groovy:        4.0.32
+Ant:           Apache Ant(TM) version 1.10.17 compiled on April 6 2026
+Launcher JVM:  17.0.20.1 (Eclipse Adoptium 17.0.20.1+1)
+Daemon JVM:    /usr/lib/jvm/temurin-17-jdk-amd64 (no Daemon JVM specified, using current Java home)
+OS:            Linux 6.17.0-1022-azure amd64
+
+== BUILD ==
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 35
+
+This Android Gradle plugin (8.5.2) was tested up to compileSdk = 34.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 35.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 35 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=35
+to this project's gradle.properties.
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:generateDebugResValues
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:parseDebugLocalResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
+> Task :app:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:processDebugResources
+> Task :app:checkDebugDuplicateClasses
+> Task :app:desugarDebugFileDependencies
+> Task :app:mergeDebugStartupProfile
+> Task :app:compileDebugKotlin
+> Task :app:mergeExtDexDebug
+> Task :app:mergeDebugJniLibFolders
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugNativeLibs NO-SOURCE
+> Task :app:stripDebugDebugSymbols NO-SOURCE
+> Task :app:validateSigningDebug
+
+> Task :app:compileDebugKotlin
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:77:75 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:82:75 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:87:76 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:92:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:98:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:103:72 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:117:67 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:119:32 No value passed for parameter 'kind'
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:123:69 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:130:59 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:135:61 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:167:23 No value passed for parameter 'kind'
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:174:16 Type mismatch: inferred type is Int but String was expected
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:259:9 Suspend function 'withContext' should be called only from a coroutine or another suspend function
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/CloudLogActivity.kt:300:50 The integer literal does not conform to the expected type Float
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/DeviceHealthActivity.kt:24:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/DeviceHealthActivity.kt:47:91 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/DeviceHealthActivity.kt:58:28 Unresolved reference: LinearLayout
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/DeviceHealthActivity.kt:59:17 Unresolved reference: LinearLayout
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/DeviceHealthActivity.kt:60:17 Unresolved reference: LinearLayout
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/DiagnosticsActivity.kt:36:78 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/DiagnosticsActivity.kt:46:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/EncyclopediaActivity.kt:59:87 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/EncyclopediaActivity.kt:80:93 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/EncyclopediaActivity.kt:84:82 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/EncyclopediaActivity.kt:89:90 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/EncyclopediaActivity.kt:115:81 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/EncyclopediaActivity.kt:139:79 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/EncyclopediaActivity.kt:153:21 Suspension functions can be called only within coroutine body
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:54:93 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:125:111 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:126:96 The integer literal does not conform to the expected type Float
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:146:37 Suspension functions can be called only within coroutine body
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:203:131 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:204:92 The integer literal does not conform to the expected type Float
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:209:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:210:92 The integer literal does not conform to the expected type Float
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:254:37 Suspension functions can be called only within coroutine body
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/PackageManagerActivity.kt:282:37 Suspension functions can be called only within coroutine body
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerDashboardActivity.kt:44:83 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerDashboardActivity.kt:107:67 The integer literal does not conform to the expected type Float
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerDashboardActivity.kt:108:123 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerDashboardActivity.kt:113:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerDashboardActivity.kt:117:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerDashboardActivity.kt:121:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerDashboardActivity.kt:126:75 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerDashboardActivity.kt:144:64 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:59:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:99:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:104:88 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:109:73 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:114:75 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:123:85 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:137:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:146:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:155:82 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:163:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:172:84 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:177:83 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:187:80 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:196:80 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:205:80 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:214:85 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:244:80 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:248:31 Unresolved reference: @Ui
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:248:35 Unresolved reference: button
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:255:91 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:260:76 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:265:68 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerManagerActivity.kt:270:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:81:75 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:84:73 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:87:73 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:108:70 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:117:70 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:122:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:129:68 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:134:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:139:78 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:144:72 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:149:70 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:154:73 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerPanelActivity.kt:172:50 The integer literal does not conform to the expected type Float
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWatchdogActivity.kt:110:73 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWatchdogActivity.kt:113:73 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWatchdogActivity.kt:116:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWatchdogActivity.kt:119:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWatchdogActivity.kt:122:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWizardActivity.kt:101:86 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWizardActivity.kt:179:78 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWizardActivity.kt:184:72 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWizardActivity.kt:189:100 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWizardActivity.kt:311:67 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWizardActivity.kt:369:17 Suspension functions can be called only within coroutine body
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/ServerWizardActivity.kt:393:65 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/SettingsActivity.kt:52:66 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/SettingsActivity.kt:58:76 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/SettingsActivity.kt:63:84 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/SettingsActivity.kt:68:90 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/SettingsActivity.kt:81:89 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/SettingsActivity.kt:86:74 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/SettingsActivity.kt:112:40 Suspension functions can be called only within coroutine body
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/SettingsActivity.kt:140:107 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceAssistantActivity.kt:70:61 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceAssistantActivity.kt:73:61 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:36:85 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:42:103 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:47:81 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:54:80 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:60:87 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:79:87 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:83:27 Unresolved reference: @Ui
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:83:31 Unresolved reference: button
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:94:96 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:101:90 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:109:70 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceSettingsActivity.kt:209:128 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceTopicPickerActivity.kt:71:76 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceTopicPickerActivity.kt:73:72 Unresolved reference: @Ui
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceTopicPickerActivity.kt:73:76 Unresolved reference: button
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceTopicPickerActivity.kt:80:87 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceTopicPickerActivity.kt:83:23 Unresolved reference: @Ui
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceTopicPickerActivity.kt:83:27 Unresolved reference: button
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VoiceTopicPickerActivity.kt:138:67 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VpsGuideActivity.kt:80:67 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VpsGuideActivity.kt:81:73 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VpsGuideActivity.kt:82:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VpsGuideActivity.kt:104:69 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VpsGuideActivity.kt:109:77 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/VpsGuideActivity.kt:191:17 Suspension functions can be called only within coroutine body
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/assistant/TextToSpeechManager.kt:96:56 Type mismatch: inferred type is List<Voice!>? but List<Voice> was expected
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/assistant/VoicePack.kt:39:60 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type String?
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/assistant/VoicePack.kt:77:41 Unresolved reference: context
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/guide/GuideController.kt:143:72 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/guide/GuideController.kt:149:75 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/guide/GuideController.kt:155:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/guide/GuideController.kt:159:71 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/guide/GuideController.kt:166:73 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/guide/GuideController.kt:193:79 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/guide/GuideController.kt:200:100 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/OnDeviceJavaServerManager.kt:108:52 Unresolved reference: pid
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/OnDeviceJavaServerManager.kt:111:101 Unresolved reference: pid
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/OnDeviceJavaServerManager.kt:139:78 Unresolved reference: pid
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/OnDeviceJavaServerManager.kt:146:78 Unresolved reference: pid
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/OnDeviceServerManager.kt:72:44 Unresolved reference: pid
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/OnDeviceServerManager.kt:103:73 Unresolved reference: pid
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/OnDeviceServerManager.kt:112:73 Unresolved reference: pid
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/PackageDeployer.kt:91:77 Unresolved reference: folder
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/server/ServerWatchdog.kt:100:62 Unresolved reference: HOME
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/service/OverlayService.kt:172:13 Unresolved reference: translationX
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/service/OverlayService.kt:339:67 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/service/OverlayService.kt:346:81 The floating-point literal does not conform to the expected type Int
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/service/OverlayService.kt:355:9 Unresolved reference: BedrockGameDetector
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/service/OverlayService.kt:355:47 Overload resolution ambiguity: 
+public inline fun <T> Iterable<TypeVariable(T)>.forEach(action: (TypeVariable(T)) -> Unit): Unit defined in kotlin.collections
+public inline fun <K, V> Map<out TypeVariable(K), TypeVariable(V)>.forEach(action: (Map.Entry<TypeVariable(K), TypeVariable(V)>) -> Unit): Unit defined in kotlin.collections
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/service/OverlayService.kt:355:57 Cannot infer a type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Atta/Atta/app/src/main/java/com/arena/mineva/service/OverlayService.kt:369:66 The floating-point literal does not conform to the expected type Int
+
+> Task :app:writeDebugAppMetadata
+> Task :app:compileDebugKotlin FAILED
+> Task :app:writeDebugSigningConfigVersions
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1788753929192.json
+
+[Incubating] Problems report is available at: file:///home/runner/work/Atta/Atta/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin' (registered by plugin 'org.jetbrains.kotlin.android').
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+* Exception is:
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:compileDebugKotlin' (registered by plugin 'org.jetbrains.kotlin.android').
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:135)
+	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:288)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:133)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:121)
+	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:41)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.DefaultNodeExecutor.executeLocalTaskNode(DefaultNodeExecutor.java:55)
+	at org.gradle.execution.plan.DefaultNodeExecutor.execute(DefaultNodeExecutor.java:34)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:355)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:343)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:339)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:84)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:339)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:328)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.execution.plan.DefaultPlanExecutor.process(DefaultPlanExecutor.java:111)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.executeWithServices(DefaultTaskExecutionGraph.java:146)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.execute(DefaultTaskExecutionGraph.java:131)
+	at org.gradle.execution.SelectedTaskExecutionAction.execute(SelectedTaskExecutionAction.java:35)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:54)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:43)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor.execute(BuildOperationFiringBuildWorkerExecutor.java:40)
+	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$executeTasks$0(DefaultBuildLifecycleController.java:323)
+	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:324)
+	at org.gradle.internal.model.StateTransitionController.lambda$tryTransition$0(StateTransitionController.java:235)
+	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:45)
+	at org.gradle.internal.model.StateTransitionController.tryTransition(StateTransitionController.java:235)
+	at org.gradle.internal.build.DefaultBuildLifecycleController.executeTasks(DefaultBuildLifecycleController.java:314)
+	at org.gradle.internal.build.DefaultBuildWorkGraphController$DefaultBuildWorkGraph.runWork(DefaultBuildWorkGraphController.java:220)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.lambda$runAndReleaseLocks$0(DefaultWorkerLeaseService.java:302)
+	at org.gradle.internal.work.ResourceLockStatistics$1.measure(ResourceLockStatistics.java:43)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAndReleaseLocks(DefaultWorkerLeaseService.java:300)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocksAcquired(DefaultWorkerLeaseService.java:296)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:288)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:131)
+	at org.gradle.composite.internal.DefaultBuildController.doRun(DefaultBuildController.java:182)
+	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.lambda$run$0(DefaultBuildController.java:199)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:84)
+	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.run(DefaultBuildController.java:199)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:65)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionException: A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+	at org.gradle.workers.internal.DefaultWorkerExecutor$WorkItemExecution.waitForCompletion(DefaultWorkerExecutor.java:273)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.lambda$waitForItemsAndGatherFailures$2(DefaultAsyncWorkTracker.java:132)
+	at org.gradle.internal.Factories$1.create(Factories.java:30)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.lambda$withoutLocksBlocking$0(DefaultWorkerLeaseService.java:412)
+	at org.gradle.internal.work.ResourceLockStatistics$1.measure(ResourceLockStatistics.java:43)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLocksBlocking(DefaultWorkerLeaseService.java:407)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.blocking(DefaultWorkerLeaseService.java:257)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.blocking(DefaultWorkerLeaseService.java:239)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.lambda$waitForItemsAndGatherFailures$1(DefaultAsyncWorkTracker.java:128)
+	at org.gradle.internal.Factories$1.create(Factories.java:30)
+	at org.gradle.internal.resources.AbstractResourceLockRegistry.whileDisallowingLockChanges(AbstractResourceLockRegistry.java:51)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.whileDisallowingProjectLockChanges(DefaultWorkerLeaseService.java:262)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForItemsAndGatherFailures(DefaultAsyncWorkTracker.java:127)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForItemsAndGatherFailures(DefaultAsyncWorkTracker.java:93)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForAll(DefaultAsyncWorkTracker.java:79)
+	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForCompletion(DefaultAsyncWorkTracker.java:67)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:267)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:30)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:27)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:48)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:244)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:227)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:210)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:176)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:167)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:47)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:137)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:134)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:134)
+	at org.gradle.internal.execution.steps.ExecuteStep$Mutable.execute(ExecuteStep.java:80)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:42)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:75)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:51)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:29)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.executeMutable(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.executeMutable(RemovePreviousOutputsStep.java:39)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:42)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:24)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:69)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:46)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.executeMutable(ResolveInputChangesStep.java:39)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.executeMutable(ResolveInputChangesStep.java:28)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:76)
+	at org.gradle.internal.Either$Right.fold(Either.java:176)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:74)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:49)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.executeMutable(StoreExecutionStateStep.java:46)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.executeMutable(StoreExecutionStateStep.java:35)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:75)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:35)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveMutableCachingStateStep.executeDelegate(ResolveMutableCachingStateStep.java:70)
+	at org.gradle.internal.execution.steps.ResolveMutableCachingStateStep.executeDelegate(ResolveMutableCachingStateStep.java:32)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:69)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:37)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.executeMutable(ResolveChangesStep.java:63)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.executeMutable(ResolveChangesStep.java:34)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.executeDelegate(ValidateStep.java:79)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.executeDelegate(ValidateStep.java:65)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:105)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.execute(ValidateStep.java:65)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.executeMutable(CaptureMutableStateBeforeExecutionStep.java:86)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.execute(CaptureMutableStateBeforeExecutionStep.java:65)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.execute(CaptureMutableStateBeforeExecutionStep.java:45)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeWithNonEmptySources(SkipEmptyMutableWorkStep.java:210)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeMutable(SkipEmptyMutableWorkStep.java:90)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeMutable(SkipEmptyMutableWorkStep.java:53)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.executeMutable(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.executeMutable(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.executeMutable(HandleStaleOutputsStep.java:77)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.executeMutable(HandleStaleOutputsStep.java:43)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$executeMutable$0(AssignMutableWorkspaceStep.java:34)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:305)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.executeMutable(AssignMutableWorkspaceStep.java:30)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.executeMutable(AssignMutableWorkspaceStep.java:21)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:56)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:38)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:68)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:132)
+	... 61 more
+Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilation error. See log for more details
+	at org.jetbrains.kotlin.gradle.tasks.TasksUtilsKt.throwExceptionIfCompilationFailed(tasksUtils.kt:20)
+	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.run(GradleKotlinCompilerWork.kt:141)
+	at org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction.execute(GradleCompilerRunnerWithWorkers.kt:73)
+	at org.gradle.workers.internal.DefaultWorkerServer.execute(DefaultWorkerServer.java:68)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:64)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:61)
+	at org.gradle.internal.classloader.ClassLoaderUtils.executeInClassloader(ClassLoaderUtils.java:103)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.lambda$execute$0(NoIsolationWorkerFactory.java:61)
+	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:44)
+	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:41)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.workers.internal.AbstractWorker.executeWrappedInBuildOperation(AbstractWorker.java:41)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.execute(NoIsolationWorkerFactory.java:58)
+	at org.gradle.workers.internal.DefaultWorkerExecutor.lambda$submitWork$1(DefaultWorkerExecutor.java:169)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runExecution(DefaultConditionalExecutionQueue.java:191)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.access$600(DefaultConditionalExecutionQueue.java:112)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner$1.run(DefaultConditionalExecutionQueue.java:168)
+	at org.gradle.internal.Factories$1.create(Factories.java:30)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.lambda$runAndReleaseLocks$0(DefaultWorkerLeaseService.java:302)
+	at org.gradle.internal.work.ResourceLockStatistics$1.measure(ResourceLockStatistics.java:43)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAndReleaseLocks(DefaultWorkerLeaseService.java:300)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocksAcquired(DefaultWorkerLeaseService.java:296)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:288)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:131)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:137)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:163)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:125)
+	... 2 more
+
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 2m 20s
+28 actionable tasks: 28 executed
