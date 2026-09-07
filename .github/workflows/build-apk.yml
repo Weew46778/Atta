@@ -16,44 +16,50 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
 
-      - name: Set up Gradle 8.7
+      - name: Preflight & write local.properties
         run: |
-          curl -sSL -o /tmp/gradle.zip https://services.gradle.org/distributions/gradle-8.7-bin.zip
-          unzip -q /tmp/gradle.zip -d /tmp
-          /tmp/gradle-8.7/bin/gradle --version
-          # generate the wrapper so ./gradlew works for the rest of the build
-          cd android && /tmp/gradle-8.7/bin/gradle wrapper
-
-      - name: Write local.properties
-        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           echo "sdk.dir=$ANDROID_HOME" > android/local.properties
           cat android/local.properties
+          ls -d $ANDROID_HOME/platforms/android-* 2>/dev/null | head || echo "no android-* platform!"
+          ls -d $ANDROID_HOME/build-tools/* 2>/dev/null | head || echo "no build-tools!"
+          gradle --version 2>/dev/null || echo "NO preinstalled gradle"
+
+      - name: Generate Gradle wrapper (pinned 8.7)
+        run: |
+          cd android
+          gradle wrapper --gradle-version 8.7 --distribution-type bin --no-daemon
+          ls -la gradle/wrapper/
 
       - name: Build debug APK
         run: |
           cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          java -version
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tail -160
+          echo "EXIT_CODE=${PIPESTATUS[0]}"
+          exit ${PIPESTATUS[0]}
 
       - name: Upload APK artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: pixelcraft-apk
           path: android/app/build/outputs/apk/debug/*.apk
 
-      - name: Create / update GitHub Release
+      - name: Create GitHub Release
+        if: success()
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "pixelcraft-apk-v${{ github.run_number }}"
           name: "PixelCraft Studio APK build #${{ github.run_number }}"
           body: |
             **PixelCraft Studio — Bedrock texture & shader pack generator**
-
             Automatic debug APK build. Install on an Android device (allow "install from unknown sources").
           files: android/app/build/outputs/apk/debug/*.apk
           token: ${{ secrets.GITHUB_TOKEN }}
