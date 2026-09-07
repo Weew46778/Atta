@@ -30,7 +30,7 @@ class BundledSttEngine(context: Context) {
         if (loaded && model != null) return true
         if (!isReady()) return false
         return runCatching {
-            LibVosk.setLogLevel(LogLevel.WARN)
+            LibVosk.setLogLevel(LogLevel.INFO)
             model = Model(modelDir.absolutePath)
             loaded = true
             true
