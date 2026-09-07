@@ -936,22 +936,22 @@ object TextureGenerator {
         grain * 0.9f + f * 0.2f
     }
 
-    private fun nyliumC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+    private fun nyliumC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, rn, rgb, off ->
         val blade = n.fbm(x / s * 22f, y / s * 22f, 4, 2f, 0.5f)
         val v = 0.5f + blade * 0.22f
-        rgb[off] = pack((r * (0.82f + v * 0.3f) + r() * 8).toInt(),
-            (g * (0.82f + v * 0.3f) + r() * 8).toInt(),
-            (b * (0.82f + v * 0.3f) + r() * 8).toInt(), 255)
+        rgb[off] = pack((r * (0.82f + v * 0.3f) + rn() * 8).toInt(),
+            (g * (0.82f + v * 0.3f) + rn() * 8).toInt(),
+            (b * (0.82f + v * 0.3f) + rn() * 8).toInt(), 255)
         blade * 0.9f
     }
 
-    private fun wartBlockC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
+    private fun wartBlockC(r: Int, g: Int, b: Int): PixelGen = PixelGen { x, y, s, n, rn, rgb, off ->
         val bump = n.ridged(x / s * 16f, y / s * 16f, 3, 2f, 0.6f)
         val f = n.fbm(x / s * 24f, y / s * 24f, 2, 2f, 0.5f)
         val v = 0.5f + bump * 0.22f + f * 0.1f
-        rgb[off] = pack((r * (0.8f + v * 0.4f) + r() * 6).toInt(),
-            (g * (0.8f + v * 0.4f) + r() * 6).toInt(),
-            (b * (0.8f + v * 0.4f) + r() * 6).toInt(), 255)
+        rgb[off] = pack((r * (0.8f + v * 0.4f) + rn() * 6).toInt(),
+            (g * (0.8f + v * 0.4f) + rn() * 6).toInt(),
+            (b * (0.8f + v * 0.4f) + rn() * 6).toInt(), 255)
         bump * 1.4f + f * 0.2f
     }
 
@@ -1041,8 +1041,8 @@ object TextureGenerator {
     private fun coloredFamily(id: String): PixelGen? {
         val prefixes = listOf("wool", "concrete_powder", "concrete", "terracotta", "glazed_terracotta")
         for (p in prefixes) {
-            if (id.startsWith("$p_")) {
-                val cname = id.removePrefix("$p_")
+            if (id.startsWith("${p}_")) {
+                val cname = id.removePrefix("${p}_")
                 val c = COLOR16.firstOrNull { it.first == cname }?.second ?: return null
                 return when (p) {
                     "wool" -> woolGen(11, c.first, c.second, c.third)
