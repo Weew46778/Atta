@@ -37,15 +37,27 @@ jobs:
 
       - name: Build debug APK
         run: |
-          if [[ -x gradlew ]]; then
-            ./gradlew assembleDebug --no-daemon
-          else
-            gradle assembleDebug --no-daemon
-          fi
+          set +e
+          {
+            echo "== JAVA =="
+            java -version
+            echo "== GRADLE =="
+            gradle --version || true
+            echo "== BUILD =="
+            if [[ -x gradlew ]]; then
+              ./gradlew assembleDebug --no-daemon --stacktrace
+            else
+              gradle assembleDebug --no-daemon --stacktrace
+            fi
+          } 2>&1 | tee /tmp/build.log
+          echo "== exit=${PIPESTATUS[0]} =="
 
-      - name: Upload debug APK
+      - name: Upload APK or build log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mineava-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
+          name: mineava-debug-build
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            /tmp/build.log
+          if-no-files-found: warn
