@@ -2,15 +2,15 @@
 
 اپ اندروید **PixelCraft Studio** (نسخه ۴) با موفقیت ساخته شد — **پک ۲۰۱ بلوک فوتوریال، پیش‌نمایش روز/شب و شیدر حرفه‌ای**.
 
-## 🔗 لینک مستقیم دانلود (آخرین build)
+## 🔗 لینک مستقیم دانلود (build #19)
 
 ```
 https://github.com/Weew46778/Atta/releases/latest
 ```
 
-صفحه‌ی ریلیز:
+صفحه‌ی ریلیز و فایل APK:
 ```
-https://github.com/Weew46778/Atta/releases
+https://github.com/Weew46778/Atta/releases/tag/pixelcraft-apk-v19
 ```
 
 🔀 Pull Request:
