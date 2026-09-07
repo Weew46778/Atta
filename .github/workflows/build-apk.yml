@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -21,39 +22,66 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Preflight & write local.properties
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: "8.7"
+
+      - name: Configure SDK
         run: |
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           echo "sdk.dir=$ANDROID_HOME" > android/local.properties
           cat android/local.properties
-          ls -d $ANDROID_HOME/platforms/android-* 2>/dev/null | head || echo "no android-* platform!"
-          ls -d $ANDROID_HOME/build-tools/* 2>/dev/null | head || echo "no build-tools!"
-          gradle --version 2>/dev/null || echo "NO preinstalled gradle"
-
-      - name: Generate Gradle wrapper (pinned 8.7)
-        run: |
-          cd android
-          gradle wrapper --gradle-version 8.7 --distribution-type bin --no-daemon
-          ls -la gradle/wrapper/
+          ls -d "$ANDROID_HOME"/platforms/android-* 2>/dev/null | head || true
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
 
       - name: Build debug APK
+        id: build
+        continue-on-error: true
         run: |
           cd android
-          java -version
-          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tail -160
-          echo "EXIT_CODE=${PIPESTATUS[0]}"
-          exit ${PIPESTATUS[0]}
+          gradle assembleDebug --no-daemon --stacktrace > /tmp/build.log 2>&1 || true
+          tail -140 /tmp/build.log
+
+      - name: Report failure to PR
+        if: always() && steps.build.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          try:
+              log = open('/tmp/build.log').read()[-6000:]
+          except Exception:
+              log = "no build log"
+          body = "### ⚠️ PixelCraft APK build failed\n```\n" + log + "\n```"
+          pr = os.environ.get('PR_NUMBER')
+          if not pr:
+              print("no PR_NUMBER; skipping comment")
+              raise SystemExit(0)
+          repo = os.environ['GITHUB_REPOSITORY']
+          data = json.dumps({"body": body}).encode()
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/issues/{pr}/comments",
+              data=data, method="POST",
+              headers={"Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+                       "Accept": "application/vnd.github+json"})
+          try:
+              urllib.request.urlopen(req)
+              print("comment posted")
+          except Exception as e:
+              print("comment failed:", e)
+          PY
 
       - name: Upload APK artifact
-        if: success()
+        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: pixelcraft-apk
           path: android/app/build/outputs/apk/debug/*.apk
 
       - name: Create GitHub Release
-        if: success()
+        if: steps.build.outcome == 'success'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "pixelcraft-apk-v${{ github.run_number }}"
@@ -63,3 +91,7 @@ jobs:
             Automatic debug APK build. Install on an Android device (allow "install from unknown sources").
           files: android/app/build/outputs/apk/debug/*.apk
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail the job if build failed
+        if: steps.build.outcome == 'failure'
+        run: exit 1
