@@ -1,0 +1,8555 @@
+{
+  "format_version": "1.14.0",
+  "sound_definitions": {
+    "dig.stone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.stone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.stone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.stone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.stone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.stone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.stone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.stone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.ancient_debris": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.ancient_debris": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.ancient_debris": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.ancient_debris": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.ancient_debris": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.ancient_debris": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.ancient_debris": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.ancient_debris": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.deepslate": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.deepslate": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.deepslate": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.deepslate": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.deepslate": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.deepslate": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.deepslate": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.deepslate": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.deepslate_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.deepslate_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.deepslate_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.deepslate_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.deepslate_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.deepslate_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.deepslate_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.deepslate_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.basalt": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.basalt": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.basalt": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.basalt": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.basalt": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.basalt": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.basalt": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.basalt": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.calcite": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.calcite": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.calcite": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.calcite": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.calcite": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.calcite": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.calcite": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.calcite": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.tuff": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.tuff": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.tuff": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.tuff": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.tuff": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.tuff": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.tuff": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.tuff": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.dripstone_block": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.dripstone_block": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.dripstone_block": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.dripstone_block": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.dripstone_block": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.dripstone_block": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.dripstone_block": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.dripstone_block": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.pointed_dripstone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.pointed_dripstone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.pointed_dripstone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.pointed_dripstone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.pointed_dripstone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.pointed_dripstone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.pointed_dripstone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.pointed_dripstone": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.nether_brick": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.nether_brick": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.nether_brick": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.nether_brick": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.nether_brick": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.nether_brick": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.nether_brick": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.nether_brick": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.mud_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.mud_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.7,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.7,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.7,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.7,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.7,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "place.mud_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "step.mud_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.mud_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.mud_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "fall.mud_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_concrete/0",
+          "volume": 0.85,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_concrete/1",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_concrete/2",
+          "volume": 0.85,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_concrete/3",
+          "volume": 0.85,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_concrete/4",
+          "volume": 0.85,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "use.mud_bricks": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.glass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/glass_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/glass_heavy/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/glass_heavy/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/glass_heavy/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "place.glass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_medium/0",
+          "volume": 0.9,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/glass_medium/1",
+          "volume": 0.9,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/glass_medium/2",
+          "volume": 0.9,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/glass_medium/3",
+          "volume": 0.9,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/glass_medium/4",
+          "volume": 0.9,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.glass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_light/0",
+          "volume": 0.8,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/glass_light/1",
+          "volume": 0.8,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/glass_light/2",
+          "volume": 0.8,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/glass_light/3",
+          "volume": 0.8,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/glass_light/4",
+          "volume": 0.8,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "step.glass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_light/0",
+          "volume": 0.9,
+          "pitch": 0.951
+        },
+        {
+          "name": "sounds/atta/glass_light/1",
+          "volume": 0.9,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/glass_light/2",
+          "volume": 0.9,
+          "pitch": 0.98
+        },
+        {
+          "name": "sounds/atta/glass_light/3",
+          "volume": 0.9,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/glass_light/4",
+          "volume": 0.9,
+          "pitch": 1.019
+        }
+      ]
+    },
+    "jump.glass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_light/0",
+          "volume": 0.9,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/glass_light/1",
+          "volume": 0.9,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/glass_light/2",
+          "volume": 0.9,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/glass_light/3",
+          "volume": 0.9,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/glass_light/4",
+          "volume": 0.9,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "land.glass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_medium/0",
+          "volume": 0.85,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/glass_medium/1",
+          "volume": 0.85,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/glass_medium/2",
+          "volume": 0.85,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/glass_medium/3",
+          "volume": 0.85,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/glass_medium/4",
+          "volume": 0.85,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "fall.glass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_light/0",
+          "volume": 0.85,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/glass_light/1",
+          "volume": 0.85,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/glass_light/2",
+          "volume": 0.85,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/glass_light/3",
+          "volume": 0.85,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/glass_light/4",
+          "volume": 0.85,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "use.glass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_medium/0",
+          "volume": 0.7,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/glass_medium/1",
+          "volume": 0.7,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/glass_medium/2",
+          "volume": 0.7,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/glass_medium/3",
+          "volume": 0.7,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/glass_medium/4",
+          "volume": 0.7,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "random.glass": {
+      "category": "ambient",
+      "sounds": [
+        {
+          "name": "sounds/atta/glass_light/0",
+          "volume": 0.55,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/glass_light/1",
+          "volume": 0.55,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/glass_light/2",
+          "volume": 0.55,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/glass_light/3",
+          "volume": 0.55,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/glass_light/4",
+          "volume": 0.55,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "dig.wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/wood_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/wood_heavy/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/wood_heavy/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/wood_heavy/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.75,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.75,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.75,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.75,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.75,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "place.wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "step.wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "fall.wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 0.85,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 0.85,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 0.85,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 0.85,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 0.85,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "use.wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/plank/0",
+          "volume": 0.8,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/plank/1",
+          "volume": 0.8,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/plank/2",
+          "volume": 0.8,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/plank/3",
+          "volume": 0.8,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/plank/4",
+          "volume": 0.8,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "dig.cherry_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_heavy/0",
+          "volume": 1.0,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/wood_heavy/1",
+          "volume": 1.0,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/wood_heavy/2",
+          "volume": 1.0,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/wood_heavy/3",
+          "volume": 1.0,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/wood_heavy/4",
+          "volume": 1.0,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "hit.cherry_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.75,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.75,
+          "pitch": 1.091
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.75,
+          "pitch": 1.103
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.75,
+          "pitch": 1.125
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.75,
+          "pitch": 1.147
+        }
+      ]
+    },
+    "place.cherry_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "step.cherry_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "jump.cherry_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 1.049
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 1.082
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 1.103
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 1.125
+        }
+      ]
+    },
+    "land.cherry_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 0.917
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 0.936
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 0.945
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 0.964
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 0.983
+        }
+      ]
+    },
+    "fall.cherry_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 0.85,
+          "pitch": 0.937
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 0.85,
+          "pitch": 0.956
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 0.85,
+          "pitch": 0.966
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 0.85,
+          "pitch": 0.985
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 0.85,
+          "pitch": 1.005
+        }
+      ]
+    },
+    "use.cherry_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/plank/0",
+          "volume": 0.8,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/plank/1",
+          "volume": 0.8,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/plank/2",
+          "volume": 0.8,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/plank/3",
+          "volume": 0.8,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/plank/4",
+          "volume": 0.8,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "dig.bamboo_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_heavy/0",
+          "volume": 1.0,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/wood_heavy/1",
+          "volume": 1.0,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/wood_heavy/2",
+          "volume": 1.0,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/wood_heavy/3",
+          "volume": 1.0,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/wood_heavy/4",
+          "volume": 1.0,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "hit.bamboo_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.75,
+          "pitch": 1.171
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.75,
+          "pitch": 1.195
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.75,
+          "pitch": 1.208
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.75,
+          "pitch": 1.232
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.75,
+          "pitch": 1.256
+        }
+      ]
+    },
+    "place.bamboo_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "step.bamboo_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "jump.bamboo_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 1.149
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 1.184
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 1.208
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 1.232
+        }
+      ]
+    },
+    "land.bamboo_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 1.004
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 1.025
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 1.035
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 1.056
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 1.076
+        }
+      ]
+    },
+    "fall.bamboo_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 0.85,
+          "pitch": 1.026
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 0.85,
+          "pitch": 1.047
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 0.85,
+          "pitch": 1.058
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 0.85,
+          "pitch": 1.079
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 0.85,
+          "pitch": 1.1
+        }
+      ]
+    },
+    "use.bamboo_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/plank/0",
+          "volume": 0.8,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/plank/1",
+          "volume": 0.8,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/plank/2",
+          "volume": 0.8,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/plank/3",
+          "volume": 0.8,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/plank/4",
+          "volume": 0.8,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "dig.nether_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/wood_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/wood_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/wood_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/wood_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "hit.nether_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.75,
+          "pitch": 0.866
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.75,
+          "pitch": 0.884
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.75,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.75,
+          "pitch": 0.91
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.75,
+          "pitch": 0.928
+        }
+      ]
+    },
+    "place.nether_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "step.nether_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "jump.nether_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 0.849
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 0.875
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 0.893
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 0.911
+        }
+      ]
+    },
+    "land.nether_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 0.742
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 0.757
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 0.765
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 0.78
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 0.796
+        }
+      ]
+    },
+    "fall.nether_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 0.85,
+          "pitch": 0.759
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 0.85,
+          "pitch": 0.774
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 0.85,
+          "pitch": 0.782
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 0.85,
+          "pitch": 0.798
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 0.85,
+          "pitch": 0.813
+        }
+      ]
+    },
+    "use.nether_wood": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/plank/0",
+          "volume": 0.8,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/plank/1",
+          "volume": 0.8,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/plank/2",
+          "volume": 0.8,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/plank/3",
+          "volume": 0.8,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/plank/4",
+          "volume": 0.8,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "dig.stem": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/wood_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/wood_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/wood_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/wood_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "hit.stem": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.75,
+          "pitch": 0.866
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.75,
+          "pitch": 0.884
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.75,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.75,
+          "pitch": 0.91
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.75,
+          "pitch": 0.928
+        }
+      ]
+    },
+    "place.stem": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "step.stem": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "jump.stem": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 1.0,
+          "pitch": 0.849
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 1.0,
+          "pitch": 0.875
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 1.0,
+          "pitch": 0.893
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 1.0,
+          "pitch": 0.911
+        }
+      ]
+    },
+    "land.stem": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/wood_medium/0",
+          "volume": 0.9,
+          "pitch": 0.742
+        },
+        {
+          "name": "sounds/atta/wood_medium/1",
+          "volume": 0.9,
+          "pitch": 0.757
+        },
+        {
+          "name": "sounds/atta/wood_medium/2",
+          "volume": 0.9,
+          "pitch": 0.765
+        },
+        {
+          "name": "sounds/atta/wood_medium/3",
+          "volume": 0.9,
+          "pitch": 0.78
+        },
+        {
+          "name": "sounds/atta/wood_medium/4",
+          "volume": 0.9,
+          "pitch": 0.796
+        }
+      ]
+    },
+    "fall.stem": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_wood/0",
+          "volume": 0.85,
+          "pitch": 0.759
+        },
+        {
+          "name": "sounds/atta/step_wood/1",
+          "volume": 0.85,
+          "pitch": 0.774
+        },
+        {
+          "name": "sounds/atta/step_wood/2",
+          "volume": 0.85,
+          "pitch": 0.782
+        },
+        {
+          "name": "sounds/atta/step_wood/3",
+          "volume": 0.85,
+          "pitch": 0.798
+        },
+        {
+          "name": "sounds/atta/step_wood/4",
+          "volume": 0.85,
+          "pitch": 0.813
+        }
+      ]
+    },
+    "use.stem": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/plank/0",
+          "volume": 0.8,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/plank/1",
+          "volume": 0.8,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/plank/2",
+          "volume": 0.8,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/plank/3",
+          "volume": 0.8,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/plank/4",
+          "volume": 0.8,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "dig.grass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.grass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "place.grass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "step.grass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.grass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 1.0,
+          "pitch": 0.999
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 1.0,
+          "pitch": 1.03
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 1.0,
+          "pitch": 1.051
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 1.0,
+          "pitch": 1.071
+        }
+      ]
+    },
+    "land.grass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "fall.grass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.85,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.85,
+          "pitch": 0.911
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.85,
+          "pitch": 0.92
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.85,
+          "pitch": 0.938
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.85,
+          "pitch": 0.957
+        }
+      ]
+    },
+    "use.grass": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "dig.dirt_with_roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "hit.dirt_with_roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.968
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.988
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.997
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.017
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.037
+        }
+      ]
+    },
+    "place.dirt_with_roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "step.dirt_with_roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 1.0,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 1.0,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 1.0,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 1.0,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 1.0,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "jump.dirt_with_roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 1.0,
+          "pitch": 0.949
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 1.0,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 1.0,
+          "pitch": 0.978
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 1.0,
+          "pitch": 0.998
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 1.0,
+          "pitch": 1.018
+        }
+      ]
+    },
+    "land.dirt_with_roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.829
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.846
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.855
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.872
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.889
+        }
+      ]
+    },
+    "fall.dirt_with_roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.85,
+          "pitch": 0.848
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.85,
+          "pitch": 0.865
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.85,
+          "pitch": 0.874
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.85,
+          "pitch": 0.909
+        }
+      ]
+    },
+    "use.dirt_with_roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "hit.roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.968
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.988
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.997
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.017
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.037
+        }
+      ]
+    },
+    "place.roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "step.roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 1.0,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 1.0,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 1.0,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 1.0,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 1.0,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "jump.roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 1.0,
+          "pitch": 0.949
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 1.0,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 1.0,
+          "pitch": 0.978
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 1.0,
+          "pitch": 0.998
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 1.0,
+          "pitch": 1.018
+        }
+      ]
+    },
+    "land.roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.829
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.846
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.855
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.872
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.889
+        }
+      ]
+    },
+    "fall.roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.85,
+          "pitch": 0.848
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.85,
+          "pitch": 0.865
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.85,
+          "pitch": 0.874
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.85,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.85,
+          "pitch": 0.909
+        }
+      ]
+    },
+    "use.roots": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.nylium": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "hit.nylium": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 1.091
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.103
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.125
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.147
+        }
+      ]
+    },
+    "place.nylium": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "step.nylium": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 1.0,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 1.0,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 1.0,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 1.0,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 1.0,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "jump.nylium": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 1.0,
+          "pitch": 1.049
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 1.0,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 1.0,
+          "pitch": 1.082
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 1.0,
+          "pitch": 1.103
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 1.0,
+          "pitch": 1.125
+        }
+      ]
+    },
+    "land.nylium": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.917
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.936
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.945
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.964
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.983
+        }
+      ]
+    },
+    "fall.nylium": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.85,
+          "pitch": 0.937
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.85,
+          "pitch": 0.956
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.85,
+          "pitch": 0.966
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.85,
+          "pitch": 0.985
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.85,
+          "pitch": 1.005
+        }
+      ]
+    },
+    "use.nylium": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "dig.mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "hit.mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.866
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.884
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.91
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.928
+        }
+      ]
+    },
+    "place.mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "step.mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "jump.mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.849
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.875
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.893
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.911
+        }
+      ]
+    },
+    "land.mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.783
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.799
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.807
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.824
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.84
+        }
+      ]
+    },
+    "fall.mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.783
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.799
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.807
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.824
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.84
+        }
+      ]
+    },
+    "use.mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "dig.packed_mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "hit.packed_mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.917
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.936
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.945
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.964
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.983
+        }
+      ]
+    },
+    "place.packed_mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "step.packed_mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "jump.packed_mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.899
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.927
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.946
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.964
+        }
+      ]
+    },
+    "land.packed_mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.829
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.846
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.855
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.872
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.889
+        }
+      ]
+    },
+    "fall.packed_mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.829
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.846
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.855
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.872
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.889
+        }
+      ]
+    },
+    "use.packed_mud": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "dig.soul_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.728
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.742
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.75
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.765
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.78
+        }
+      ]
+    },
+    "hit.soul_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.764
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.78
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.788
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.803
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.819
+        }
+      ]
+    },
+    "place.soul_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.728
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.742
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.75
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.765
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.78
+        }
+      ]
+    },
+    "step.soul_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.728
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.742
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.75
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.765
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.78
+        }
+      ]
+    },
+    "jump.soul_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.749
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.765
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.772
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.788
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.803
+        }
+      ]
+    },
+    "land.soul_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.691
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.705
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.712
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.727
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.741
+        }
+      ]
+    },
+    "fall.soul_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.691
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.705
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.712
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.727
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.741
+        }
+      ]
+    },
+    "use.soul_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.728
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.742
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.75
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.765
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.78
+        }
+      ]
+    },
+    "dig.soul_soil": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.776
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.792
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.8
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.832
+        }
+      ]
+    },
+    "hit.soul_soil": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.815
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.832
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.84
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.857
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.874
+        }
+      ]
+    },
+    "place.soul_soil": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.776
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.792
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.8
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.832
+        }
+      ]
+    },
+    "step.soul_soil": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.776
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.792
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.8
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.832
+        }
+      ]
+    },
+    "jump.soul_soil": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.799
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.824
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.84
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.857
+        }
+      ]
+    },
+    "land.soul_soil": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.737
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.752
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.76
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.775
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.79
+        }
+      ]
+    },
+    "fall.soul_soil": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.737
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.752
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.76
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.775
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.79
+        }
+      ]
+    },
+    "use.soul_soil": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.776
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.792
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.8
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.832
+        }
+      ]
+    },
+    "block.mud.break": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "block.mud.hit": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.866
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.884
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.91
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.928
+        }
+      ]
+    },
+    "block.mud.step": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "block.mud.place": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "block.mud.fall": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.783
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.799
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.807
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.824
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.84
+        }
+      ]
+    },
+    "block.packed_mud.break": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "block.packed_mud.hit": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.917
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.936
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.945
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.964
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.983
+        }
+      ]
+    },
+    "block.packed_mud.step": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "block.packed_mud.place": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "block.packed_mud.fall": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.829
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.846
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.855
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.872
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.889
+        }
+      ]
+    },
+    "block.mud_bricks.break": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "block.mud_bricks.hit": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.968
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.988
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.997
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.017
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.037
+        }
+      ]
+    },
+    "block.mud_bricks.step": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "block.mud_bricks.place": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "block.mud_bricks.fall": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.875
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.893
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.902
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.939
+        }
+      ]
+    },
+    "block.muddy_mangrove_roots.break": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 1.0,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 1.0,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 1.0,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 1.0,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 1.0,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "block.muddy_mangrove_roots.hit": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.866
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.884
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.892
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.91
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.928
+        }
+      ]
+    },
+    "block.muddy_mangrove_roots.step": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "block.muddy_mangrove_roots.place": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "block.muddy_mangrove_roots.fall": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.783
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.799
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.807
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.824
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.84
+        }
+      ]
+    },
+    "dig.sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.95,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.95,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.95,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.95,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.95,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "hit.sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.968
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.988
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.997
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.017
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.037
+        }
+      ]
+    },
+    "place.sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "step.sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "jump.sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.94
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.959
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.988
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 1.008
+        }
+      ]
+    },
+    "land.sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.875
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.893
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.902
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.939
+        }
+      ]
+    },
+    "fall.sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "use.sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.red_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.95,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.95,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.95,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.95,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.95,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "hit.red_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.968
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.988
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.997
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.017
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.037
+        }
+      ]
+    },
+    "place.red_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "step.red_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "jump.red_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 0.94
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 0.959
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 0.988
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 1.008
+        }
+      ]
+    },
+    "land.red_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.875
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.893
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.902
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.939
+        }
+      ]
+    },
+    "fall.red_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.85,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.85,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.85,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.85,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.85,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "use.red_sand": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "dig.gravel": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.95,
+          "pitch": 0.776
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.95,
+          "pitch": 0.792
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.95,
+          "pitch": 0.8
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.95,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.95,
+          "pitch": 0.832
+        }
+      ]
+    },
+    "hit.gravel": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.8,
+          "pitch": 0.825
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.8,
+          "pitch": 0.842
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.8,
+          "pitch": 0.85
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.8,
+          "pitch": 0.867
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.8,
+          "pitch": 0.884
+        }
+      ]
+    },
+    "place.gravel": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.795
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.812
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.82
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.836
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.853
+        }
+      ]
+    },
+    "step.gravel": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.776
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.792
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.8
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.832
+        }
+      ]
+    },
+    "jump.gravel": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.776
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.792
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.8
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.832
+        }
+      ]
+    },
+    "fall.gravel": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.9,
+          "pitch": 0.776
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.9,
+          "pitch": 0.792
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.9,
+          "pitch": 0.8
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.9,
+          "pitch": 0.816
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.9,
+          "pitch": 0.832
+        }
+      ]
+    },
+    "land.gravel": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/mining/0",
+          "volume": 0.85,
+          "pitch": 0.728
+        },
+        {
+          "name": "sounds/atta/mining/1",
+          "volume": 0.85,
+          "pitch": 0.742
+        },
+        {
+          "name": "sounds/atta/mining/2",
+          "volume": 0.85,
+          "pitch": 0.75
+        },
+        {
+          "name": "sounds/atta/mining/3",
+          "volume": 0.85,
+          "pitch": 0.765
+        },
+        {
+          "name": "sounds/atta/mining/4",
+          "volume": 0.85,
+          "pitch": 0.78
+        }
+      ]
+    },
+    "use.gravel": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.7,
+          "pitch": 0.873
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.7,
+          "pitch": 0.891
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.7,
+          "pitch": 0.9
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.7,
+          "pitch": 0.918
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.7,
+          "pitch": 0.936
+        }
+      ]
+    },
+    "dig.snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.95,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.95,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.95,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.95,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.95,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "place.snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "step.snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_snow/0",
+          "volume": 1.0,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_snow/1",
+          "volume": 1.0,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_snow/2",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_snow/3",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_snow/4",
+          "volume": 1.0,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "jump.snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_snow/0",
+          "volume": 1.0,
+          "pitch": 0.989
+        },
+        {
+          "name": "sounds/atta/step_snow/1",
+          "volume": 1.0,
+          "pitch": 1.01
+        },
+        {
+          "name": "sounds/atta/step_snow/2",
+          "volume": 1.0,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_snow/3",
+          "volume": 1.0,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/step_snow/4",
+          "volume": 1.0,
+          "pitch": 1.061
+        }
+      ]
+    },
+    "land.snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "fall.snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_snow/0",
+          "volume": 0.85,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/step_snow/1",
+          "volume": 0.85,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/step_snow/2",
+          "volume": 0.85,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/step_snow/3",
+          "volume": 0.85,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/step_snow/4",
+          "volume": 0.85,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "use.snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "dig.powder_snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.95,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.95,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.95,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.95,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.95,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "hit.powder_snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 1.091
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.103
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.125
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.147
+        }
+      ]
+    },
+    "place.powder_snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "step.powder_snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_snow/0",
+          "volume": 1.0,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/step_snow/1",
+          "volume": 1.0,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/step_snow/2",
+          "volume": 1.0,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/step_snow/3",
+          "volume": 1.0,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_snow/4",
+          "volume": 1.0,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "jump.powder_snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_snow/0",
+          "volume": 1.0,
+          "pitch": 1.039
+        },
+        {
+          "name": "sounds/atta/step_snow/1",
+          "volume": 1.0,
+          "pitch": 1.06
+        },
+        {
+          "name": "sounds/atta/step_snow/2",
+          "volume": 1.0,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_snow/3",
+          "volume": 1.0,
+          "pitch": 1.092
+        },
+        {
+          "name": "sounds/atta/step_snow/4",
+          "volume": 1.0,
+          "pitch": 1.114
+        }
+      ]
+    },
+    "land.powder_snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_heavy/0",
+          "volume": 0.9,
+          "pitch": 0.968
+        },
+        {
+          "name": "sounds/atta/soft_heavy/1",
+          "volume": 0.9,
+          "pitch": 0.988
+        },
+        {
+          "name": "sounds/atta/soft_heavy/2",
+          "volume": 0.9,
+          "pitch": 0.997
+        },
+        {
+          "name": "sounds/atta/soft_heavy/3",
+          "volume": 0.9,
+          "pitch": 1.017
+        },
+        {
+          "name": "sounds/atta/soft_heavy/4",
+          "volume": 0.9,
+          "pitch": 1.037
+        }
+      ]
+    },
+    "fall.powder_snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_snow/0",
+          "volume": 0.85,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/step_snow/1",
+          "volume": 0.85,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/step_snow/2",
+          "volume": 0.85,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/step_snow/3",
+          "volume": 0.85,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_snow/4",
+          "volume": 0.85,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "use.powder_snow": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "dig.moss": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.95,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.95,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.95,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.95,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.95,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "hit.moss": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "place.moss": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "step.moss": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "jump.moss": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "fall.moss": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_carpet/0",
+          "volume": 0.95,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/step_carpet/1",
+          "volume": 0.95,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/step_carpet/2",
+          "volume": 0.95,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/step_carpet/3",
+          "volume": 0.95,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/step_carpet/4",
+          "volume": 0.95,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "land.moss": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.9,
+          "pitch": 0.921
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.9,
+          "pitch": 0.941
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.9,
+          "pitch": 0.95
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.9,
+          "pitch": 0.969
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.9,
+          "pitch": 0.988
+        }
+      ]
+    },
+    "use.moss": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.75,
+          "pitch": 0.97
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.75,
+          "pitch": 0.99
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.75,
+          "pitch": 1.0
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.75,
+          "pitch": 1.02
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.75,
+          "pitch": 1.04
+        }
+      ]
+    },
+    "dig.azalea_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.85,
+          "pitch": 1.067
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.85,
+          "pitch": 1.089
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.85,
+          "pitch": 1.1
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.85,
+          "pitch": 1.122
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.85,
+          "pitch": 1.144
+        }
+      ]
+    },
+    "hit.azalea_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.7,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.7,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.7,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.7,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.7,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "place.azalea_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.85,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.85,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.85,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.85,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.85,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "step.azalea_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.9,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.9,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.9,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.9,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.9,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "jump.azalea_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.9,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.9,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.9,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.9,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.9,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "fall.azalea_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.9,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.9,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.9,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.9,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.9,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "land.azalea_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.85,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.85,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.85,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.85,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.85,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "use.azalea_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.7,
+          "pitch": 1.067
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.7,
+          "pitch": 1.089
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.7,
+          "pitch": 1.1
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.7,
+          "pitch": 1.122
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.7,
+          "pitch": 1.144
+        }
+      ]
+    },
+    "dig.cherry_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.85,
+          "pitch": 1.067
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.85,
+          "pitch": 1.089
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.85,
+          "pitch": 1.1
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.85,
+          "pitch": 1.122
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.85,
+          "pitch": 1.144
+        }
+      ]
+    },
+    "hit.cherry_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.7,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.7,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.7,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.7,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.7,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "place.cherry_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.85,
+          "pitch": 1.048
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.85,
+          "pitch": 1.069
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.85,
+          "pitch": 1.08
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.85,
+          "pitch": 1.102
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.85,
+          "pitch": 1.123
+        }
+      ]
+    },
+    "step.cherry_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.9,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.9,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.9,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.9,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.9,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "jump.cherry_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.9,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.9,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.9,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.9,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.9,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "fall.cherry_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/step_grass/0",
+          "volume": 0.9,
+          "pitch": 1.115
+        },
+        {
+          "name": "sounds/atta/step_grass/1",
+          "volume": 0.9,
+          "pitch": 1.138
+        },
+        {
+          "name": "sounds/atta/step_grass/2",
+          "volume": 0.9,
+          "pitch": 1.15
+        },
+        {
+          "name": "sounds/atta/step_grass/3",
+          "volume": 0.9,
+          "pitch": 1.173
+        },
+        {
+          "name": "sounds/atta/step_grass/4",
+          "volume": 0.9,
+          "pitch": 1.196
+        }
+      ]
+    },
+    "land.cherry_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/soft_medium/0",
+          "volume": 0.85,
+          "pitch": 1.018
+        },
+        {
+          "name": "sounds/atta/soft_medium/1",
+          "volume": 0.85,
+          "pitch": 1.04
+        },
+        {
+          "name": "sounds/atta/soft_medium/2",
+          "volume": 0.85,
+          "pitch": 1.05
+        },
+        {
+          "name": "sounds/atta/soft_medium/3",
+          "volume": 0.85,
+          "pitch": 1.071
+        },
+        {
+          "name": "sounds/atta/soft_medium/4",
+          "volume": 0.85,
+          "pitch": 1.092
+        }
+      ]
+    },
+    "use.cherry_leaves": {
+      "category": "block",
+      "sounds": [
+        {
+          "name": "sounds/atta/generic/0",
+          "volume": 0.7,
+          "pitch": 1.067
+        },
+        {
+          "name": "sounds/atta/generic/1",
+          "volume": 0.7,
+          "pitch": 1.089
+        },
+        {
+          "name": "sounds/atta/generic/2",
+          "volume": 0.7,
+          "pitch": 1.1
+        },
+        {
+          "name": "sounds/atta/generic/3",
+          "volume": 0.7,
+          "pitch": 1.122
+        },
+        {
+          "name": "sounds/atta/generic/4",
+          "volume": 0.7,
+          "pitch": 1.144
+        }
+      ]
+    }
+  }
+}

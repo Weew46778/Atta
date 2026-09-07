@@ -1,0 +1,33 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "\u00a76Atta \u00a7bPhotoReal \u00a7a512x \u00a77[All-in-One]",
+    "description": "512x real-photo PBR textures + Vibrant Visuals shader + true recorded sounds \u2014 merged in one pack.",
+    "uuid": "5354db97-186d-490d-9d23-5a0c654a4a0e",
+    "version": [
+      3,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      120
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "description": "Atta PhotoReal 512x landscape + shader + sounds",
+      "uuid": "ad5c02c2-53ca-4801-b3a2-f5e8d9582f6d",
+      "version": [
+        3,
+        0,
+        0
+      ]
+    }
+  ],
+  "capabilities": [
+    "pbr"
+  ]
+}
