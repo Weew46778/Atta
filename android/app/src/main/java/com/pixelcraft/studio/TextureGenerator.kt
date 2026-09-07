@@ -83,7 +83,7 @@ class Noise(val seed: Int) {
 
 private data class Vec3(val x: Float, val y: Float, val z: Float) {
     fun norm(): Vec3 {
-        val l = hypot(x, y, z).coerceAtLeast(1e-6f)
+        val l = Math.hypot(x.toDouble(), y.toDouble(), z.toDouble()).toFloat().coerceAtLeast(1e-6f)
         return Vec3(x / l, y / l, z / l)
     }
 }

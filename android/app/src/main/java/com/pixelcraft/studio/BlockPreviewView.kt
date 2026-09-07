@@ -94,7 +94,7 @@ class BlockPreviewView @JvmOverloads constructor(
         return floatArrayOf(p[0], p[1] * c - p[2] * s, p[1] * s + p[2] * c)
     }
     private fun normalize(v: FloatArray): FloatArray {
-        val l = hypot(v[0].toDouble(), v[1].toDouble(), v[2].toDouble()).toFloat().coerceAtLeast(1e-6f)
+        val l = Math.hypot(v[0].toDouble(), v[1].toDouble(), v[2].toDouble()).toFloat().coerceAtLeast(1e-6f)
         return floatArrayOf(v[0] / l, v[1] / l, v[2] / l)
     }
 
