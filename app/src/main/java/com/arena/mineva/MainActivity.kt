@@ -63,6 +63,11 @@ class MainActivity : AppCompatActivity() {
             }
         )
         root.addView(
+            Ui.button(this, "🎓  راهنمای گامبهگام آوا", 0xFF7D4DB1.toInt()) {
+                startActivity(Intent(this, com.arena.mineva.guide.GuideActivity::class.java))
+            }
+        )
+        root.addView(
             Ui.button(this, "🪟  فعالکردن پنل اورلای داخل بازی", 0xFF7D4DB1.toInt()) {
                 startOverlay()
             }

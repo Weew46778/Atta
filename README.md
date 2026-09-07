@@ -36,6 +36,9 @@ MVP اول یک اپ اندروید بومی (Kotlin + Android Views) برای:
 - **تحقیق پویا عمومی** (`KnowledgeResearchWorker.runGeneral`): افزودن موضوعات غیرماینکرافت به «دانش عمومی» از دایرة‌المعارف
 - **پایش پس‌زمینه** (`ServerWatchdogService`): سرویس foreground حتی وقتی اپ بسته است
 - **راهنمای گام‌به‌گام VPS** (`VpsGuideActivity`): تست SSH → انتخاب نوع → استقرار خودکار → بررسی نهایی
+- **راهنمای گام‌به‌گام صوتی** (`guide/GuideController`, `GuideActivity`): شروع/ادامه/بازگشت مراحل با صدا
+- **انتخاب ۵ موضوع دلخواه کاربر با صدا** (`VoiceTopicPickerActivity`, `UserTopicStore`): آوا موضوعات غیرماینکرافتی را می‌پرسد و ذخیره می‌کند
+- **تشخیص خودکار بازی و پیشنهاد هوشمند** (`BedrockGameDetector`): آشکارسازی Minecraft و نمایش پیشنهادهای لحظه‌ای در پنل اورلای
 - **ابزار ساخت/تست**: `tools/static_check.py` + `tools/build_apk.sh` + GitHub Actions (`android-debug-build`)
 
 ## Build

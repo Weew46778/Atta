@@ -21,6 +21,22 @@ object AppPrefs {
         get() = get().getBoolean("onboarded", false)
         set(value) = get().edit().putBoolean("onboarded", value).apply()
 
+    var guideIndex: Int
+        get() = get().getInt("guide_index", 0)
+        set(value) = get().edit().putInt("guide_index", value).apply()
+
+    var userTopicsJson: String
+        get() = get().getString("user_topics_json", "[]") ?: "[]"
+        set(value) = get().edit().putString("user_topics_json", value).apply()
+
+    var lastSeenGame: String
+        get() = get().getString("last_seen_game", "") ?: ""
+        set(value) = get().edit().putString("last_seen_game", value).apply()
+
+    var suggestionsSeen: String
+        get() = get().getString("suggestions_seen", "") ?: ""
+        set(value) = get().edit().putString("suggestions_seen", value).apply()
+
     var overlayHintShown: Boolean
         get() = get().getBoolean("overlay_hint", false)
         set(value) = get().edit().putBoolean("overlay_hint", value).apply()

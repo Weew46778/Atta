@@ -84,6 +84,14 @@
             android:exported="false" />
 
         <activity
+            android:name=".guide.GuideActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".VoiceTopicPickerActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ServerWizardActivity"
             android:exported="false" />
 

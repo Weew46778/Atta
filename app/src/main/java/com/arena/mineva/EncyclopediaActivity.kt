@@ -84,6 +84,11 @@ class EncyclopediaActivity : AppCompatActivity() {
                 startGeneralResearch()
             }
         )
+        root.addView(
+            Ui.button(this, "🎙 انتخاب ۵ موضوع دلخواه کاربر (صوتی)", 0xFF35D07F.toInt(), 46f) {
+                startActivity(android.content.Intent(this, VoiceTopicPickerActivity::class.java))
+            }
+        )
 
         list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         root.addView(Ui.text(this, "همهٔ موضوعات:", 16f, 0xFFF1F5F9.toInt(), bold = true))

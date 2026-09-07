@@ -26,7 +26,8 @@ class KnowledgeRepository(context: Context) {
 
     private val entries: List<KnowledgeEntry> =
         (runCatching { load(context) }.getOrDefault(emptyList()) +
-            runCatching { loadExtraBase(context) }.getOrDefault(emptyList())).distinctBy { it.id }
+            runCatching { loadExtraBase(context) }.getOrDefault(emptyList()) +
+            loadUserTopics()).distinctBy { it.id }
 
     private val extraFile: File = File(context.filesDir, "knowledge_extra.json")
     private val extraEntries: MutableList<KnowledgeEntry> = runCatching {
@@ -160,6 +161,18 @@ class KnowledgeRepository(context: Context) {
             .use { it.readText() }
         loadJson(json)
     }.getOrDefault(emptyList())
+
+    private fun loadUserTopics(): List<KnowledgeEntry> =
+        com.arena.mineva.knowledge.UserTopicStore.all().map { t ->
+            KnowledgeEntry(
+                id = "user_topic_${t.title.lowercase().replace(" ", "_")}",
+                title = t.title,
+                category = t.category,
+                text = t.detail.ifBlank { t.title },
+                tags = t.title.split(" ").filter { it.length > 2 }.take(10),
+                steps = emptyList()
+            )
+        }
 
     private fun loadJson(json: String): List<KnowledgeEntry> {
         val arr = JSONArray(json)

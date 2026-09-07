@@ -150,7 +150,7 @@ def check_json(path: Path) -> None:
 
 def check_activities() -> None:
     manifest_text = MANIFEST.read_text(encoding="utf-8")
-    declared = set(re.findall(r'android:name="(\.[A-Za-z0-9_]+)"', manifest_text))
+    declared = set(re.findall(r'android:name="(\.[A-Za-z0-9_.]+)"', manifest_text))
     declared_names = {m.split(".")[-1] for m in declared}
     kotlin_source = "\n".join(
         p.read_text(encoding="utf-8") for p in KOTLIN_ROOT.rglob("*.kt")

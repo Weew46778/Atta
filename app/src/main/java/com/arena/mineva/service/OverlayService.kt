@@ -341,6 +341,10 @@ class OverlayService : Service() {
             }
         )
         c.addView(Ui.text(this, "اگر سرور VPS با کلید SSH ذخیرهشده فعال باشد، دستورها از همینجا به کنسول سرور ارسال میشوند.", 12f, 0xFF9FB2C2.toInt()))
+        c.addView(Ui.text(this, "🤖 پیشنهادهای لحظهای", 16f, 0xFF2E9BFF.toInt(), bold = true))
+        BedrockGameDetector.suggestions(this).forEach { s ->
+            c.addView(commandRow(s.title, s.text))
+        }
     }
 
     private fun buildHealthTab(c: ViewGroup) {
