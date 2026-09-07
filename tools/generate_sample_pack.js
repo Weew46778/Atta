@@ -88,22 +88,22 @@ function buildZip(files) {
 }
 
 // ---- build the sample texture pack ----
-const BEDROCK_PATH = {
-  grass_top: 'textures/blocks/grass_top.png',
-  grass_side: 'textures/blocks/grass_side.png',
-  grass_bottom: 'textures/blocks/grass_bottom.png',
-  dirt: 'textures/blocks/dirt.png',
-  stone: 'textures/blocks/stone.png',
-  cobblestone: 'textures/blocks/cobblestone.png',
+// Path overrides for ids whose Bedrock filename differs from `textures/blocks/<id>.png`.
+const PATH_OVERRIDE = {
   oak_log_side: 'textures/blocks/log_oak.png',
   oak_log_top: 'textures/blocks/log_oak_top.png',
   oak_planks: 'textures/blocks/planks_oak.png',
-  sand: 'textures/blocks/sand.png',
   bricks: 'textures/blocks/brick.png',
-  snow: 'textures/blocks/snow.png',
   oak_leaves: 'textures/blocks/leaves_oak.png',
   water: 'textures/blocks/water_still.png',
+  quartz_block: 'textures/blocks/quartz_block_top.png',
+  wool_blue: 'textures/blocks/wool_colored_blue.png',
+  wool_purple: 'textures/blocks/wool_colored_purple.png',
+  terracotta: 'textures/blocks/hardened_clay.png',
+  mycelium_top: 'textures/blocks/mycelium_top.png',
+  mycelium_side: 'textures/blocks/mycelium_side.png',
 };
+const pathOf = (id) => PATH_OVERRIDE[id] || `textures/blocks/${id}.png`;
 const SEED = 1337; const SIZE = 128; const REL = 0.6;
 const manifest = `{
   "format_version": 2,
@@ -122,13 +122,16 @@ const manifest = `{
 `;
 
 const files = [{ path: 'manifest.json', data: manifest }];
-for (const id of Object.keys(BEDROCK_PATH)) {
+const ids = Object.keys(PixelCraft.TEXTURE_REGISTRY);
+for (const id of ids) {
   const b = PixelCraft.getTexture(id, SEED, SIZE, REL);
-  files.push({ path: BEDROCK_PATH[id], data: encodePNG(b.color) });
-  files.push({ path: BEDROCK_PATH[id].replace('.png', '_n.png'), data: encodePNG(b.normal) });
-  files.push({ path: BEDROCK_PATH[id].replace('.png', '_roughness.png'), data: encodePNG(b.shaded) });
+  const base = pathOf(id);
+  files.push({ path: base, data: encodePNG(b.color) });
+  files.push({ path: base.replace('.png', '_n.png'), data: encodePNG(b.normal) });
+  files.push({ path: base.replace('.png', '_roughness.png'), data: encodePNG(b.shaded) });
   console.log(' +', id);
 }
+console.log('\nTotal blocks:', new Set(ids.map((i) => PixelCraft.TEXTURE_REGISTRY[i].block)).size);
 
 const outDir = path.join(__dirname, '..', 'art', 'sample');
 fs.mkdirSync(outDir, { recursive: true });

@@ -56,6 +56,10 @@ function buildShaderSettings(realism) {
     sunColor: [1.0, 0.96, 0.88],
     skyZenith: [0.12 + t * 0.06, 0.22 + t * 0.1, 0.42 + t * 0.16],
     skyHorizon: [0.6, 0.75 - t * 0.07, 0.92 - t * 0.05],
+    bloom: t * 0.55,            // subtle highlight bloom at high realism
+    toneMapping: t > 0.55 ? "ACES" : "Neutral", // filmic tone mapping
+    shadowQuality: t > 0.5 ? "High" : (t > 0.2 ? "Medium" : "Low"),
+    wavyWater: 0.4 + t * 0.6,
     n: Math.round(196605),
   };
 }
@@ -94,7 +98,7 @@ function buildShaderFiles(name, realism, packIconCanvas) {
     ],
   }) });
 
-  // materials.json — pipeline material that consumes the PBR shader
+  // materials.json — pipeline materials (opaque PBR + transparent water)
   files.push({ path: 'textures/renderer/materials.json', data: j([
     {
       name: "pixelcraft_pbr",
@@ -106,6 +110,20 @@ function buildShaderFiles(name, realism, packIconCanvas) {
         { name: "SUN_DIRECTION", header: "SUN_DIRECTION" },
         { name: "AO_STRENGTH", header: "AO_STRENGTH" },
         { name: "ROUGHNESS_SCALE", header: "ROUGHNESS_SCALE" },
+        { name: "SATURATION", header: "SATURATION" },
+        { name: "CONTRAST", header: "CONTRAST" },
+      ],
+    },
+    {
+      name: "pixelcraft_water",
+      shader: "shaders/pixelcraft_water",
+      blend: "alpha",
+      passes: [
+        { pass: "transparent", vertex: "VertexShader", pixel: "PixelShader" },
+      ],
+      uniforms: [
+        { name: "WATER_REFLECT", header: "WATER_REFLECT" },
+        { name: "SUN_DIRECTION", header: "SUN_DIRECTION" },
       ],
     },
   ]) });
@@ -113,6 +131,7 @@ function buildShaderFiles(name, realism, packIconCanvas) {
   // shaders.json — declares the shader sources
   files.push({ path: 'textures/renderer/shaders.json', data: j([
     { name: "shaders/pixelcraft_pbr", vertex: "PixelCraftVertex", pixel: "PixelCraftPixel" },
+    { name: "shaders/pixelcraft_water", vertex: "PixelCraftVertex", pixel: "PixelCraftWaterPixel" },
   ]) });
 
   // deferred.json — toggle the deferred lighting pipeline used by RenderDragon
@@ -124,11 +143,48 @@ function buildShaderFiles(name, realism, packIconCanvas) {
     water: { reflection_strength: +s.waterReflect.toFixed(3) },
   }) });
 
+  // post_chain.json — bloom + tone mapping (film-like realism, no ray tracing)
+  files.push({ path: 'textures/renderer/post_chain.json', data: j({
+    version: 1,
+    enabled: true,
+    tone_mapping: s.toneMapping,
+    exposure: +s.exposure.toFixed(3),
+    bloom: {
+      enabled: s.bloom > 0.01,
+      strength: +s.bloom.toFixed(3),
+      threshold: 0.82,
+      radius: 0.9,
+    },
+    lens_dirt: false,
+    chromatic_aberration: 0,
+  }) });
+
   // Human-readable HLSL PBR source (compiled by the Bedrock toolchain at build time)
   files.push({ path: 'shaders/pixelcraft_pbr.hlsl', data: PBR_HLSL });
+  files.push({ path: 'shaders/pixelcraft_water.hlsl', data: PBR_WATER_HLSL });
 
   return { files, settings: s };
 }
+
+const PBR_WATER_HLSL = `// PixelCraft Studio — Realistic water (RenderDragon source)
+#include <common/common.h>
+Texture2D WaterMap : register(t0);
+SamplerState LinearSampler : register(s0);
+
+struct PSInputW {
+  float4 Position : SV_POSITION;
+  float3 WorldNormal : NORMAL;
+  float2 UV : TEXCOORD0;
+};
+
+float4 PixelCraftWaterPixel(PSInputW input) : SV_TARGET {
+  float4 albedo = WaterMap.Sample(LinearSampler, input.UV);
+  float3 N = normalize(input.WorldNormal);
+  float fresnel = pow(1.0 - saturate(dot(N, float3(0.0, 1.0, 0.0))), 3.0);
+  float3 waterColor = lerp(albedo.rgb, float3(0.55, 0.72, 0.95), fresnel * g_WATER_REFLECT);
+  return float4(waterColor, albedo.a * 0.75);
+}
+`;
 
 const PBR_HLSL = `// PixelCraft Studio — Realistic PBR shader (RenderDragon source)
 // Compiled by the official Bedrock RenderDragon shader toolchain for the target engine.

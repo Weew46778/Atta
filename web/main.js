@@ -16,7 +16,7 @@
   const state = {
     yaw: Math.PI / 6,
     pitch: 0.55,
-    scale: 118,
+    zoom: 1,
     dragging: false,
     lastX: 0, lastY: 0,
   };
@@ -25,13 +25,23 @@
   const selectedBlock = { id: 'grass_top' };
 
   // ------- init UI -------
+  // Curated order: each entry is a representative texture id; the "block" it belongs to
+  // drives the 3-face cube preview. These map to the 30+ blocks in the pack.
+  const BLOCK_CHIPS = [
+    'grass_top', 'dirt', 'coarse_dirt', 'mycelium_top',
+    'stone', 'cobblestone', 'deepslate', 'tuff', 'gravel',
+    'sand', 'red_sand', 'clay', 'terracotta',
+    'oak_log_side', 'oak_planks', 'oak_leaves',
+    'bricks', 'snow', 'ice', 'packed_ice', 'water',
+    'netherrack', 'glowstone', 'obsidian', 'quartz_block', 'end_stone', 'magma',
+    'sponge', 'wool_blue', 'wool_purple',
+  ];
+
   function buildBlockList() {
     const list = $('blockList');
     list.innerHTML = '';
-    const ids = ['grass_top', 'dirt', 'stone', 'cobblestone', 'oak_log_side',
-      'oak_planks', 'sand', 'bricks', 'snow', 'oak_leaves', 'water'];
-    ids.forEach((id) => {
-      const bundle = PixelCraft.getTexture(id, seed, 64, realism);
+    BLOCK_CHIPS.forEach((id) => {
+      const bundle = PixelCraft.getTexture(id, seed, 48, realism);
       const c = document.createElement('canvas');
       c.width = 14; c.height = 14;
       if (bundle.color) c.getContext('2d').drawImage(canvasOf(bundle.color), 0, 0, 14, 14);
@@ -41,9 +51,8 @@
       chip.innerHTML = `<span class="swatch"></span>${PixelCraft.TEXTURE_REGISTRY[id].title}`;
       chip.querySelector('.swatch').replaceWith(c);
       chip.addEventListener('click', () => {
-        chip.classList.toggle('on');
-        // clicking a block also selects it for the cube preview
-        if (id.startsWith('grass') || id === 'dirt') selectBlock('grass_top');
+        // selecting the block also puts it on the 3D cube
+        selectForPreview(generatedPack, id);
       });
       list.appendChild(chip);
     });
@@ -104,13 +113,13 @@
     selectedBlock.id = id;
     const blockName = PixelCraft.TEXTURE_REGISTRY[id].block;
     const members = pack.preview.filter((p) => p.block === blockName);
-    const topEntry = members.find((m) => m.id.endsWith('_top') || (blockName === 'grass' && m.id === 'grass_top'));
-    const sideEntry = members.find((m) => /_side|_log|planks|stone|cobble|brick|sand|snow|water/.test(m.id));
-    const bottomEntry = members.find((m) => m.id.endsWith('_bottom')) || members[0];
+    const single = members.length === 1;
 
-    const top = topEntry || members[0];
-    const side = sideEntry || members[0];
-    const bottom = bottomEntry || top;
+    // For multi-face blocks use the _top/_side/_bottom variants; for single-face blocks
+    // reuse the one texture on all three faces.
+    const top = members.find((m) => m.id.endsWith('_top')) || members[0];
+    const side = members.find((m) => m.id.endsWith('_side')) || (single ? members[0] : members.find((m) => m.id.endsWith('_log')) || members[0]);
+    const bottom = members.find((m) => m.id.endsWith('_bottom')) || top;
 
     // fill face thumbs
     thumb('faceTop', top ? top.shadedCanvas : null);
@@ -180,14 +189,13 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
 
-    // regenerate faces at coarse size when state scale changes? Already have currentFaces.
     if (currentFaces.top && currentFaces.side) {
       window.Block3D.renderBlock(ctx, {
         top: currentFaces.top, side: currentFaces.side, bottom: currentFaces.bottom,
       }, {
         yaw: state.yaw, pitch: state.pitch,
         cx: w / 2, cy: h / 2,
-        scale: state.scale,
+        zoom: state.zoom,
       });
     }
   }
@@ -246,8 +254,8 @@
     canvas.addEventListener('pointerup', () => { state.dragging = false; });
     canvas.addEventListener('wheel', (e) => {
       e.preventDefault();
-      state.scale += e.deltaY * -0.06;
-      state.scale = Math.max(50, Math.min(200, state.scale));
+      state.zoom *= (e.deltaY < 0 ? 1.06 : 0.94);
+      state.zoom = Math.max(0.6, Math.min(2.0, state.zoom));
     }, { passive: false });
   }
 
@@ -312,6 +320,8 @@
   registerToastStyles();
   // initial seed display fix
   $('seedDisplay').textContent = seed;
+  const blockSet = new Set(Object.values(PixelCraft.TEXTURE_REGISTRY).map((r) => r.block));
+  $('blockCount').textContent = blockSet.size;
 
   function registerToastStyles() {
     const st = document.createElement('style');

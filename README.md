@@ -19,7 +19,7 @@ isometric 3D block right in the app**, and exports a complete, Bedrock-compatibl
 
 | Feature | Web preview | Android app |
 |--------|:-:|:-:|
-| Procedural realistic block textures (grass, dirt, stone, cobble, logs, planks, sand, brick, snow, leaves, water) | ✅ | ✅ |
+| Procedural realistic block textures (**30 blocks / 34 faces** — grass, dirt, coarse dirt, stone, cobble, deepslate, tuff, gravel, sand, red sand, clay, logs, planks, leaves, brick, snow, ice, packed ice, water, netherrack, glowstone, obsidian, quartz, end stone, magma, sponge, wool, terracotta, mycelium) | ✅ | ✅ |
 | Per-pixel **height map → normal map + bump-lit** shading (real depth & roughness) | ✅ | ✅ |
 | **Rotating isometric 3D block preview** — a grass block shows all 3 of its textures (top / side / bottom) mapped onto the cube simultaneously | ✅ | ✅ |
 | Realism & relief (bump strength) **sliders** | ✅ | ✅ |
@@ -104,7 +104,9 @@ textures/renderer/per_object.json
 textures/renderer/materials.json
 textures/renderer/shaders.json
 textures/renderer/deferred.json
+textures/renderer/post_chain.json      # bloom + ACES tone mapping
 shaders/pixelcraft_pbr.hlsl            # human-readable PBR source
+shaders/pixelcraft_water.hlsl          # human-readable water shader
 ```
 
 Install on Bedrock by opening the `.mcpack` (or launching Minecraft → Settings → Global

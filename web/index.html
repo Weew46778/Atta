@@ -50,8 +50,9 @@
     </div>
 
     <div class="card">
-      <label class="lab">Included textures</label>
+      <label class="lab">Blocks in pack <span id="blockCount" class="mono">30+</span></label>
       <div id="blockList" class="block-list"></div>
+      <p class="fineprint">Tap a block to preview it on the 3D cube. All blocks are included in the exported pack.</p>
     </div>
 
     <div class="card actions">
@@ -89,12 +90,12 @@
 
     <section class="right-col">
       <div class="texture-grid">
-        <h3>Texture atlas <span id="texCount" class="mono"></span></h3>
+        <h3>Texture atlas <span class="mono">30 blocks · <span id="texCount"></span> faces</span></h3>
         <div id="grid" class="grid"></div>
       </div>
 
       <div class="settings-card">
-        <h3>Shaders <span class="badge">realistic · no Ray</span></h3>
+        <h3>Shaders <span class="badge">RenderDragon · realistic · no Ray</span></h3>
         <div id="shaderSettings" class="settings"><!-- populated dynamically --></div>
         <p class="fineprint">
           Shader pack targets Bedrock RenderDragon pipeline. Deferred lighting, exposure,

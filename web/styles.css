@@ -88,16 +88,16 @@ button.big.ghost:hover { border-color: var(--accent-2); color: var(--accent-2); 
 .main { display: grid; grid-template-columns: 1.25fr 1fr; gap: 18px; overflow-y: auto; }
 .preview-card {
   background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 14px;
-  box-shadow: var(--shadow); display: flex; flex-direction: column; min-height: 520px;
+  box-shadow: var(--shadow); display: flex; flex-direction: column; min-height: 560px;
 }
 .preview-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .preview-head h2 { margin: 0; font-size: 17px; }
 .preview-tools { display: flex; align-items: center; gap: 10px; }
 .hint { font-size: 11px; color: var(--muted); }
 #blockCanvas {
-  flex: 1; width: 100%; min-height: 340px; border-radius: 12px; cursor: grab;
+  flex: 1; width: 100%; min-height: 400px; border-radius: 12px; cursor: grab;
   background:
-    radial-gradient(circle at 50% 40%, #1d2748, #10162b 75%);
+    radial-gradient(circle at 50% 42%, #1d2748, #10162b 76%);
   border: 1px solid var(--border); touch-action: none;
 }
 #blockCanvas:active { cursor: grabbing; }
@@ -118,8 +118,8 @@ button.big.ghost:hover { border-color: var(--accent-2); color: var(--accent-2); 
 }
 .texture-grid h3, .settings-card h3 { margin: 0 0 12px; font-size: 15px; display: flex; align-items: center; gap: 8px; }
 .grid {
-  grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 8px;
-  display: grid; max-height: 360px; overflow-y: auto; padding-right: 2px;
+  grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); gap: 9px;
+  display: grid; max-height: 400px; overflow-y: auto; padding-right: 2px;
 }
 .tile { cursor: pointer; transition: .12s; }
 .tile:hover { transform: translateY(-2px); }

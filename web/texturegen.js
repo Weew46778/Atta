@@ -263,6 +263,261 @@ function genWater(seed, size, relief) {
   }, relief);
 }
 
+// ---------- extra blocks (20+ total) ----------
+
+function genCoarseDirt(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const peb = Perlin.ridged(n, x / s * 9, y / s * 9, 3, 2, 0.6);
+    const f = Perlin.fbm(n, x / s * 11, y / s * 11, 5, 2, 0.55);
+    const base = 0.45 + f * 0.2;
+    const rock = peb > 0.55 ? 1 : 0;
+    rgb[i]     = (96 + base * 44) * (0.9 + peb * 0.25) + r() * 8 + rock * 22;
+    rgb[i + 1] = (60 + base * 30) * (0.9 + peb * 0.25) + r() * 8 + rock * 20;
+    rgb[i + 2] = (38 + base * 20) * (0.9 + peb * 0.22) + rock * 18;
+    rgb[i + 3] = 255;
+    return base * 0.7 + peb * 0.9;
+  }, relief);
+}
+
+function genDeepslate(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const ridged = Perlin.ridged(n, x / s * 6, y / s * 6, 4, 2, 0.55);
+    const strata = Math.sin(y / s * Math.PI * 6 + ridged * 2) * 0.5 + 0.5;
+    const fine = Perlin.fbm(n, x / s * 24, y / s * 24, 3, 2, 0.5);
+    const v = 0.4 + ridged * 0.22 + strata * 0.14 + fine * 0.08;
+    const q = v * 255;
+    rgb[i]     = q * 0.44 + r() * 6;
+    rgb[i + 1] = q * 0.45 + r() * 6;
+    rgb[i + 2] = q * 0.5 + r() * 5;
+    rgb[i + 3] = 255;
+    return ridged * 1.1 + strata * 0.6 + fine * 0.1;
+  }, relief);
+}
+
+function genTuff(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 14, y / s * 14, 5, 2, 0.5);
+    const spots = Perlin.ridged(n, x / s * 22, y / s * 22, 2, 2, 0.6);
+    const v = 0.5 + f * 0.18 + spots * 0.12;
+    const q = v * 255;
+    rgb[i]     = q * 0.68 + r() * 8;
+    rgb[i + 1] = q * 0.69 + r() * 8;
+    rgb[i + 2] = q * 0.72 + r() * 6;
+    rgb[i + 3] = 255;
+    return f * 0.7 + spots * 0.6;
+  }, relief);
+}
+
+function genGravel(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const peb = Perlin.ridged(n, x / s * 8, y / s * 8, 3, 2, 0.7);
+    const f = Perlin.fbm(n, x / s * 26, y / s * 26, 2, 2, 0.5);
+    const grey = 0.5 + peb * 0.22 + f * 0.1;
+    const warm = r() * 0.2;
+    rgb[i]     = (120 + grey * 70) * (1 - warm) + (130 + grey * 50) * warm + r() * 14;
+    rgb[i + 1] = (112 + grey * 64) * (1 - warm) + (104 + grey * 46) * warm + r() * 12;
+    rgb[i + 2] = (104 + grey * 60) * (1 - warm) + (86 + grey * 44) * warm + r() * 10;
+    rgb[i + 3] = 255;
+    return peb * 1.3 + f * 0.2;
+  }, relief);
+}
+
+function genRedSand(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const ripple = Math.sin((x + Perlin.fbm(n, x / s * 5, y / s * 5, 2, 2, 0.5) * 20) / s * Math.PI * 8);
+    const f = Perlin.fbm(n, x / s * 18, y / s * 18, 3, 2, 0.5);
+    const v = 0.5 + ripple * 0.08 + f * 0.1;
+    rgb[i]     = 176 + v * 46 + r() * 8;
+    rgb[i + 1] = 92 + v * 30 + r() * 7;
+    rgb[i + 2] = 58 + v * 22 + r() * 6;
+    rgb[i + 3] = 255;
+    return ripple * 0.5 + f * 0.5;
+  }, relief);
+}
+
+function genClay(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 8, y / s * 8, 4, 2, 0.5);
+    const v = 0.5 + f * 0.1;
+    rgb[i]     = 176 + v * 32 + r() * 5;
+    rgb[i + 1] = 158 + v * 30 + r() * 5;
+    rgb[i + 2] = 146 + v * 28 + r() * 5;
+    rgb[i + 3] = 255;
+    return f * 0.4;
+  }, relief);
+}
+
+function genIce(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const streak = Perlin.fbm(n, x / s * 6, y / s * 2, 4, 2, 0.5);
+    const v = 0.5 + streak * 0.22;
+    rgb[i]     = 168 + v * 40 + r() * 8;
+    rgb[i + 1] = 214 + v * 30 + r() * 8;
+    rgb[i + 2] = 236 + v * 18 + r() * 6;
+    rgb[i + 3] = 200;
+    return streak * 0.8;
+  }, relief);
+}
+
+function genPackedIce(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 14, y / s * 14, 3, 2, 0.5);
+    const v = 0.5 + f * 0.12;
+    rgb[i]     = 196 + v * 30 + r() * 6;
+    rgb[i + 1] = 226 + v * 24 + r() * 6;
+    rgb[i + 2] = 246 + v * 10 + r() * 5;
+    rgb[i + 3] = 230;
+    return f * 0.5;
+  }, relief);
+}
+
+function genNetherrack(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const ridged = Perlin.ridged(n, x / s * 9, y / s * 9, 4, 2, 0.55);
+    const f = Perlin.fbm(n, x / s * 20, y / s * 20, 3, 2, 0.5);
+    const v = 0.5 + ridged * 0.26 + f * 0.1;
+    rgb[i]     = 128 + v * 60 + r() * 8;
+    rgb[i + 1] = 42 + v * 26 + r() * 6;
+    rgb[i + 2] = 34 + v * 20 + r() * 5;
+    rgb[i + 3] = 255;
+    return ridged * 1.2 + f * 0.2;
+  }, relief);
+}
+
+function genGlowstone(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const glow = Perlin.fbm(n, x / s * 10, y / s * 10, 3, 2, 0.6);
+    const glowSpots = Perlin.ridged(n, x / s * 18, y / s * 18, 2, 2, 0.7);
+    const v = 0.5 + glow * 0.24;
+    const g = glowSpots > 0.72 ? 1 : 0; // bright glowing nodes
+    rgb[i]     = 200 + v * 40 + r() * 16 + g * 30;
+    rgb[i + 1] = 168 + v * 36 + r() * 14 + g * 26;
+    rgb[i + 2] = 96 + v * 30 + r() * 12 + g * 20;
+    rgb[i + 3] = 255;
+    return glow * 0.7 + glowSpots * 1.2;
+  }, relief);
+}
+
+function genObsidian(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const sheen = Perlin.fbm(n, x / s * 8, y / s * 8, 3, 2, 0.5);
+    const v = 0.18 + sheen * 0.14;
+    rgb[i]     = 14 + v * 60 + r() * 5;
+    rgb[i + 1] = 12 + v * 52 + r() * 5;
+    rgb[i + 2] = 28 + v * 74 + r() * 6;
+    rgb[i + 3] = 255;
+    return sheen * 0.7;
+  }, relief);
+}
+
+function genQuartz(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 10, y / s * 10, 3, 2, 0.5);
+    const v = 0.5 + f * 0.09;
+    rgb[i]     = 224 + v * 24 + r() * 4;
+    rgb[i + 1] = 216 + v * 24 + r() * 4;
+    rgb[i + 2] = 204 + v * 24 + r() * 4;
+    rgb[i + 3] = 255;
+    return f * 0.4;
+  }, relief);
+}
+
+function genEndStone(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 10, y / s * 10, 4, 2, 0.5);
+    const v = 0.5 + f * 0.13;
+    rgb[i]     = 204 + v * 34 + r() * 8;
+    rgb[i + 1] = 188 + v * 32 + r() * 8;
+    rgb[i + 2] = 134 + v * 30 + r() * 7;
+    rgb[i + 3] = 255;
+    return f * 0.7;
+  }, relief);
+}
+
+function genMagma(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const crack = Perlin.ridged(n, x / s * 8, y / s * 8, 3, 2, 0.7);
+    const glow = crack > 0.62 ? 1 : 0; // glowing cracks
+    const f = Perlin.fbm(n, x / s * 20, y / s * 20, 3, 2, 0.5);
+    const v = 0.5 + f * 0.12;
+    rgb[i]     = 96 + v * 34 + r() * 8 + glow * 90;
+    rgb[i + 1] = 30 + v * 18 + r() * 6 + glow * 46;
+    rgb[i + 2] = 22 + v * 12 + r() * 5 + glow * 22;
+    rgb[i + 3] = 255;
+    return f * 0.5 + crack * 1.5;
+  }, relief);
+}
+
+function genSponge(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const hole = Perlin.ridged(n, x / s * 14, y / s * 14, 3, 2, 0.7);
+    const f = Perlin.fbm(n, x / s * 24, y / s * 24, 2, 2, 0.5);
+    const v = 0.5 + f * 0.12;
+    const isHole = hole > 0.62;
+    rgb[i]     = (206 + v * 30 + r() * 12) * (isHole ? 0.6 : 1);
+    rgb[i + 1] = (176 + v * 28 + r() * 10) * (isHole ? 0.6 : 1);
+    rgb[i + 2] = (78 + v * 22 + r() * 8) * (isHole ? 0.6 : 1);
+    rgb[i + 3] = 255;
+    return f * 0.5 + hole * 1.6;
+  }, relief);
+}
+
+function genWool(seed, size, relief, rgb0, rgb1, rgb2) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const weave = 0.5 + 0.5 * Math.sin((x + y * 0.5) / s * Math.PI * 26 + Perlin.fbm(n, x / s * 20, y / s * 20, 2, 2, 0.5) * 4);
+    const f = Perlin.fbm(n, x / s * 30, y / s * 30, 2, 2, 0.5);
+    const v = 0.5 + weave * 0.18 + f * 0.1;
+    rgb[i]     = rgb0 + v * (96 - rgb0) + r() * 12;
+    rgb[i + 1] = rgb1 + v * (110 - rgb1) + r() * 12;
+    rgb[i + 2] = rgb2 + v * (150 - rgb2) + r() * 10;
+    rgb[i + 3] = 255;
+    return weave * 1.1 + f * 0.2;
+  }, relief);
+}
+function genBlueWool(seed, size, relief) { return genWool(seed, size, relief, 40, 60, 150); }
+function genPurpleWool(seed, size, relief) { return genWool(seed, size, relief, 110, 40, 150); }
+
+function genTerracotta(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const f = Perlin.fbm(n, x / s * 8, y / s * 8, 3, 2, 0.5);
+    const band = Math.sin(y / s * Math.PI * 8 + f * 2) * 0.5 + 0.5;
+    const v = 0.5 + f * 0.1 + band * 0.08;
+    rgb[i]     = 150 + v * 44 + r() * 6;
+    rgb[i + 1] = 80 + v * 26 + r() * 5;
+    rgb[i + 2] = 56 + v * 20 + r() * 5;
+    rgb[i + 3] = 255;
+    return f * 0.5 + band * 0.4;
+  }, relief);
+}
+
+function genMyceliumTop(seed, size, relief) {
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const speck = Perlin.fbm(n, x / s * 20, y / s * 20, 4, 2, 0.5);
+    const f = Perlin.fbm(n, x / s * 10, y / s * 10, 4, 2, 0.5);
+    const v = 0.5 + speck * 0.2;
+    rgb[i]     = 128 + v * 46 + r() * 10;
+    rgb[i + 1] = 118 + v * 40 + r() * 10;
+    rgb[i + 2] = 116 + v * 40 + r() * 10;
+    rgb[i + 3] = 255;
+    return f * 0.7 + speck * 0.5;
+  }, relief);
+}
+
+function genMyceliumSide(seed, size, relief) {
+  const dirt = genDirt(seed + 7, size, relief * 0.5);
+  return synthesizeTexture(seed, size, (x, y, s, n, r, rgb, i) => {
+    const fringe = 1 - y / s;
+    const top = Math.pow(fringe, 0.6);
+    const speck = Perlin.fbm(n, x / s * 26, 0, 3, 2, 0.5);
+    const ix = i;
+    rgb[ix]     = dirt.color.data[ix]     * (1 - top) + (140 + speck * 60) * top;
+    rgb[ix + 1] = dirt.color.data[ix + 1] * (1 - top) + (132 + speck * 50) * top;
+    rgb[ix + 2] = dirt.color.data[ix + 2] * (1 - top) + (128 + speck * 46) * top;
+    rgb[ix + 3] = 255;
+    return dirt.height[y * s + x] * (1 - top) + top * (0.7 + speck * 0.5);
+  }, relief);
+}
+
 // register of generators keyed by texture id
 const TEXTURE_REGISTRY = {
   grass_top:   { title: 'Grass Top',   gen: genGrassTop,  block: 'grass' },
@@ -279,6 +534,26 @@ const TEXTURE_REGISTRY = {
   snow:        { title: 'Snow',        gen: genSnow,   block: 'snow' },
   oak_leaves:  { title: 'Oak Leaves',  gen: genLeaves, block: 'oak_leaves' },
   water:       { title: 'Water',       gen: genWater,  block: 'water' },
+  coarse_dirt: { title: 'Coarse Dirt', gen: genCoarseDirt, block: 'coarse_dirt' },
+  deepslate:   { title: 'Deepslate',   gen: genDeepslate,   block: 'deepslate' },
+  tuff:        { title: 'Tuff',        gen: genTuff,        block: 'tuff' },
+  gravel:      { title: 'Gravel',      gen: genGravel,      block: 'gravel' },
+  red_sand:    { title: 'Red Sand',    gen: genRedSand,     block: 'red_sand' },
+  clay:        { title: 'Clay',        gen: genClay,        block: 'clay' },
+  ice:         { title: 'Ice',         gen: genIce,         block: 'ice' },
+  packed_ice:  { title: 'Packed Ice',  gen: genPackedIce,   block: 'packed_ice' },
+  netherrack:  { title: 'Netherrack',  gen: genNetherrack,  block: 'netherrack' },
+  glowstone:   { title: 'Glowstone',   gen: genGlowstone,   block: 'glowstone' },
+  obsidian:    { title: 'Obsidian',    gen: genObsidian,    block: 'obsidian' },
+  quartz_block:{ title: 'Quartz',      gen: genQuartz,      block: 'quartz_block' },
+  end_stone:   { title: 'End Stone',   gen: genEndStone,    block: 'end_stone' },
+  magma:       { title: 'Magma',       gen: genMagma,       block: 'magma' },
+  sponge:      { title: 'Sponge',      gen: genSponge,      block: 'sponge' },
+  wool_blue:   { title: 'Blue Wool',   gen: genBlueWool,    block: 'wool_blue' },
+  wool_purple: { title: 'Purple Wool', gen: genPurpleWool,  block: 'wool_purple' },
+  terracotta:  { title: 'Terracotta',  gen: genTerracotta,  block: 'terracotta' },
+  mycelium_top:{ title: 'Mycelium Top',   gen: genMyceliumTop,   block: 'mycelium' },
+  mycelium_side:{title: 'Mycelium Side',  gen: genMyceliumSide,  block: 'mycelium' },
 };
 
 function getTexture(id, seed, size, relief) {
@@ -293,4 +568,8 @@ Object.assign(window.PixelCraft, {
   genGrassTop, genGrassSide, genDirt, genStone, genCobble,
   genWoodSide, genWoodTop, genSand, genPlank, genBrick,
   genSnow, genLeaves, genWater,
+  genCoarseDirt, genDeepslate, genTuff, genGravel, genRedSand, genClay, genIce,
+  genPackedIce, genNetherrack, genGlowstone, genObsidian, genQuartz, genEndStone,
+  genMagma, genSponge, genBlueWool, genPurpleWool, genTerracotta, genMyceliumTop,
+  genMyceliumSide,
 });

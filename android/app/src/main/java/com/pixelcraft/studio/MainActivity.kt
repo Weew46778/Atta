@@ -28,15 +28,34 @@ class MainActivity : AppCompatActivity() {
     private val blocks = listOf(
         BlockDef("Grass Block", "grass"),
         BlockDef("Dirt", "dirt"),
+        BlockDef("Coarse Dirt", "coarse_dirt"),
+        BlockDef("Mycelium", "mycelium"),
         BlockDef("Stone", "stone"),
         BlockDef("Cobblestone", "cobblestone"),
+        BlockDef("Deepslate", "deepslate"),
+        BlockDef("Tuff", "tuff"),
+        BlockDef("Gravel", "gravel"),
+        BlockDef("Sand", "sand"),
+        BlockDef("Red Sand", "red_sand"),
+        BlockDef("Clay", "clay"),
         BlockDef("Oak Log", "oak_log"),
         BlockDef("Oak Planks", "oak_planks"),
-        BlockDef("Sand", "sand"),
+        BlockDef("Oak Leaves", "oak_leaves"),
         BlockDef("Bricks", "bricks"),
         BlockDef("Snow", "snow"),
-        BlockDef("Oak Leaves", "oak_leaves"),
+        BlockDef("Ice", "ice"),
+        BlockDef("Packed Ice", "packed_ice"),
         BlockDef("Water", "water"),
+        BlockDef("Netherrack", "netherrack"),
+        BlockDef("Glowstone", "glowstone"),
+        BlockDef("Obsidian", "obsidian"),
+        BlockDef("Quartz", "quartz_block"),
+        BlockDef("End Stone", "end_stone"),
+        BlockDef("Magma", "magma"),
+        BlockDef("Sponge", "sponge"),
+        BlockDef("Blue Wool", "wool_blue"),
+        BlockDef("Purple Wool", "wool_purple"),
+        BlockDef("Terracotta", "terracotta"),
     )
 
     private val resolutions = intArrayOf(16, 32, 64)
@@ -124,6 +143,7 @@ class MainActivity : AppCompatActivity() {
     private fun faceIds(key: String): Triple<String, String, String> = when (key) {
         "grass" -> Triple("grass_top", "grass_side", "grass_bottom")
         "oak_log" -> Triple("oak_log_top", "oak_log_side", "oak_log_top")
+        "mycelium" -> Triple("mycelium_top", "mycelium_side", "mycelium_top")
         else -> Triple(key, key, key)
     }
 

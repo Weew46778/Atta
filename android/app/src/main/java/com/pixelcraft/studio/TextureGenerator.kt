@@ -115,11 +115,11 @@ object TextureGenerator {
             (rstate shr 9).toFloat() / 8388608f
         }
 
-        // For grass_side we overlay grass over a precomputed dirt map (built once).
-        val gen: PixelGen = if (id == "grass_side") {
+        // For grass_side / mycelium_side we overlay a fringe over a precomputed dirt map (built once).
+        val gen: PixelGen = if (id == "grass_side" || id == "mycelium_side") {
             val dirtB = generate(seed + 7, size, "dirt", realism, relief)
             PixelGen { x, y, s, n, r, rgb, off ->
-                grassSidePixel(x, y, s, n, r, rgb, off, dirtB.colorInt, dirtB.height)
+                grassSidePixel(x, y, s, n, r, rgb, off, dirtB.colorInt, dirtB.height, id)
             }
         } else registry(id)
 
@@ -175,27 +175,49 @@ object TextureGenerator {
     // registry of generators
     fun registry(id: String): PixelGen = when (id) {
         "grass_top" -> grassTop
-        // grass_side is handled specially inside generate(); this path is never hit.
+        // grass_side / mycelium_side are handled specially inside generate(); never hit here.
         "grass_side" -> stone
         "grass_bottom" -> dirt
         "dirt" -> dirt
+        "coarse_dirt" -> coarseDirt
         "stone" -> stone
         "cobblestone" -> cobble
+        "deepslate" -> deepslate
+        "tuff" -> tuff
+        "gravel" -> gravel
+        "sand" -> sand
+        "red_sand" -> redSand
+        "clay" -> clay
+        "bricks" -> brick
         "oak_log_side" -> woodSide
         "oak_log_top" -> woodTop
         "oak_planks" -> plank
-        "sand" -> sand
-        "bricks" -> brick
-        "snow" -> snow
         "oak_leaves" -> leaves
+        "snow" -> snow
+        "ice" -> ice
+        "packed_ice" -> packedIce
         "water" -> water
+        "netherrack" -> netherrack
+        "glowstone" -> glowstone
+        "obsidian" -> obsidian
+        "quartz_block" -> quartz
+        "end_stone" -> endStone
+        "magma" -> magma
+        "sponge" -> sponge
+        "wool_blue" -> blueWool
+        "wool_purple" -> purpleWool
+        "terracotta" -> terracotta
+        "mycelium_top" -> myceliumTop
+        "mycelium_side" -> stone
         else -> stone
     }
 
     fun allIds(): Array<String> = arrayOf(
-        "grass_top", "grass_side", "grass_bottom", "dirt", "stone", "cobblestone",
-        "oak_log_side", "oak_log_top", "oak_planks", "sand", "bricks", "snow",
-        "oak_leaves", "water"
+        "grass_top", "grass_side", "grass_bottom", "dirt", "coarse_dirt", "stone", "cobblestone",
+        "deepslate", "tuff", "gravel", "sand", "red_sand", "clay", "bricks",
+        "oak_log_side", "oak_log_top", "oak_planks", "oak_leaves", "snow", "ice", "packed_ice",
+        "water", "netherrack", "glowstone", "obsidian", "quartz_block", "end_stone", "magma",
+        "sponge", "wool_blue", "wool_purple", "terracotta", "mycelium_top", "mycelium_side"
     )
 
     fun title(id: String): String = when (id) {
@@ -203,22 +225,43 @@ object TextureGenerator {
         "grass_side" -> "Grass Side"
         "grass_bottom" -> "Grass Bottom"
         "dirt" -> "Dirt"
+        "coarse_dirt" -> "Coarse Dirt"
         "stone" -> "Stone"
         "cobblestone" -> "Cobblestone"
+        "deepslate" -> "Deepslate"
+        "tuff" -> "Tuff"
+        "gravel" -> "Gravel"
         "oak_log_side" -> "Oak Log Side"
         "oak_log_top" -> "Oak Log Top"
         "oak_planks" -> "Oak Planks"
         "sand" -> "Sand"
+        "red_sand" -> "Red Sand"
+        "clay" -> "Clay"
         "bricks" -> "Bricks"
         "snow" -> "Snow"
+        "ice" -> "Ice"
+        "packed_ice" -> "Packed Ice"
         "oak_leaves" -> "Oak Leaves"
         "water" -> "Water"
+        "netherrack" -> "Netherrack"
+        "glowstone" -> "Glowstone"
+        "obsidian" -> "Obsidian"
+        "quartz_block" -> "Quartz"
+        "end_stone" -> "End Stone"
+        "magma" -> "Magma"
+        "sponge" -> "Sponge"
+        "wool_blue" -> "Blue Wool"
+        "wool_purple" -> "Purple Wool"
+        "terracotta" -> "Terracotta"
+        "mycelium_top" -> "Mycelium Top"
+        "mycelium_side" -> "Mycelium Side"
         else -> id
     }
 
     fun block(id: String): String = when (id) {
         "grass_top", "grass_side", "grass_bottom" -> "grass"
         "oak_log_side", "oak_log_top" -> "oak_log"
+        "mycelium_top", "mycelium_side" -> "mycelium"
         else -> id.removeSuffix("_top").removeSuffix("_side").removeSuffix("_bottom")
     }
 
@@ -232,19 +275,25 @@ object TextureGenerator {
         g * 0.9f + f2 * 0.3f
     }
 
-    // Grass-side uses a precomputed dirt map provided by generate().
+    // Grass-side / mycelium-side use a precomputed dirt map provided by generate().
+    // `kind` selects the fringe colour: "grass" (green blades) or "mycelium" (grey speckle).
     private fun grassSidePixel(x: Int, y: Int, s: Int, n: Noise, r: () -> Float,
-                               rgb: IntArray, off: Int, dirtColor: IntArray, dirtHeight: FloatArray): Float {
+                               rgb: IntArray, off: Int, dirtColor: IntArray, dirtHeight: FloatArray,
+                               kind: String): Float {
         val fringe = 1f - y.toFloat() / s
         val top = fringe.pow(0.55f)
         val blades = n.fbm(x / s * 26f, 0f, 4, 2f, 0.5f)
         val dcr = (dirtColor[off] shr 16) and 0xFF
         val dcg = (dirtColor[off] shr 8) and 0xFF
         val dcb = dirtColor[off] and 0xFF
+        val (fr, fg, fb) = if (kind == "mycelium")
+            Triple(140f + blades * 60f, 132f + blades * 50f, 128f + blades * 46f)
+        else
+            Triple(70f + blades * 90f, 128f + blades * 44f, 58f + blades * 30f)
         rgb[off] = pack(
-            (dcr * (1 - top) + (70 + blades * 90) * top).toInt(),
-            (dcg * (1 - top) + (128 + blades * 44) * top).toInt(),
-            (dcb * (1 - top) + (58 + blades * 30) * top).toInt(), 255)
+            (dcr * (1 - top) + fr * top).toInt(),
+            (dcg * (1 - top) + fg * top).toInt(),
+            (dcb * (1 - top) + fb * top).toInt(), 255)
         return dirtHeight[off] * (1 - top) + top * (0.7f + blades * 0.5f)
     }
 
@@ -361,6 +410,180 @@ object TextureGenerator {
         wave * 0.8f
     }
 
+    // ---- extra blocks (30 total) ----
+    private val coarseDirt = PixelGen { x, y, s, n, r, rgb, off ->
+        val peb = n.ridged(x / s * 9f, y / s * 9f, 3, 2f, 0.6f)
+        val f = n.fbm(x / s * 11f, y / s * 11f, 5, 2f, 0.55f)
+        val base = 0.45f + f * 0.2f
+        val rock = if (peb > 0.55f) 1f else 0f
+        rgb[off] = pack(((96 + base * 44) * (0.9f + peb * 0.25f) + r() * 8 + rock * 22).toInt(),
+            ((60 + base * 30) * (0.9f + peb * 0.25f) + r() * 8 + rock * 20).toInt(),
+            ((38 + base * 20) * (0.9f + peb * 0.22f) + rock * 18).toInt(), 255)
+        base * 0.7f + peb * 0.9f
+    }
+
+    private val deepslate = PixelGen { x, y, s, n, r, rgb, off ->
+        val ridged = n.ridged(x / s * 6f, y / s * 6f, 4, 2f, 0.55f)
+        val strata = (sin(y / s * Math.PI.toFloat() * 6f + ridged * 2f) * 0.5f + 0.5f)
+        val fine = n.fbm(x / s * 24f, y / s * 24f, 3, 2f, 0.5f)
+        val v = 0.4f + ridged * 0.22f + strata * 0.14f + fine * 0.08f
+        val q = v * 255
+        rgb[off] = pack((q * 0.44f + r() * 6).toInt(), (q * 0.45f + r() * 6).toInt(),
+            (q * 0.5f + r() * 5).toInt(), 255)
+        ridged * 1.1f + strata * 0.6f + fine * 0.1f
+    }
+
+    private val tuff = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 14f, y / s * 14f, 5, 2f, 0.5f)
+        val spots = n.ridged(x / s * 22f, y / s * 22f, 2, 2f, 0.6f)
+        val v = 0.5f + f * 0.18f + spots * 0.12f
+        val q = v * 255
+        rgb[off] = pack((q * 0.68f + r() * 8).toInt(), (q * 0.69f + r() * 8).toInt(),
+            (q * 0.72f + r() * 6).toInt(), 255)
+        f * 0.7f + spots * 0.6f
+    }
+
+    private val gravel = PixelGen { x, y, s, n, r, rgb, off ->
+        val peb = n.ridged(x / s * 8f, y / s * 8f, 3, 2f, 0.7f)
+        val f = n.fbm(x / s * 26f, y / s * 26f, 2, 2f, 0.5f)
+        val grey = 0.5f + peb * 0.22f + f * 0.1f
+        val warm = r() * 0.2f
+        rgb[off] = pack(((120 + grey * 70) * (1 - warm) + (130 + grey * 50) * warm + r() * 14).toInt(),
+            ((112 + grey * 64) * (1 - warm) + (104 + grey * 46) * warm + r() * 12).toInt(),
+            ((104 + grey * 60) * (1 - warm) + (86 + grey * 44) * warm + r() * 10).toInt(), 255)
+        peb * 1.3f + f * 0.2f
+    }
+
+    private val redSand = PixelGen { x, y, s, n, r, rgb, off ->
+        val ripple = sin((x + n.fbm(x / s * 5f, y / s * 5f, 2, 2f, 0.5f) * 20f) / s * Math.PI.toFloat() * 8f)
+        val f = n.fbm(x / s * 18f, y / s * 18f, 3, 2f, 0.5f)
+        val v = 0.5f + ripple * 0.08f + f * 0.1f
+        rgb[off] = pack((176 + v * 46 + r() * 8).toInt(), (92 + v * 30 + r() * 7).toInt(),
+            (58 + v * 22 + r() * 6).toInt(), 255)
+        ripple * 0.5f + f * 0.5f
+    }
+
+    private val clay = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 8f, y / s * 8f, 4, 2f, 0.5f)
+        val v = 0.5f + f * 0.1f
+        rgb[off] = pack((176 + v * 32 + r() * 5).toInt(), (158 + v * 30 + r() * 5).toInt(),
+            (146 + v * 28 + r() * 5).toInt(), 255)
+        f * 0.4f
+    }
+
+    private val ice = PixelGen { x, y, s, n, r, rgb, off ->
+        val streak = n.fbm(x / s * 6f, y / s * 2f, 4, 2f, 0.5f)
+        val v = 0.5f + streak * 0.22f
+        rgb[off] = pack((168 + v * 40 + r() * 8).toInt(), (214 + v * 30 + r() * 8).toInt(),
+            (236 + v * 18 + r() * 6).toInt(), 200)
+        streak * 0.8f
+    }
+
+    private val packedIce = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 14f, y / s * 14f, 3, 2f, 0.5f)
+        val v = 0.5f + f * 0.12f
+        rgb[off] = pack((196 + v * 30 + r() * 6).toInt(), (226 + v * 24 + r() * 6).toInt(),
+            (246 + v * 10 + r() * 5).toInt(), 230)
+        f * 0.5f
+    }
+
+    private val netherrack = PixelGen { x, y, s, n, r, rgb, off ->
+        val ridged = n.ridged(x / s * 9f, y / s * 9f, 4, 2f, 0.55f)
+        val f = n.fbm(x / s * 20f, y / s * 20f, 3, 2f, 0.5f)
+        val v = 0.5f + ridged * 0.26f + f * 0.1f
+        rgb[off] = pack((128 + v * 60 + r() * 8).toInt(), (42 + v * 26 + r() * 6).toInt(),
+            (34 + v * 20 + r() * 5).toInt(), 255)
+        ridged * 1.2f + f * 0.2f
+    }
+
+    private val glowstone = PixelGen { x, y, s, n, r, rgb, off ->
+        val glow = n.fbm(x / s * 10f, y / s * 10f, 3, 2f, 0.6f)
+        val spots = n.ridged(x / s * 18f, y / s * 18f, 2, 2f, 0.7f)
+        val v = 0.5f + glow * 0.24f
+        val g = if (spots > 0.72f) 1f else 0f
+        rgb[off] = pack((200 + v * 40 + r() * 16 + g * 30).toInt(), (168 + v * 36 + r() * 14 + g * 26).toInt(),
+            (96 + v * 30 + r() * 12 + g * 20).toInt(), 255)
+        glow * 0.7f + spots * 1.2f
+    }
+
+    private val obsidian = PixelGen { x, y, s, n, r, rgb, off ->
+        val sheen = n.fbm(x / s * 8f, y / s * 8f, 3, 2f, 0.5f)
+        val v = 0.18f + sheen * 0.14f
+        rgb[off] = pack((14 + v * 60 + r() * 5).toInt(), (12 + v * 52 + r() * 5).toInt(),
+            (28 + v * 74 + r() * 6).toInt(), 255)
+        sheen * 0.7f
+    }
+
+    private val quartz = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 10f, y / s * 10f, 3, 2f, 0.5f)
+        val v = 0.5f + f * 0.09f
+        rgb[off] = pack((224 + v * 24 + r() * 4).toInt(), (216 + v * 24 + r() * 4).toInt(),
+            (204 + v * 24 + r() * 4).toInt(), 255)
+        f * 0.4f
+    }
+
+    private val endStone = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 10f, y / s * 10f, 4, 2f, 0.5f)
+        val v = 0.5f + f * 0.13f
+        rgb[off] = pack((204 + v * 34 + r() * 8).toInt(), (188 + v * 32 + r() * 8).toInt(),
+            (134 + v * 30 + r() * 7).toInt(), 255)
+        f * 0.7f
+    }
+
+    private val magma = PixelGen { x, y, s, n, r, rgb, off ->
+        val crack = n.ridged(x / s * 8f, y / s * 8f, 3, 2f, 0.7f)
+        val glow = if (crack > 0.62f) 1f else 0f
+        val f = n.fbm(x / s * 20f, y / s * 20f, 3, 2f, 0.5f)
+        val v = 0.5f + f * 0.12f
+        rgb[off] = pack((96 + v * 34 + r() * 8 + glow * 90).toInt(), (30 + v * 18 + r() * 6 + glow * 46).toInt(),
+            (22 + v * 12 + r() * 5 + glow * 22).toInt(), 255)
+        f * 0.5f + crack * 1.5f
+    }
+
+    private val sponge = PixelGen { x, y, s, n, r, rgb, off ->
+        val hole = n.ridged(x / s * 14f, y / s * 14f, 3, 2f, 0.7f)
+        val f = n.fbm(x / s * 24f, y / s * 24f, 2, 2f, 0.5f)
+        val v = 0.5f + f * 0.12f
+        val isHole = if (hole > 0.62f) 0.6f else 1f
+        rgb[off] = pack(((206 + v * 30 + r() * 12) * isHole).toInt(),
+            ((176 + v * 28 + r() * 10) * isHole).toInt(),
+            ((78 + v * 22 + r() * 8) * isHole).toInt(), 255)
+        f * 0.5f + hole * 1.6f
+    }
+
+    private fun woolGen(seed: Int, r0: Int, r1: Int, r2: Int): PixelGen =
+        PixelGen { x, y, s, n, r, rgb, off ->
+            val weave = 0.5f + 0.5f * sin((x + y * 0.5f) / s * Math.PI.toFloat() * 26f +
+                n.fbm(x / s * 20f, y / s * 20f, 2, 2f, 0.5f) * 4f)
+            val f = n.fbm(x / s * 30f, y / s * 30f, 2, 2f, 0.5f)
+            val v = 0.5f + weave * 0.18f + f * 0.1f
+            rgb[off] = pack((r0 + v * (96 - r0) + r() * 12).toInt(),
+                (r1 + v * (110 - r1) + r() * 12).toInt(),
+                (r2 + v * (150 - r2) + r() * 10).toInt(), 255)
+            weave * 1.1f + f * 0.2f
+        }
+
+    private val blueWool = woolGen(7, 40, 60, 150)
+    private val purpleWool = woolGen(9, 110, 40, 150)
+
+    private val terracotta = PixelGen { x, y, s, n, r, rgb, off ->
+        val f = n.fbm(x / s * 8f, y / s * 8f, 3, 2f, 0.5f)
+        val band = sin(y / s * Math.PI.toFloat() * 8f + f * 2f) * 0.5f + 0.5f
+        val v = 0.5f + f * 0.1f + band * 0.08f
+        rgb[off] = pack((150 + v * 44 + r() * 6).toInt(), (80 + v * 26 + r() * 5).toInt(),
+            (56 + v * 20 + r() * 5).toInt(), 255)
+        f * 0.5f + band * 0.4f
+    }
+
+    private val myceliumTop = PixelGen { x, y, s, n, r, rgb, off ->
+        val speck = n.fbm(x / s * 20f, y / s * 20f, 4, 2f, 0.5f)
+        val f = n.fbm(x / s * 10f, y / s * 10f, 4, 2f, 0.5f)
+        val v = 0.5f + speck * 0.2f
+        rgb[off] = pack((128 + v * 46 + r() * 10).toInt(), (118 + v * 40 + r() * 10).toInt(),
+            (116 + v * 40 + r() * 10).toInt(), 255)
+        f * 0.7f + speck * 0.5f
+    }
+
     // Expected Bedrock texture file path for an id.
     fun bedrockPath(id: String): String = when (id) {
         "grass_top" -> "textures/blocks/grass_top.png"
@@ -374,9 +597,17 @@ object TextureGenerator {
         "oak_planks" -> "textures/blocks/planks_oak.png"
         "sand" -> "textures/blocks/sand.png"
         "bricks" -> "textures/blocks/brick.png"
+        "sand" -> "textures/blocks/sand.png"
+        "bricks" -> "textures/blocks/brick.png"
         "snow" -> "textures/blocks/snow.png"
         "oak_leaves" -> "textures/blocks/leaves_oak.png"
         "water" -> "textures/blocks/water_still.png"
+        "quartz_block" -> "textures/blocks/quartz_block_top.png"
+        "wool_blue" -> "textures/blocks/wool_colored_blue.png"
+        "wool_purple" -> "textures/blocks/wool_colored_purple.png"
+        "terracotta" -> "textures/blocks/hardened_clay.png"
+        "mycelium_top" -> "textures/blocks/mycelium_top.png"
+        "mycelium_side" -> "textures/blocks/mycelium_side.png"
         else -> "textures/blocks/$id.png"
     }
 }

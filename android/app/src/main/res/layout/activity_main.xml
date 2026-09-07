@@ -21,247 +21,306 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/app_name"
-                android:textColor="@color/text"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textColor="@color/text"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bedrock texture &amp; shader pack maker"
+                    android:textColor="@color/muted"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/statusText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/badge_bg"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text="@string/generated"
                 android:textColor="@color/accent"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <!-- 3D block preview -->
-        <com.pixelcraft.studio.BlockPreviewView
-            android:id="@+id/blockPreview"
-            android:layout_width="match_parent"
-            android:layout_height="360dp"
-            android:layout_marginTop="12dp"
-            android:background="#10162B" />
-
-        <!-- Face thumbnails -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Top"
-                    android:textColor="@color/muted"
-                    android:textSize="12sp" />
-
-                <ImageView
-                    android:id="@+id/faceTop"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#0D1428"
-                    android:scaleType="centerCrop" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Side"
-                    android:textColor="@color/muted"
-                    android:textSize="12sp" />
-
-                <ImageView
-                    android:id="@+id/faceSide"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#0D1428"
-                    android:scaleType="centerCrop" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bottom"
-                    android:textColor="@color/muted"
-                    android:textSize="12sp" />
-
-                <ImageView
-                    android:id="@+id/faceBottom"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#0D1428"
-                    android:scaleType="centerCrop" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Settings card -->
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:background="@color/panel"
-            android:orientation="vertical"
-            android:padding="14dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/pack_name"
-                android:textAllCaps="true"
-                android:textColor="@color/muted"
-                android:textSize="12sp" />
-
-            <EditText
-                android:id="@+id/packNameInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:backgroundTint="@color/border"
-                android:text="PixelCraft Realistic Pack"
-                android:textColor="@color/text"
-                android:textColorHint="@color/muted"
-                android:textSize="15sp" />
+            app:cardBackgroundColor="@color/panel"
+            app:cardCornerRadius="20dp"
+            app:strokeColor="@color/border"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="12dp">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:text="3D Block Preview"
+                    android:textColor="@color/text"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <com.pixelcraft.studio.BlockPreviewView
+                    android:id="@+id/blockPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="340dp"
+                    android:layout_marginTop="6dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Top"
+                            android:textColor="@color/muted"
+                            android:textSize="11sp" />
+
+                        <ImageView
+                            android:id="@+id/faceTop"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/round_tile"
+                            android:scaleType="centerCrop" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Side"
+                            android:textColor="@color/muted"
+                            android:textSize="11sp" />
+
+                        <ImageView
+                            android:id="@+id/faceSide"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/round_tile"
+                            android:scaleType="centerCrop" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bottom"
+                            android:textColor="@color/muted"
+                            android:textSize="11sp" />
+
+                        <ImageView
+                            android:id="@+id/faceBottom"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/round_tile"
+                            android:scaleType="centerCrop" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Settings card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="@color/panel"
+            app:cardCornerRadius="20dp"
+            app:strokeColor="@color/border"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pack Settings"
+                    android:textColor="@color/text"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/pack_name"
+                    android:textAllCaps="true"
+                    android:textColor="@color/muted"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/packNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:backgroundTint="@color/border"
+                    android:text="PixelCraft Realistic Pack"
+                    android:textColor="@color/text"
+                    android:textColorHint="@color/muted"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:text="@string/seed"
                     android:textAllCaps="true"
                     android:textColor="@color/muted"
                     android:textSize="12sp" />
 
-                <Button
-                    android:id="@+id/randomizeBtn"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/seedInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/border"
+                        android:inputType="number"
+                        android:text="1337"
+                        android:textColor="@color/text"
+                        android:textColorHint="@color/muted"
+                        android:textSize="15sp" />
+
+                    <Button
+                        android:id="@+id/randomizeBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@color/accent"
+                        android:text="@string/randomize"
+                        android:textColor="@color/onAccent"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/accent"
-                    android:text="@string/randomize"
-                    android:textColor="@color/onAccent"
-                    android:textSize="13sp" />
+                    android:layout_marginTop="12dp"
+                    android:text="@string/resolution"
+                    android:textAllCaps="true"
+                    android:textColor="@color/muted"
+                    android:textSize="12sp" />
+
+                <Spinner
+                    android:id="@+id/resolutionSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:backgroundTint="@color/accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Block preview · 30 blocks"
+                    android:textAllCaps="true"
+                    android:textColor="@color/muted"
+                    android:textSize="12sp" />
+
+                <Spinner
+                    android:id="@+id/blockSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:backgroundTint="@color/accent" />
+
+                <TextView
+                    android:id="@+id/realismLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/realism"
+                    android:textAllCaps="true"
+                    android:textColor="@color/muted"
+                    android:textSize="12sp" />
+
+                <SeekBar
+                    android:id="@+id/realismSeek"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:max="100"
+                    android:progress="75"
+                    android:progressTint="@color/accent"
+                    android:thumbTint="@color/accent" />
+
+                <TextView
+                    android:id="@+id/reliefLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/relief"
+                    android:textAllCaps="true"
+                    android:textColor="@color/muted"
+                    android:textSize="12sp" />
+
+                <SeekBar
+                    android:id="@+id/reliefSeek"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:max="100"
+                    android:progress="60"
+                    android:progressTint="@color/accent"
+                    android:thumbTint="@color/accent" />
             </LinearLayout>
-
-            <EditText
-                android:id="@+id/seedInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:backgroundTint="@color/border"
-                android:inputType="number"
-                android:text="1337"
-                android:textColor="@color/text"
-                android:textColorHint="@color/muted"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="@string/resolution"
-                android:textAllCaps="true"
-                android:textColor="@color/muted"
-                android:textSize="12sp" />
-
-            <Spinner
-                android:id="@+id/resolutionSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:backgroundTint="@color/accent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="Block preview"
-                android:textAllCaps="true"
-                android:textColor="@color/muted"
-                android:textSize="12sp" />
-
-            <Spinner
-                android:id="@+id/blockSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:backgroundTint="@color/accent" />
-
-            <TextView
-                android:id="@+id/realismLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="@string/realism"
-                android:textAllCaps="true"
-                android:textColor="@color/muted"
-                android:textSize="12sp" />
-
-            <SeekBar
-                android:id="@+id/realismSeek"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:max="100"
-                android:progress="75"
-                android:progressTint="@color/accent"
-                android:thumbTint="@color/accent" />
-
-            <TextView
-                android:id="@+id/reliefLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/relief"
-                android:textAllCaps="true"
-                android:textColor="@color/muted"
-                android:textSize="12sp" />
-
-            <SeekBar
-                android:id="@+id/reliefSeek"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:max="100"
-                android:progress="60"
-                android:progressTint="@color/accent"
-                android:thumbTint="@color/accent" />
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Export buttons -->
         <Button
@@ -287,9 +346,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Shader pack targets Bedrock RenderDragon pipeline · realism from baked relief, normal maps &amp; procedural lighting (no ray tracing)"
+            android:text="30 blocks · Texture + RenderDragon shader packs · realistic, no ray tracing"
             android:textColor="@color/muted"
             android:textSize="11sp" />
     </LinearLayout>

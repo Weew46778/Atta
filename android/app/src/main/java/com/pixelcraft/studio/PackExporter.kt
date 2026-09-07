@@ -152,7 +152,9 @@ object PackExporter {
             addBytes(zos, "textures/renderer/materials.json", settings[2].toByteArray())
             addBytes(zos, "textures/renderer/shaders.json", settings[3].toByteArray())
             addBytes(zos, "textures/renderer/deferred.json", settings[4].toByteArray())
+            addBytes(zos, "textures/renderer/post_chain.json", settings[5].toByteArray())
             addBytes(zos, "shaders/pixelcraft_pbr.hlsl", PBR_HLSL.toByteArray())
+            addBytes(zos, "shaders/pixelcraft_water.hlsl", PBR_WATER_HLSL.toByteArray())
         }
         return file
     }
@@ -191,8 +193,35 @@ object PackExporter {
             "  \"sky\": {\"zenith\": [0.16, 0.28, 0.5], \"horizon\": [0.6, 0.75, 0.92]},\n" +
             "  \"fog\": {\"density\": ${fmt(fog)}, \"color\": [0.6, 0.75, 0.92]},\n" +
             "  \"water\": {\"reflection_strength\": ${fmt(water)}}\n}\n"
-        return arrayOf(frame, obj, materials, shaders, deferred)
+        val bloom = t * 0.55f
+        val tone = if (t > 0.55f) "ACES" else "Neutral"
+        val post = "{\n  \"version\": 1,\n  \"enabled\": true,\n" +
+            "  \"tone_mapping\": \"$tone\",\n  \"exposure\": ${fmt(exposure)},\n" +
+            "  \"bloom\": {\"enabled\": ${bloom > 0.01f}, \"strength\": ${fmt(bloom)}, " +
+            "\"threshold\": 0.82, \"radius\": 0.9},\n  \"lens_dirt\": false,\n  \"chromatic_aberration\": 0\n}\n"
+        return arrayOf(frame, obj, materials, shaders, deferred, post)
     }
+
+    private val PBR_WATER_HLSL = """
+// PixelCraft Studio — Realistic water (RenderDragon source)
+#include <common/common.h>
+Texture2D WaterMap : register(t0);
+SamplerState LinearSampler : register(s0);
+
+struct PSInputW {
+  float4 Position : SV_POSITION;
+  float3 WorldNormal : NORMAL;
+  float2 UV : TEXCOORD0;
+};
+
+float4 PixelCraftWaterPixel(PSInputW input) : SV_TARGET {
+  float4 albedo = WaterMap.Sample(LinearSampler, input.UV);
+  float3 N = normalize(input.WorldNormal);
+  float fresnel = pow(1.0 - saturate(dot(N, float3(0.0, 1.0, 0.0))), 3.0);
+  float3 waterColor = lerp(albedo.rgb, float3(0.55, 0.72, 0.95), fresnel * g_WATER_REFLECT);
+  return float4(waterColor, albedo.a * 0.75);
+}
+"""
 
     private val PBR_HLSL = """
 // PixelCraft Studio — Realistic PBR shader (RenderDragon source)
