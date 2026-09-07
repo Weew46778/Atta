@@ -52,6 +52,14 @@ jobs:
           } 2>&1 | tee /tmp/build.log
           echo "== exit=${PIPESTATUS[0]} =="
 
+      - name: Show build outputs
+        if: always()
+        run: |
+          echo "== build outputs =="
+          find app/build/outputs -type f -printf '%p %s bytes\n' 2>/dev/null || true
+          echo "== build.log tail =="
+          tail -40 /tmp/build.log 2>/dev/null || true
+
       - name: Upload APK or build log
         if: always()
         uses: actions/upload-artifact@v4
@@ -61,3 +69,23 @@ jobs:
             app/build/outputs/apk/debug/*.apk
             /tmp/build.log
           if-no-files-found: warn
+
+      - name: Publish APK to GitHub Release
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          APK="$(ls app/build/outputs/apk/debug/*.apk 2>/dev/null | head -1)"
+          if [ ! -f "$APK" ]; then
+            echo "No APK produced. Skipping release publish."
+            exit 0
+          fi
+          ls -lh "$APK"
+          TAG="v0.1.0-build-${{ github.run_number }}"
+          gh release create "$TAG" "$APK" \
+            --title "MineAva debug APK #${{ github.run_number }}" \
+            --notes "Automatic debug build from ${{ github.sha }}. This is an unsigned debug APK for testing." \
+            --target "${{ github.sha }}" \
+            --repo "$GITHUB_REPOSITORY" \
+            || gh release upload "$TAG" "$APK" --clobber --repo "$GITHUB_REPOSITORY"
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets --jq '.tagName, (.assets[] | .name + " " + .url)'
