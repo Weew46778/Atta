@@ -1,0 +1,2612 @@
+{
+ "format_version": "1.14.0",
+ "sound_definitions": {
+  "dig.stone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/stone/dig1",
+    "sounds/atta/stone/dig2",
+    "sounds/atta/stone/dig3",
+    "sounds/atta/stone/dig4"
+   ]
+  },
+  "step.stone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/stone/step1",
+    "sounds/atta/stone/step2",
+    "sounds/atta/stone/step3",
+    "sounds/atta/stone/step4",
+    "sounds/atta/stone/step5",
+    "sounds/atta/stone/step6"
+   ]
+  },
+  "hit.stone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/stone/hit1",
+    "sounds/atta/stone/hit2",
+    "sounds/atta/stone/hit3"
+   ]
+  },
+  "place.stone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/stone/place1",
+    "sounds/atta/stone/place2",
+    "sounds/atta/stone/place3",
+    "sounds/atta/stone/place4"
+   ]
+  },
+  "fall.stone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/stone/fall1",
+    "sounds/atta/stone/fall2"
+   ]
+  },
+  "land.stone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/stone/land1",
+    "sounds/atta/stone/land2"
+   ]
+  },
+  "jump.stone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/stone/jump1",
+    "sounds/atta/stone/jump2"
+   ]
+  },
+  "use.stone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/stone/use1",
+    "sounds/atta/stone/use2"
+   ]
+  },
+  "dig.deepslate": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate/dig1",
+    "sounds/atta/deepslate/dig2",
+    "sounds/atta/deepslate/dig3",
+    "sounds/atta/deepslate/dig4"
+   ]
+  },
+  "step.deepslate": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate/step1",
+    "sounds/atta/deepslate/step2",
+    "sounds/atta/deepslate/step3",
+    "sounds/atta/deepslate/step4",
+    "sounds/atta/deepslate/step5",
+    "sounds/atta/deepslate/step6"
+   ]
+  },
+  "hit.deepslate": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate/hit1",
+    "sounds/atta/deepslate/hit2",
+    "sounds/atta/deepslate/hit3"
+   ]
+  },
+  "place.deepslate": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate/place1",
+    "sounds/atta/deepslate/place2",
+    "sounds/atta/deepslate/place3",
+    "sounds/atta/deepslate/place4"
+   ]
+  },
+  "fall.deepslate": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate/fall1",
+    "sounds/atta/deepslate/fall2"
+   ]
+  },
+  "land.deepslate": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate/land1",
+    "sounds/atta/deepslate/land2"
+   ]
+  },
+  "jump.deepslate": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate/jump1",
+    "sounds/atta/deepslate/jump2"
+   ]
+  },
+  "use.deepslate": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate/use1",
+    "sounds/atta/deepslate/use2"
+   ]
+  },
+  "dig.deepslate_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate_bricks/dig1",
+    "sounds/atta/deepslate_bricks/dig2",
+    "sounds/atta/deepslate_bricks/dig3",
+    "sounds/atta/deepslate_bricks/dig4"
+   ]
+  },
+  "step.deepslate_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate_bricks/step1",
+    "sounds/atta/deepslate_bricks/step2",
+    "sounds/atta/deepslate_bricks/step3",
+    "sounds/atta/deepslate_bricks/step4",
+    "sounds/atta/deepslate_bricks/step5",
+    "sounds/atta/deepslate_bricks/step6"
+   ]
+  },
+  "hit.deepslate_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate_bricks/hit1",
+    "sounds/atta/deepslate_bricks/hit2",
+    "sounds/atta/deepslate_bricks/hit3"
+   ]
+  },
+  "place.deepslate_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate_bricks/place1",
+    "sounds/atta/deepslate_bricks/place2",
+    "sounds/atta/deepslate_bricks/place3",
+    "sounds/atta/deepslate_bricks/place4"
+   ]
+  },
+  "fall.deepslate_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate_bricks/fall1",
+    "sounds/atta/deepslate_bricks/fall2"
+   ]
+  },
+  "land.deepslate_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate_bricks/land1",
+    "sounds/atta/deepslate_bricks/land2"
+   ]
+  },
+  "jump.deepslate_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate_bricks/jump1",
+    "sounds/atta/deepslate_bricks/jump2"
+   ]
+  },
+  "use.deepslate_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/deepslate_bricks/use1",
+    "sounds/atta/deepslate_bricks/use2"
+   ]
+  },
+  "dig.basalt": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/basalt/dig1",
+    "sounds/atta/basalt/dig2",
+    "sounds/atta/basalt/dig3",
+    "sounds/atta/basalt/dig4"
+   ]
+  },
+  "step.basalt": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/basalt/step1",
+    "sounds/atta/basalt/step2",
+    "sounds/atta/basalt/step3",
+    "sounds/atta/basalt/step4",
+    "sounds/atta/basalt/step5",
+    "sounds/atta/basalt/step6"
+   ]
+  },
+  "hit.basalt": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/basalt/hit1",
+    "sounds/atta/basalt/hit2",
+    "sounds/atta/basalt/hit3"
+   ]
+  },
+  "place.basalt": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/basalt/place1",
+    "sounds/atta/basalt/place2",
+    "sounds/atta/basalt/place3",
+    "sounds/atta/basalt/place4"
+   ]
+  },
+  "fall.basalt": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/basalt/fall1",
+    "sounds/atta/basalt/fall2"
+   ]
+  },
+  "land.basalt": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/basalt/land1",
+    "sounds/atta/basalt/land2"
+   ]
+  },
+  "jump.basalt": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/basalt/jump1",
+    "sounds/atta/basalt/jump2"
+   ]
+  },
+  "use.basalt": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/basalt/use1",
+    "sounds/atta/basalt/use2"
+   ]
+  },
+  "dig.tuff": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/tuff/dig1",
+    "sounds/atta/tuff/dig2",
+    "sounds/atta/tuff/dig3",
+    "sounds/atta/tuff/dig4"
+   ]
+  },
+  "step.tuff": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/tuff/step1",
+    "sounds/atta/tuff/step2",
+    "sounds/atta/tuff/step3",
+    "sounds/atta/tuff/step4",
+    "sounds/atta/tuff/step5",
+    "sounds/atta/tuff/step6"
+   ]
+  },
+  "hit.tuff": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/tuff/hit1",
+    "sounds/atta/tuff/hit2",
+    "sounds/atta/tuff/hit3"
+   ]
+  },
+  "place.tuff": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/tuff/place1",
+    "sounds/atta/tuff/place2",
+    "sounds/atta/tuff/place3",
+    "sounds/atta/tuff/place4"
+   ]
+  },
+  "fall.tuff": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/tuff/fall1",
+    "sounds/atta/tuff/fall2"
+   ]
+  },
+  "land.tuff": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/tuff/land1",
+    "sounds/atta/tuff/land2"
+   ]
+  },
+  "jump.tuff": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/tuff/jump1",
+    "sounds/atta/tuff/jump2"
+   ]
+  },
+  "use.tuff": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/tuff/use1",
+    "sounds/atta/tuff/use2"
+   ]
+  },
+  "dig.calcite": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/calcite/dig1",
+    "sounds/atta/calcite/dig2",
+    "sounds/atta/calcite/dig3",
+    "sounds/atta/calcite/dig4"
+   ]
+  },
+  "step.calcite": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/calcite/step1",
+    "sounds/atta/calcite/step2",
+    "sounds/atta/calcite/step3",
+    "sounds/atta/calcite/step4",
+    "sounds/atta/calcite/step5",
+    "sounds/atta/calcite/step6"
+   ]
+  },
+  "hit.calcite": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/calcite/hit1",
+    "sounds/atta/calcite/hit2",
+    "sounds/atta/calcite/hit3"
+   ]
+  },
+  "place.calcite": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/calcite/place1",
+    "sounds/atta/calcite/place2",
+    "sounds/atta/calcite/place3",
+    "sounds/atta/calcite/place4"
+   ]
+  },
+  "fall.calcite": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/calcite/fall1",
+    "sounds/atta/calcite/fall2"
+   ]
+  },
+  "land.calcite": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/calcite/land1",
+    "sounds/atta/calcite/land2"
+   ]
+  },
+  "jump.calcite": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/calcite/jump1",
+    "sounds/atta/calcite/jump2"
+   ]
+  },
+  "use.calcite": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/calcite/use1",
+    "sounds/atta/calcite/use2"
+   ]
+  },
+  "dig.dripstone_block": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dripstone_block/dig1",
+    "sounds/atta/dripstone_block/dig2",
+    "sounds/atta/dripstone_block/dig3",
+    "sounds/atta/dripstone_block/dig4"
+   ]
+  },
+  "step.dripstone_block": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dripstone_block/step1",
+    "sounds/atta/dripstone_block/step2",
+    "sounds/atta/dripstone_block/step3",
+    "sounds/atta/dripstone_block/step4",
+    "sounds/atta/dripstone_block/step5",
+    "sounds/atta/dripstone_block/step6"
+   ]
+  },
+  "hit.dripstone_block": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dripstone_block/hit1",
+    "sounds/atta/dripstone_block/hit2",
+    "sounds/atta/dripstone_block/hit3"
+   ]
+  },
+  "place.dripstone_block": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dripstone_block/place1",
+    "sounds/atta/dripstone_block/place2",
+    "sounds/atta/dripstone_block/place3",
+    "sounds/atta/dripstone_block/place4"
+   ]
+  },
+  "fall.dripstone_block": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dripstone_block/fall1",
+    "sounds/atta/dripstone_block/fall2"
+   ]
+  },
+  "land.dripstone_block": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dripstone_block/land1",
+    "sounds/atta/dripstone_block/land2"
+   ]
+  },
+  "jump.dripstone_block": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dripstone_block/jump1",
+    "sounds/atta/dripstone_block/jump2"
+   ]
+  },
+  "use.dripstone_block": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dripstone_block/use1",
+    "sounds/atta/dripstone_block/use2"
+   ]
+  },
+  "dig.pointed_dripstone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/pointed_dripstone/dig1",
+    "sounds/atta/pointed_dripstone/dig2",
+    "sounds/atta/pointed_dripstone/dig3",
+    "sounds/atta/pointed_dripstone/dig4"
+   ]
+  },
+  "step.pointed_dripstone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/pointed_dripstone/step1",
+    "sounds/atta/pointed_dripstone/step2",
+    "sounds/atta/pointed_dripstone/step3",
+    "sounds/atta/pointed_dripstone/step4",
+    "sounds/atta/pointed_dripstone/step5",
+    "sounds/atta/pointed_dripstone/step6"
+   ]
+  },
+  "hit.pointed_dripstone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/pointed_dripstone/hit1",
+    "sounds/atta/pointed_dripstone/hit2",
+    "sounds/atta/pointed_dripstone/hit3"
+   ]
+  },
+  "place.pointed_dripstone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/pointed_dripstone/place1",
+    "sounds/atta/pointed_dripstone/place2",
+    "sounds/atta/pointed_dripstone/place3",
+    "sounds/atta/pointed_dripstone/place4"
+   ]
+  },
+  "fall.pointed_dripstone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/pointed_dripstone/fall1",
+    "sounds/atta/pointed_dripstone/fall2"
+   ]
+  },
+  "land.pointed_dripstone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/pointed_dripstone/land1",
+    "sounds/atta/pointed_dripstone/land2"
+   ]
+  },
+  "jump.pointed_dripstone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/pointed_dripstone/jump1",
+    "sounds/atta/pointed_dripstone/jump2"
+   ]
+  },
+  "use.pointed_dripstone": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/pointed_dripstone/use1",
+    "sounds/atta/pointed_dripstone/use2"
+   ]
+  },
+  "dig.netherrack": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/netherrack/dig1",
+    "sounds/atta/netherrack/dig2",
+    "sounds/atta/netherrack/dig3",
+    "sounds/atta/netherrack/dig4"
+   ]
+  },
+  "step.netherrack": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/netherrack/step1",
+    "sounds/atta/netherrack/step2",
+    "sounds/atta/netherrack/step3",
+    "sounds/atta/netherrack/step4",
+    "sounds/atta/netherrack/step5",
+    "sounds/atta/netherrack/step6"
+   ]
+  },
+  "hit.netherrack": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/netherrack/hit1",
+    "sounds/atta/netherrack/hit2",
+    "sounds/atta/netherrack/hit3"
+   ]
+  },
+  "place.netherrack": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/netherrack/place1",
+    "sounds/atta/netherrack/place2",
+    "sounds/atta/netherrack/place3",
+    "sounds/atta/netherrack/place4"
+   ]
+  },
+  "fall.netherrack": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/netherrack/fall1",
+    "sounds/atta/netherrack/fall2"
+   ]
+  },
+  "land.netherrack": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/netherrack/land1",
+    "sounds/atta/netherrack/land2"
+   ]
+  },
+  "jump.netherrack": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/netherrack/jump1",
+    "sounds/atta/netherrack/jump2"
+   ]
+  },
+  "use.netherrack": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/netherrack/use1",
+    "sounds/atta/netherrack/use2"
+   ]
+  },
+  "dig.nether_brick": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nether_brick/dig1",
+    "sounds/atta/nether_brick/dig2",
+    "sounds/atta/nether_brick/dig3",
+    "sounds/atta/nether_brick/dig4"
+   ]
+  },
+  "step.nether_brick": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nether_brick/step1",
+    "sounds/atta/nether_brick/step2",
+    "sounds/atta/nether_brick/step3",
+    "sounds/atta/nether_brick/step4",
+    "sounds/atta/nether_brick/step5",
+    "sounds/atta/nether_brick/step6"
+   ]
+  },
+  "hit.nether_brick": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nether_brick/hit1",
+    "sounds/atta/nether_brick/hit2",
+    "sounds/atta/nether_brick/hit3"
+   ]
+  },
+  "place.nether_brick": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nether_brick/place1",
+    "sounds/atta/nether_brick/place2",
+    "sounds/atta/nether_brick/place3",
+    "sounds/atta/nether_brick/place4"
+   ]
+  },
+  "fall.nether_brick": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nether_brick/fall1",
+    "sounds/atta/nether_brick/fall2"
+   ]
+  },
+  "land.nether_brick": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nether_brick/land1",
+    "sounds/atta/nether_brick/land2"
+   ]
+  },
+  "jump.nether_brick": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nether_brick/jump1",
+    "sounds/atta/nether_brick/jump2"
+   ]
+  },
+  "use.nether_brick": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nether_brick/use1",
+    "sounds/atta/nether_brick/use2"
+   ]
+  },
+  "dig.ancient_debris": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/ancient_debris/dig1",
+    "sounds/atta/ancient_debris/dig2",
+    "sounds/atta/ancient_debris/dig3",
+    "sounds/atta/ancient_debris/dig4"
+   ]
+  },
+  "step.ancient_debris": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/ancient_debris/step1",
+    "sounds/atta/ancient_debris/step2",
+    "sounds/atta/ancient_debris/step3",
+    "sounds/atta/ancient_debris/step4",
+    "sounds/atta/ancient_debris/step5",
+    "sounds/atta/ancient_debris/step6"
+   ]
+  },
+  "hit.ancient_debris": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/ancient_debris/hit1",
+    "sounds/atta/ancient_debris/hit2",
+    "sounds/atta/ancient_debris/hit3"
+   ]
+  },
+  "place.ancient_debris": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/ancient_debris/place1",
+    "sounds/atta/ancient_debris/place2",
+    "sounds/atta/ancient_debris/place3",
+    "sounds/atta/ancient_debris/place4"
+   ]
+  },
+  "fall.ancient_debris": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/ancient_debris/fall1",
+    "sounds/atta/ancient_debris/fall2"
+   ]
+  },
+  "land.ancient_debris": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/ancient_debris/land1",
+    "sounds/atta/ancient_debris/land2"
+   ]
+  },
+  "jump.ancient_debris": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/ancient_debris/jump1",
+    "sounds/atta/ancient_debris/jump2"
+   ]
+  },
+  "use.ancient_debris": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/ancient_debris/use1",
+    "sounds/atta/ancient_debris/use2"
+   ]
+  },
+  "dig.mud_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/dig1",
+    "sounds/atta/mud_bricks/dig2",
+    "sounds/atta/mud_bricks/dig3",
+    "sounds/atta/mud_bricks/dig4"
+   ]
+  },
+  "step.mud_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/step1",
+    "sounds/atta/mud_bricks/step2",
+    "sounds/atta/mud_bricks/step3",
+    "sounds/atta/mud_bricks/step4",
+    "sounds/atta/mud_bricks/step5",
+    "sounds/atta/mud_bricks/step6"
+   ]
+  },
+  "hit.mud_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/hit1",
+    "sounds/atta/mud_bricks/hit2",
+    "sounds/atta/mud_bricks/hit3"
+   ]
+  },
+  "place.mud_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/place1",
+    "sounds/atta/mud_bricks/place2",
+    "sounds/atta/mud_bricks/place3",
+    "sounds/atta/mud_bricks/place4"
+   ]
+  },
+  "fall.mud_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/fall1",
+    "sounds/atta/mud_bricks/fall2"
+   ]
+  },
+  "land.mud_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/land1",
+    "sounds/atta/mud_bricks/land2"
+   ]
+  },
+  "jump.mud_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/jump1",
+    "sounds/atta/mud_bricks/jump2"
+   ]
+  },
+  "use.mud_bricks": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/use1",
+    "sounds/atta/mud_bricks/use2"
+   ]
+  },
+  "dig.grass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/grass/dig1",
+    "sounds/atta/grass/dig2",
+    "sounds/atta/grass/dig3",
+    "sounds/atta/grass/dig4"
+   ]
+  },
+  "step.grass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/grass/step1",
+    "sounds/atta/grass/step2",
+    "sounds/atta/grass/step3",
+    "sounds/atta/grass/step4",
+    "sounds/atta/grass/step5",
+    "sounds/atta/grass/step6"
+   ]
+  },
+  "hit.grass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/grass/hit1",
+    "sounds/atta/grass/hit2",
+    "sounds/atta/grass/hit3"
+   ]
+  },
+  "place.grass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/grass/place1",
+    "sounds/atta/grass/place2",
+    "sounds/atta/grass/place3",
+    "sounds/atta/grass/place4"
+   ]
+  },
+  "fall.grass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/grass/fall1",
+    "sounds/atta/grass/fall2"
+   ]
+  },
+  "land.grass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/grass/land1",
+    "sounds/atta/grass/land2"
+   ]
+  },
+  "jump.grass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/grass/jump1",
+    "sounds/atta/grass/jump2"
+   ]
+  },
+  "use.grass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/grass/use1",
+    "sounds/atta/grass/use2"
+   ]
+  },
+  "dig.gravel": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/gravel/dig1",
+    "sounds/atta/gravel/dig2",
+    "sounds/atta/gravel/dig3",
+    "sounds/atta/gravel/dig4"
+   ]
+  },
+  "step.gravel": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/gravel/step1",
+    "sounds/atta/gravel/step2",
+    "sounds/atta/gravel/step3",
+    "sounds/atta/gravel/step4",
+    "sounds/atta/gravel/step5",
+    "sounds/atta/gravel/step6"
+   ]
+  },
+  "hit.gravel": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/gravel/hit1",
+    "sounds/atta/gravel/hit2",
+    "sounds/atta/gravel/hit3"
+   ]
+  },
+  "place.gravel": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/gravel/place1",
+    "sounds/atta/gravel/place2",
+    "sounds/atta/gravel/place3",
+    "sounds/atta/gravel/place4"
+   ]
+  },
+  "fall.gravel": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/gravel/fall1",
+    "sounds/atta/gravel/fall2"
+   ]
+  },
+  "land.gravel": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/gravel/land1",
+    "sounds/atta/gravel/land2"
+   ]
+  },
+  "jump.gravel": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/gravel/jump1",
+    "sounds/atta/gravel/jump2"
+   ]
+  },
+  "use.gravel": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/gravel/use1",
+    "sounds/atta/gravel/use2"
+   ]
+  },
+  "dig.sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/sand/dig1",
+    "sounds/atta/sand/dig2",
+    "sounds/atta/sand/dig3",
+    "sounds/atta/sand/dig4"
+   ]
+  },
+  "step.sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/sand/step1",
+    "sounds/atta/sand/step2",
+    "sounds/atta/sand/step3",
+    "sounds/atta/sand/step4",
+    "sounds/atta/sand/step5",
+    "sounds/atta/sand/step6"
+   ]
+  },
+  "hit.sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/sand/hit1",
+    "sounds/atta/sand/hit2",
+    "sounds/atta/sand/hit3"
+   ]
+  },
+  "place.sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/sand/place1",
+    "sounds/atta/sand/place2",
+    "sounds/atta/sand/place3",
+    "sounds/atta/sand/place4"
+   ]
+  },
+  "fall.sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/sand/fall1",
+    "sounds/atta/sand/fall2"
+   ]
+  },
+  "land.sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/sand/land1",
+    "sounds/atta/sand/land2"
+   ]
+  },
+  "jump.sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/sand/jump1",
+    "sounds/atta/sand/jump2"
+   ]
+  },
+  "use.sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/sand/use1",
+    "sounds/atta/sand/use2"
+   ]
+  },
+  "dig.snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/snow/dig1",
+    "sounds/atta/snow/dig2",
+    "sounds/atta/snow/dig3",
+    "sounds/atta/snow/dig4"
+   ]
+  },
+  "step.snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/snow/step1",
+    "sounds/atta/snow/step2",
+    "sounds/atta/snow/step3",
+    "sounds/atta/snow/step4",
+    "sounds/atta/snow/step5",
+    "sounds/atta/snow/step6"
+   ]
+  },
+  "hit.snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/snow/hit1",
+    "sounds/atta/snow/hit2",
+    "sounds/atta/snow/hit3"
+   ]
+  },
+  "place.snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/snow/place1",
+    "sounds/atta/snow/place2",
+    "sounds/atta/snow/place3",
+    "sounds/atta/snow/place4"
+   ]
+  },
+  "fall.snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/snow/fall1",
+    "sounds/atta/snow/fall2"
+   ]
+  },
+  "land.snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/snow/land1",
+    "sounds/atta/snow/land2"
+   ]
+  },
+  "jump.snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/snow/jump1",
+    "sounds/atta/snow/jump2"
+   ]
+  },
+  "use.snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/snow/use1",
+    "sounds/atta/snow/use2"
+   ]
+  },
+  "dig.powder_snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/powder_snow/dig1",
+    "sounds/atta/powder_snow/dig2",
+    "sounds/atta/powder_snow/dig3",
+    "sounds/atta/powder_snow/dig4"
+   ]
+  },
+  "step.powder_snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/powder_snow/step1",
+    "sounds/atta/powder_snow/step2",
+    "sounds/atta/powder_snow/step3",
+    "sounds/atta/powder_snow/step4",
+    "sounds/atta/powder_snow/step5",
+    "sounds/atta/powder_snow/step6"
+   ]
+  },
+  "hit.powder_snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/powder_snow/hit1",
+    "sounds/atta/powder_snow/hit2",
+    "sounds/atta/powder_snow/hit3"
+   ]
+  },
+  "place.powder_snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/powder_snow/place1",
+    "sounds/atta/powder_snow/place2",
+    "sounds/atta/powder_snow/place3",
+    "sounds/atta/powder_snow/place4"
+   ]
+  },
+  "fall.powder_snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/powder_snow/fall1",
+    "sounds/atta/powder_snow/fall2"
+   ]
+  },
+  "land.powder_snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/powder_snow/land1",
+    "sounds/atta/powder_snow/land2"
+   ]
+  },
+  "jump.powder_snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/powder_snow/jump1",
+    "sounds/atta/powder_snow/jump2"
+   ]
+  },
+  "use.powder_snow": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/powder_snow/use1",
+    "sounds/atta/powder_snow/use2"
+   ]
+  },
+  "dig.soul_soil": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_soil/dig1",
+    "sounds/atta/soul_soil/dig2",
+    "sounds/atta/soul_soil/dig3",
+    "sounds/atta/soul_soil/dig4"
+   ]
+  },
+  "step.soul_soil": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_soil/step1",
+    "sounds/atta/soul_soil/step2",
+    "sounds/atta/soul_soil/step3",
+    "sounds/atta/soul_soil/step4",
+    "sounds/atta/soul_soil/step5",
+    "sounds/atta/soul_soil/step6"
+   ]
+  },
+  "hit.soul_soil": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_soil/hit1",
+    "sounds/atta/soul_soil/hit2",
+    "sounds/atta/soul_soil/hit3"
+   ]
+  },
+  "place.soul_soil": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_soil/place1",
+    "sounds/atta/soul_soil/place2",
+    "sounds/atta/soul_soil/place3",
+    "sounds/atta/soul_soil/place4"
+   ]
+  },
+  "fall.soul_soil": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_soil/fall1",
+    "sounds/atta/soul_soil/fall2"
+   ]
+  },
+  "land.soul_soil": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_soil/land1",
+    "sounds/atta/soul_soil/land2"
+   ]
+  },
+  "jump.soul_soil": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_soil/jump1",
+    "sounds/atta/soul_soil/jump2"
+   ]
+  },
+  "use.soul_soil": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_soil/use1",
+    "sounds/atta/soul_soil/use2"
+   ]
+  },
+  "dig.roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/roots/dig1",
+    "sounds/atta/roots/dig2",
+    "sounds/atta/roots/dig3",
+    "sounds/atta/roots/dig4"
+   ]
+  },
+  "step.roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/roots/step1",
+    "sounds/atta/roots/step2",
+    "sounds/atta/roots/step3",
+    "sounds/atta/roots/step4",
+    "sounds/atta/roots/step5",
+    "sounds/atta/roots/step6"
+   ]
+  },
+  "hit.roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/roots/hit1",
+    "sounds/atta/roots/hit2",
+    "sounds/atta/roots/hit3"
+   ]
+  },
+  "place.roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/roots/place1",
+    "sounds/atta/roots/place2",
+    "sounds/atta/roots/place3",
+    "sounds/atta/roots/place4"
+   ]
+  },
+  "fall.roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/roots/fall1",
+    "sounds/atta/roots/fall2"
+   ]
+  },
+  "land.roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/roots/land1",
+    "sounds/atta/roots/land2"
+   ]
+  },
+  "jump.roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/roots/jump1",
+    "sounds/atta/roots/jump2"
+   ]
+  },
+  "use.roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/roots/use1",
+    "sounds/atta/roots/use2"
+   ]
+  },
+  "dig.dirt_with_roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dirt_with_roots/dig1",
+    "sounds/atta/dirt_with_roots/dig2",
+    "sounds/atta/dirt_with_roots/dig3",
+    "sounds/atta/dirt_with_roots/dig4"
+   ]
+  },
+  "step.dirt_with_roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dirt_with_roots/step1",
+    "sounds/atta/dirt_with_roots/step2",
+    "sounds/atta/dirt_with_roots/step3",
+    "sounds/atta/dirt_with_roots/step4",
+    "sounds/atta/dirt_with_roots/step5",
+    "sounds/atta/dirt_with_roots/step6"
+   ]
+  },
+  "hit.dirt_with_roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dirt_with_roots/hit1",
+    "sounds/atta/dirt_with_roots/hit2",
+    "sounds/atta/dirt_with_roots/hit3"
+   ]
+  },
+  "place.dirt_with_roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dirt_with_roots/place1",
+    "sounds/atta/dirt_with_roots/place2",
+    "sounds/atta/dirt_with_roots/place3",
+    "sounds/atta/dirt_with_roots/place4"
+   ]
+  },
+  "fall.dirt_with_roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dirt_with_roots/fall1",
+    "sounds/atta/dirt_with_roots/fall2"
+   ]
+  },
+  "land.dirt_with_roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dirt_with_roots/land1",
+    "sounds/atta/dirt_with_roots/land2"
+   ]
+  },
+  "jump.dirt_with_roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dirt_with_roots/jump1",
+    "sounds/atta/dirt_with_roots/jump2"
+   ]
+  },
+  "use.dirt_with_roots": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/dirt_with_roots/use1",
+    "sounds/atta/dirt_with_roots/use2"
+   ]
+  },
+  "dig.moss": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/moss/dig1",
+    "sounds/atta/moss/dig2",
+    "sounds/atta/moss/dig3",
+    "sounds/atta/moss/dig4"
+   ]
+  },
+  "step.moss": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/moss/step1",
+    "sounds/atta/moss/step2",
+    "sounds/atta/moss/step3",
+    "sounds/atta/moss/step4",
+    "sounds/atta/moss/step5",
+    "sounds/atta/moss/step6"
+   ]
+  },
+  "hit.moss": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/moss/hit1",
+    "sounds/atta/moss/hit2",
+    "sounds/atta/moss/hit3"
+   ]
+  },
+  "place.moss": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/moss/place1",
+    "sounds/atta/moss/place2",
+    "sounds/atta/moss/place3",
+    "sounds/atta/moss/place4"
+   ]
+  },
+  "fall.moss": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/moss/fall1",
+    "sounds/atta/moss/fall2"
+   ]
+  },
+  "land.moss": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/moss/land1",
+    "sounds/atta/moss/land2"
+   ]
+  },
+  "jump.moss": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/moss/jump1",
+    "sounds/atta/moss/jump2"
+   ]
+  },
+  "use.moss": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/moss/use1",
+    "sounds/atta/moss/use2"
+   ]
+  },
+  "dig.nylium": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nylium/dig1",
+    "sounds/atta/nylium/dig2",
+    "sounds/atta/nylium/dig3",
+    "sounds/atta/nylium/dig4"
+   ]
+  },
+  "step.nylium": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nylium/step1",
+    "sounds/atta/nylium/step2",
+    "sounds/atta/nylium/step3",
+    "sounds/atta/nylium/step4",
+    "sounds/atta/nylium/step5",
+    "sounds/atta/nylium/step6"
+   ]
+  },
+  "hit.nylium": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nylium/hit1",
+    "sounds/atta/nylium/hit2",
+    "sounds/atta/nylium/hit3"
+   ]
+  },
+  "place.nylium": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nylium/place1",
+    "sounds/atta/nylium/place2",
+    "sounds/atta/nylium/place3",
+    "sounds/atta/nylium/place4"
+   ]
+  },
+  "fall.nylium": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nylium/fall1",
+    "sounds/atta/nylium/fall2"
+   ]
+  },
+  "land.nylium": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nylium/land1",
+    "sounds/atta/nylium/land2"
+   ]
+  },
+  "jump.nylium": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nylium/jump1",
+    "sounds/atta/nylium/jump2"
+   ]
+  },
+  "use.nylium": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/nylium/use1",
+    "sounds/atta/nylium/use2"
+   ]
+  },
+  "dig.packed_mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/dig1",
+    "sounds/atta/packed_mud/dig2",
+    "sounds/atta/packed_mud/dig3",
+    "sounds/atta/packed_mud/dig4"
+   ]
+  },
+  "step.packed_mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/step1",
+    "sounds/atta/packed_mud/step2",
+    "sounds/atta/packed_mud/step3",
+    "sounds/atta/packed_mud/step4",
+    "sounds/atta/packed_mud/step5",
+    "sounds/atta/packed_mud/step6"
+   ]
+  },
+  "hit.packed_mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/hit1",
+    "sounds/atta/packed_mud/hit2",
+    "sounds/atta/packed_mud/hit3"
+   ]
+  },
+  "place.packed_mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/place1",
+    "sounds/atta/packed_mud/place2",
+    "sounds/atta/packed_mud/place3",
+    "sounds/atta/packed_mud/place4"
+   ]
+  },
+  "fall.packed_mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/fall1",
+    "sounds/atta/packed_mud/fall2"
+   ]
+  },
+  "land.packed_mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/land1",
+    "sounds/atta/packed_mud/land2"
+   ]
+  },
+  "jump.packed_mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/jump1",
+    "sounds/atta/packed_mud/jump2"
+   ]
+  },
+  "use.packed_mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/use1",
+    "sounds/atta/packed_mud/use2"
+   ]
+  },
+  "dig.soul_sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_sand/dig1",
+    "sounds/atta/soul_sand/dig2",
+    "sounds/atta/soul_sand/dig3",
+    "sounds/atta/soul_sand/dig4",
+    "sounds/atta/soul_sand/break1",
+    "sounds/atta/soul_sand/break2",
+    "sounds/atta/soul_sand/break3",
+    "sounds/atta/soul_sand/break4"
+   ]
+  },
+  "step.soul_sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_sand/step1",
+    "sounds/atta/soul_sand/step2",
+    "sounds/atta/soul_sand/step3",
+    "sounds/atta/soul_sand/step4",
+    "sounds/atta/soul_sand/step5",
+    "sounds/atta/soul_sand/step6"
+   ]
+  },
+  "hit.soul_sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_sand/hit1",
+    "sounds/atta/soul_sand/hit2",
+    "sounds/atta/soul_sand/hit3"
+   ]
+  },
+  "place.soul_sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_sand/place1",
+    "sounds/atta/soul_sand/place2",
+    "sounds/atta/soul_sand/place3",
+    "sounds/atta/soul_sand/place4"
+   ]
+  },
+  "fall.soul_sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_sand/fall1",
+    "sounds/atta/soul_sand/fall2"
+   ]
+  },
+  "land.soul_sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_sand/land1",
+    "sounds/atta/soul_sand/land2"
+   ]
+  },
+  "jump.soul_sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_sand/jump1",
+    "sounds/atta/soul_sand/jump2"
+   ]
+  },
+  "use.soul_sand": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/soul_sand/use1",
+    "sounds/atta/soul_sand/use2"
+   ]
+  },
+  "dig.mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/dig1",
+    "sounds/atta/mud/dig2",
+    "sounds/atta/mud/dig3",
+    "sounds/atta/mud/dig4",
+    "sounds/atta/mud/break1",
+    "sounds/atta/mud/break2",
+    "sounds/atta/mud/break3",
+    "sounds/atta/mud/break4"
+   ]
+  },
+  "step.mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/step1",
+    "sounds/atta/mud/step2",
+    "sounds/atta/mud/step3",
+    "sounds/atta/mud/step4",
+    "sounds/atta/mud/step5",
+    "sounds/atta/mud/step6"
+   ]
+  },
+  "hit.mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/hit1",
+    "sounds/atta/mud/hit2",
+    "sounds/atta/mud/hit3"
+   ]
+  },
+  "place.mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/place1",
+    "sounds/atta/mud/place2",
+    "sounds/atta/mud/place3",
+    "sounds/atta/mud/place4"
+   ]
+  },
+  "fall.mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/fall1",
+    "sounds/atta/mud/fall2"
+   ]
+  },
+  "land.mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/land1",
+    "sounds/atta/mud/land2"
+   ]
+  },
+  "jump.mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/jump1",
+    "sounds/atta/mud/jump2"
+   ]
+  },
+  "use.mud": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/use1",
+    "sounds/atta/mud/use2"
+   ]
+  },
+  "dig.wood": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/wood/dig1",
+    "sounds/atta/wood/dig2",
+    "sounds/atta/wood/dig3",
+    "sounds/atta/wood/dig4"
+   ]
+  },
+  "step.wood": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/wood/step1",
+    "sounds/atta/wood/step2",
+    "sounds/atta/wood/step3",
+    "sounds/atta/wood/step4",
+    "sounds/atta/wood/step5",
+    "sounds/atta/wood/step6"
+   ]
+  },
+  "hit.wood": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/wood/hit1",
+    "sounds/atta/wood/hit2",
+    "sounds/atta/wood/hit3"
+   ]
+  },
+  "place.wood": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/wood/place1",
+    "sounds/atta/wood/place2",
+    "sounds/atta/wood/place3",
+    "sounds/atta/wood/place4"
+   ]
+  },
+  "fall.wood": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/wood/fall1",
+    "sounds/atta/wood/fall2"
+   ]
+  },
+  "land.wood": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/wood/land1",
+    "sounds/atta/wood/land2"
+   ]
+  },
+  "jump.wood": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/wood/jump1",
+    "sounds/atta/wood/jump2"
+   ]
+  },
+  "use.wood": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/wood/use1",
+    "sounds/atta/wood/use2"
+   ]
+  },
+  "step.bamboo_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/step1",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/step2",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/step3",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/step4",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/step5",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/step6",
+     "pitch": 1.25,
+     "volume": 0.95
+    }
+   ]
+  },
+  "hit.bamboo_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/hit1",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/hit2",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/hit3",
+     "pitch": 1.25,
+     "volume": 0.95
+    }
+   ]
+  },
+  "place.bamboo_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/place1",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/place2",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/place3",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/place4",
+     "pitch": 1.25,
+     "volume": 0.95
+    }
+   ]
+  },
+  "fall.bamboo_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/fall1",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/fall2",
+     "pitch": 1.25,
+     "volume": 0.95
+    }
+   ]
+  },
+  "land.bamboo_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/land1",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/land2",
+     "pitch": 1.25,
+     "volume": 0.95
+    }
+   ]
+  },
+  "jump.bamboo_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/jump1",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/jump2",
+     "pitch": 1.25,
+     "volume": 0.95
+    }
+   ]
+  },
+  "use.bamboo_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/use1",
+     "pitch": 1.25,
+     "volume": 0.95
+    },
+    {
+     "name": "sounds/atta/wood/use2",
+     "pitch": 1.25,
+     "volume": 0.95
+    }
+   ]
+  },
+  "step.cherry_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/step1",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/step2",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/step3",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/step4",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/step5",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/step6",
+     "pitch": 1.12,
+     "volume": 0.9
+    }
+   ]
+  },
+  "hit.cherry_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/hit1",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/hit2",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/hit3",
+     "pitch": 1.12,
+     "volume": 0.9
+    }
+   ]
+  },
+  "place.cherry_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/place1",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/place2",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/place3",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/place4",
+     "pitch": 1.12,
+     "volume": 0.9
+    }
+   ]
+  },
+  "fall.cherry_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/fall1",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/fall2",
+     "pitch": 1.12,
+     "volume": 0.9
+    }
+   ]
+  },
+  "land.cherry_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/land1",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/land2",
+     "pitch": 1.12,
+     "volume": 0.9
+    }
+   ]
+  },
+  "jump.cherry_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/jump1",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/jump2",
+     "pitch": 1.12,
+     "volume": 0.9
+    }
+   ]
+  },
+  "use.cherry_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/use1",
+     "pitch": 1.12,
+     "volume": 0.9
+    },
+    {
+     "name": "sounds/atta/wood/use2",
+     "pitch": 1.12,
+     "volume": 0.9
+    }
+   ]
+  },
+  "step.nether_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/step1",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/step2",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/step3",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/step4",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/step5",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/step6",
+     "pitch": 0.9,
+     "volume": 1.0
+    }
+   ]
+  },
+  "hit.nether_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/hit1",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/hit2",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/hit3",
+     "pitch": 0.9,
+     "volume": 1.0
+    }
+   ]
+  },
+  "place.nether_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/place1",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/place2",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/place3",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/place4",
+     "pitch": 0.9,
+     "volume": 1.0
+    }
+   ]
+  },
+  "fall.nether_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/fall1",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/fall2",
+     "pitch": 0.9,
+     "volume": 1.0
+    }
+   ]
+  },
+  "land.nether_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/land1",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/land2",
+     "pitch": 0.9,
+     "volume": 1.0
+    }
+   ]
+  },
+  "jump.nether_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/jump1",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/jump2",
+     "pitch": 0.9,
+     "volume": 1.0
+    }
+   ]
+  },
+  "use.nether_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/use1",
+     "pitch": 0.9,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/use2",
+     "pitch": 0.9,
+     "volume": 1.0
+    }
+   ]
+  },
+  "dig.nether_wood": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/dig1",
+     "pitch": 0.92,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/dig2",
+     "pitch": 0.92,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/dig3",
+     "pitch": 0.92,
+     "volume": 1.0
+    },
+    {
+     "name": "sounds/atta/wood/dig4",
+     "pitch": 0.92,
+     "volume": 1.0
+    }
+   ]
+  },
+  "dig.stem": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/dig1",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/dig2",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/dig3",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/dig4",
+     "pitch": 1.05,
+     "volume": 0.85
+    }
+   ]
+  },
+  "step.stem": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/step1",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/step2",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/step3",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/step4",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/step5",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/step6",
+     "pitch": 1.05,
+     "volume": 0.85
+    }
+   ]
+  },
+  "hit.stem": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/hit1",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/hit2",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/hit3",
+     "pitch": 1.05,
+     "volume": 0.85
+    }
+   ]
+  },
+  "place.stem": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/place1",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/place2",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/place3",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/place4",
+     "pitch": 1.05,
+     "volume": 0.85
+    }
+   ]
+  },
+  "fall.stem": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/fall1",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/fall2",
+     "pitch": 1.05,
+     "volume": 0.85
+    }
+   ]
+  },
+  "land.stem": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/land1",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/land2",
+     "pitch": 1.05,
+     "volume": 0.85
+    }
+   ]
+  },
+  "jump.stem": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/jump1",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/jump2",
+     "pitch": 1.05,
+     "volume": 0.85
+    }
+   ]
+  },
+  "use.stem": {
+   "category": "block",
+   "sounds": [
+    {
+     "name": "sounds/atta/wood/use1",
+     "pitch": 1.05,
+     "volume": 0.85
+    },
+    {
+     "name": "sounds/atta/wood/use2",
+     "pitch": 1.05,
+     "volume": 0.85
+    }
+   ]
+  },
+  "block.mud.break": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/dig1",
+    "sounds/atta/mud/dig2",
+    "sounds/atta/mud/dig3",
+    "sounds/atta/mud/dig4",
+    "sounds/atta/mud/break1",
+    "sounds/atta/mud/break2",
+    "sounds/atta/mud/break3",
+    "sounds/atta/mud/break4"
+   ]
+  },
+  "block.mud.hit": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/hit1",
+    "sounds/atta/mud/hit2",
+    "sounds/atta/mud/hit3"
+   ]
+  },
+  "block.mud.step": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/step1",
+    "sounds/atta/mud/step2",
+    "sounds/atta/mud/step3",
+    "sounds/atta/mud/step4",
+    "sounds/atta/mud/step5",
+    "sounds/atta/mud/step6"
+   ]
+  },
+  "block.mud.place": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/place1",
+    "sounds/atta/mud/place2",
+    "sounds/atta/mud/place3",
+    "sounds/atta/mud/place4"
+   ]
+  },
+  "block.mud.fall": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud/fall1",
+    "sounds/atta/mud/fall2"
+   ]
+  },
+  "block.packed_mud.break": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/dig1",
+    "sounds/atta/packed_mud/dig2",
+    "sounds/atta/packed_mud/dig3",
+    "sounds/atta/packed_mud/dig4"
+   ]
+  },
+  "block.packed_mud.hit": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/hit1",
+    "sounds/atta/packed_mud/hit2",
+    "sounds/atta/packed_mud/hit3"
+   ]
+  },
+  "block.packed_mud.step": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/step1",
+    "sounds/atta/packed_mud/step2",
+    "sounds/atta/packed_mud/step3",
+    "sounds/atta/packed_mud/step4",
+    "sounds/atta/packed_mud/step5",
+    "sounds/atta/packed_mud/step6"
+   ]
+  },
+  "block.packed_mud.place": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/place1",
+    "sounds/atta/packed_mud/place2",
+    "sounds/atta/packed_mud/place3",
+    "sounds/atta/packed_mud/place4"
+   ]
+  },
+  "block.packed_mud.fall": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/packed_mud/fall1",
+    "sounds/atta/packed_mud/fall2"
+   ]
+  },
+  "block.mud_bricks.break": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/dig1",
+    "sounds/atta/mud_bricks/dig2",
+    "sounds/atta/mud_bricks/dig3",
+    "sounds/atta/mud_bricks/dig4"
+   ]
+  },
+  "block.mud_bricks.hit": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/hit1",
+    "sounds/atta/mud_bricks/hit2",
+    "sounds/atta/mud_bricks/hit3"
+   ]
+  },
+  "block.mud_bricks.step": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/step1",
+    "sounds/atta/mud_bricks/step2",
+    "sounds/atta/mud_bricks/step3",
+    "sounds/atta/mud_bricks/step4",
+    "sounds/atta/mud_bricks/step5",
+    "sounds/atta/mud_bricks/step6"
+   ]
+  },
+  "block.mud_bricks.place": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/place1",
+    "sounds/atta/mud_bricks/place2",
+    "sounds/atta/mud_bricks/place3",
+    "sounds/atta/mud_bricks/place4"
+   ]
+  },
+  "block.mud_bricks.fall": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/mud_bricks/fall1",
+    "sounds/atta/mud_bricks/fall2"
+   ]
+  },
+  "block.muddy_mangrove_roots.break": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/muddy_mangrove_roots/dig1",
+    "sounds/atta/muddy_mangrove_roots/dig2",
+    "sounds/atta/muddy_mangrove_roots/dig3",
+    "sounds/atta/muddy_mangrove_roots/dig4"
+   ]
+  },
+  "block.muddy_mangrove_roots.hit": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/muddy_mangrove_roots/hit1",
+    "sounds/atta/muddy_mangrove_roots/hit2",
+    "sounds/atta/muddy_mangrove_roots/hit3"
+   ]
+  },
+  "block.muddy_mangrove_roots.step": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/muddy_mangrove_roots/step1",
+    "sounds/atta/muddy_mangrove_roots/step2",
+    "sounds/atta/muddy_mangrove_roots/step3",
+    "sounds/atta/muddy_mangrove_roots/step4",
+    "sounds/atta/muddy_mangrove_roots/step5",
+    "sounds/atta/muddy_mangrove_roots/step6"
+   ]
+  },
+  "block.muddy_mangrove_roots.place": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/muddy_mangrove_roots/place1",
+    "sounds/atta/muddy_mangrove_roots/place2",
+    "sounds/atta/muddy_mangrove_roots/place3",
+    "sounds/atta/muddy_mangrove_roots/place4"
+   ]
+  },
+  "block.muddy_mangrove_roots.fall": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/muddy_mangrove_roots/fall1",
+    "sounds/atta/muddy_mangrove_roots/fall2"
+   ]
+  },
+  "dig.azalea_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/azalea_leaves/dig1",
+    "sounds/atta/azalea_leaves/dig2",
+    "sounds/atta/azalea_leaves/dig3",
+    "sounds/atta/azalea_leaves/dig4",
+    "sounds/atta/azalea_leaves/break1",
+    "sounds/atta/azalea_leaves/break2",
+    "sounds/atta/azalea_leaves/break3",
+    "sounds/atta/azalea_leaves/break4"
+   ]
+  },
+  "step.azalea_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/azalea_leaves/step1",
+    "sounds/atta/azalea_leaves/step2",
+    "sounds/atta/azalea_leaves/step3",
+    "sounds/atta/azalea_leaves/step4",
+    "sounds/atta/azalea_leaves/step5",
+    "sounds/atta/azalea_leaves/step6"
+   ]
+  },
+  "hit.azalea_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/azalea_leaves/hit1",
+    "sounds/atta/azalea_leaves/hit2",
+    "sounds/atta/azalea_leaves/hit3"
+   ]
+  },
+  "place.azalea_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/azalea_leaves/place1",
+    "sounds/atta/azalea_leaves/place2",
+    "sounds/atta/azalea_leaves/place3",
+    "sounds/atta/azalea_leaves/place4"
+   ]
+  },
+  "fall.azalea_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/azalea_leaves/fall1",
+    "sounds/atta/azalea_leaves/fall2"
+   ]
+  },
+  "land.azalea_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/azalea_leaves/land1",
+    "sounds/atta/azalea_leaves/land2"
+   ]
+  },
+  "dig.cherry_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/cherry_leaves/dig1",
+    "sounds/atta/cherry_leaves/dig2",
+    "sounds/atta/cherry_leaves/dig3",
+    "sounds/atta/cherry_leaves/dig4",
+    "sounds/atta/cherry_leaves/break1",
+    "sounds/atta/cherry_leaves/break2",
+    "sounds/atta/cherry_leaves/break3",
+    "sounds/atta/cherry_leaves/break4"
+   ]
+  },
+  "step.cherry_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/cherry_leaves/step1",
+    "sounds/atta/cherry_leaves/step2",
+    "sounds/atta/cherry_leaves/step3",
+    "sounds/atta/cherry_leaves/step4",
+    "sounds/atta/cherry_leaves/step5",
+    "sounds/atta/cherry_leaves/step6"
+   ]
+  },
+  "hit.cherry_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/cherry_leaves/hit1",
+    "sounds/atta/cherry_leaves/hit2",
+    "sounds/atta/cherry_leaves/hit3"
+   ]
+  },
+  "place.cherry_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/cherry_leaves/place1",
+    "sounds/atta/cherry_leaves/place2",
+    "sounds/atta/cherry_leaves/place3",
+    "sounds/atta/cherry_leaves/place4"
+   ]
+  },
+  "fall.cherry_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/cherry_leaves/fall1",
+    "sounds/atta/cherry_leaves/fall2"
+   ]
+  },
+  "land.cherry_leaves": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/cherry_leaves/land1",
+    "sounds/atta/cherry_leaves/land2"
+   ]
+  },
+  "random.glass": {
+   "category": "block",
+   "sounds": [
+    "sounds/atta/glass/glass1",
+    "sounds/atta/glass/glass2",
+    "sounds/atta/glass/glass3",
+    "sounds/atta/glass/glass4"
+   ]
+  }
+ }
+}

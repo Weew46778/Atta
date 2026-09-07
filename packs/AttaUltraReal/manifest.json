@@ -1,0 +1,33 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "\u00a76Atta UltraReal \u00a77\u2014 \u00a7b512x Real Photos",
+    "description": "\u00a7l512x\u00a7r real-photo PBR textures + heightmaps, true material sounds. Vibrant Visuals required. Apply ABOVE the shader pack.",
+    "uuid": "9c1f7291-b635-4276-92df-a3f6d78786ba",
+    "version": [
+      2,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      120
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "description": "Atta UltraReal 512x resources",
+      "uuid": "9b549cb0-d276-43e3-8e12-466afa92cf6b",
+      "version": [
+        2,
+        0,
+        0
+      ]
+    }
+  ],
+  "capabilities": [
+    "pbr"
+  ]
+}
