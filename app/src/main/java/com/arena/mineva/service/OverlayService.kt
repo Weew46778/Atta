@@ -28,6 +28,7 @@ import androidx.core.app.NotificationCompat
 import com.arena.mineva.AppPrefs
 import com.arena.mineva.MainActivity
 import com.arena.mineva.Ui
+import com.arena.mineva.assistant.BedrockGameDetector
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.BedrockCommandBuilder
 import com.arena.mineva.server.InWorldAvaBuilder
@@ -169,9 +170,9 @@ class OverlayService : Service() {
             gravity = Gravity.START or Gravity.TOP
             x = 0
             y = 0
-            translationX = -Ui.dp(this@OverlayService, 340f).toFloat()
         }
         windowManager.addView(panelRoot, panelParams)
+        panelRoot.translationX = -Ui.dp(this@OverlayService, 340f).toFloat()
         panelRoot.alpha = 0f
 
         tabsColumn = LinearLayout(this).apply {

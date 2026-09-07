@@ -17,7 +17,7 @@ import java.io.File
  * relying entirely on the device TTS engine. The retail audio itself is not committed into
  * this repository because of licensing/size, but the full import + playback path is live.
  */
-class VoicePack(context: Context) {
+class VoicePack(private val context: Context) {
 
     private val filesDir: File = context.filesDir
 
@@ -36,7 +36,7 @@ class VoicePack(context: Context) {
 
     fun voiceName(): String {
         loadOnce()
-        return manifest?.optString("voice", "صدای داخل اپ").ifBlank { "صدای داخل اپ" }
+        return (manifest?.optString("voice", "صدای داخل اپ") ?: "").ifBlank { "صدای داخل اپ" }
     }
 
     fun phraseCount(): Int {

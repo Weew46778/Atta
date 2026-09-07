@@ -123,7 +123,7 @@ class PackageManagerActivity : AppCompatActivity() {
         )
         names.forEach { (key, label) ->
             val btn = Ui.button(this, label, if (category == key) 0xFF2E9BFF.toInt() else 0xFF1C2836.toInt(), 42f).apply {
-                layoutParams = LinearLayout.LayoutParams(0, Ui.dp(this@PackageManagerActivity, 42), 1f)
+                layoutParams = LinearLayout.LayoutParams(0, Ui.dp(this@PackageManagerActivity, 42f), 1f)
                 setPadding(Ui.dp(this@PackageManagerActivity, 4f), 0, Ui.dp(this@PackageManagerActivity, 4f), 0)
             }
             btn.setOnClickListener {
@@ -143,7 +143,7 @@ class PackageManagerActivity : AppCompatActivity() {
                 this@PackageManagerActivity,
                 serverVersion = version,
                 limit = 20,
-                onProgress = { s -> withContext(Dispatchers.Main) { appendProgress(s) } }
+                onProgress = { s -> runOnUiThread { appendProgress(s) } }
             )
             withContext(Dispatchers.Main) {
                 catalog.reload()
@@ -201,13 +201,13 @@ class PackageManagerActivity : AppCompatActivity() {
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         }
         val install = Ui.button(this, if (installed) "حذف" else "نصب", if (installed) 0xFFFF5A5A.toInt() else 0xFF35D07F.toInt(), 42f).apply {
-            layoutParams = LinearLayout.LayoutParams(0, Ui.dp(this@PackageManagerActivity, 42), 1f)
+            layoutParams = LinearLayout.LayoutParams(0, Ui.dp(this@PackageManagerActivity, 42f), 1f)
         }
         install.setOnClickListener {
             if (installed) removeOne(item) else installOne(item)
         }
         val check = Ui.button(this, "🔍 چک لینک", 0xFF2E9BFF.toInt(), 42f).apply {
-            layoutParams = LinearLayout.LayoutParams(0, Ui.dp(this@PackageManagerActivity, 42), 1f)
+            layoutParams = LinearLayout.LayoutParams(0, Ui.dp(this@PackageManagerActivity, 42f), 1f)
             setPadding(Ui.dp(this@PackageManagerActivity, 6f), 0, Ui.dp(this@PackageManagerActivity, 6f), 0)
         }
         check.setOnClickListener { checkLink(item) }
@@ -251,7 +251,7 @@ class PackageManagerActivity : AppCompatActivity() {
                 item = item,
                 sshPassword = pw,
                 keyPassphrase = keyPass,
-                onProgress = { s -> withContext(Dispatchers.Main) { appendProgress(s) } }
+                onProgress = { s -> runOnUiThread { appendProgress(s) } }
             )
             withContext(Dispatchers.Main) {
                 if (result.success) {
@@ -279,7 +279,7 @@ class PackageManagerActivity : AppCompatActivity() {
                 item = item,
                 sshPassword = pw,
                 keyPassphrase = keyPass,
-                onProgress = { s -> withContext(Dispatchers.Main) { appendProgress(s) } }
+                onProgress = { s -> runOnUiThread { appendProgress(s) } }
             )
             withContext(Dispatchers.Main) {
                 if (result.success) {

@@ -54,6 +54,7 @@ class PackageDeployer {
                 onProgress("دانلود ${item.name}: $read/$total")
             }
 
+            val folder = remoteFolder(item.category)
             if (config.target == ServerTarget.VPS) {
                 onProgress("اتصال به سرور: ${config.host}")
                 val ssh = SshClient()
@@ -65,7 +66,6 @@ class PackageDeployer {
                     keyPassphrase = keyPassphrase.ifBlank { null },
                     port = config.sshPort
                 )
-                val folder = remoteFolder(item.category)
                 val remoteDir = "~/minecraft-server/$folder"
                 val remotePath = "$remoteDir/$fileName"
                 ssh.exec(session, "mkdir -p $remoteDir")

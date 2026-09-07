@@ -150,7 +150,7 @@ class EncyclopediaActivity : AppCompatActivity() {
                 context = this@EncyclopediaActivity,
                 limit = 5,
                 onProgress = { step ->
-                    withContext(Dispatchers.Main) {
+                    runOnUiThread {
                         list.addView(Ui.text(this@EncyclopediaActivity, "• $step", 12f, 0xFFD8E3EC.toInt()))
                     }
                 }

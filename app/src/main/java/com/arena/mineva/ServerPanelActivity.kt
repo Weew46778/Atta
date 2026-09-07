@@ -169,7 +169,7 @@ class ServerPanelActivity : AppCompatActivity() {
         Ui.text(this, text, 17f, 0xFFF1F5F9.toInt(), bold = true)
 
     private fun weightParams() =
-        LinearLayout.LayoutParams(0, Ui.dp(this, 44), 1f)
+        LinearLayout.LayoutParams(0, Ui.dp(this, 44f), 1f)
 
     private fun field(hint: String) = EditText(this).apply {
         layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

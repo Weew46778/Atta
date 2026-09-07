@@ -60,6 +60,16 @@ object Ui {
         if (click != null) setOnClickListener { click() }
     }
 
+    // Convenience overload used by the app's compact buttons:
+    // button(context, content, bgColor, heightDp) / button(context, content, bgColor, heightDp, onClick)
+    fun button(
+        context: Context,
+        content: String,
+        bgColor: Int,
+        heightDp: Float,
+        onClick: (() -> Unit)? = null
+    ): TextView = button(context, content, bgColor, Color.WHITE, heightDp, onClick)
+
     fun card(context: Context): LinearLayout = LinearLayout(context).apply {
         orientation = LinearLayout.VERTICAL
         val pad = dp(context, 14f)

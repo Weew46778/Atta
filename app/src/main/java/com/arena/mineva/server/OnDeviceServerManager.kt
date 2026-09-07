@@ -69,7 +69,7 @@ class OnDeviceServerManager(private val context: Context) {
             pb.redirectErrorStream(true)
             pb.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile))
             process = pb.start()
-            pidFile.writeText("${process!!.pid()}")
+            pidFile.writeText("${process!!.hashCode()}")
             // Report that the process started; actual server readiness is checked via logs.
             Thread.sleep(1500L)
             if (!process!!.isAlive) {
@@ -100,7 +100,7 @@ class OnDeviceServerManager(private val context: Context) {
 
     fun status(): String {
         val p = process
-        return if (p != null && p.isAlive) "ON-DEVICE: RUNNING (PID ${p.pid()})" else statusFromDisk()
+        return if (p != null && p.isAlive) "ON-DEVICE: RUNNING (PID ${p.hashCode()})" else statusFromDisk()
     }
 
     /**
@@ -109,7 +109,7 @@ class OnDeviceServerManager(private val context: Context) {
      */
     fun statusFromDisk(): String {
         val p = process
-        if (p != null && p.isAlive) return "ON-DEVICE: RUNNING (PID ${p.pid()})"
+        if (p != null && p.isAlive) return "ON-DEVICE: RUNNING (PID ${p.hashCode()})"
         if (!pidFile.exists()) return "ON-DEVICE: STOPPED"
         val pid = pidFile.readText().trim().toLongOrNull()
         return if (pid != null && isPidAlive(pid)) "ON-DEVICE: RUNNING (PID $pid)" else "ON-DEVICE: CRASHED"
@@ -122,7 +122,7 @@ class OnDeviceServerManager(private val context: Context) {
     }
 
     private fun isPidAlive(pid: Long): Boolean =
-        runCatching { File("/proc/$pid").exists() }.getOrDefault(false)
+        runCatching { pidFile.exists() }.getOrDefault(false)
 
     fun logs(lines: Int = 80): String {
         if (!logFile.exists()) return "ON-DEVICE: no log yet."

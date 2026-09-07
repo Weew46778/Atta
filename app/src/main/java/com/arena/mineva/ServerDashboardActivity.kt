@@ -104,7 +104,7 @@ class ServerDashboardActivity : AppCompatActivity() {
             )
 
             val row = Ui.horizontal(this)
-            val weight = LinearLayout.LayoutParams(0, Ui.dp(this, 42), 1f)
+            val weight = LinearLayout.LayoutParams(0, Ui.dp(this, 42f), 1f)
             row.addView(Ui.button(this, "⭐ فعال", if (profile.id == activeId) 0xFF35D07F.toInt() else 0xFF1F8F8F.toInt(), 42f) {
                 ServerProfileStore.setActive(profile.id)
                 tts.speak("پروفایل «${profile.name}» فعال شد.")

@@ -366,9 +366,7 @@ class ServerWizardActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             val outcome = VpsProvisioner().provision(this@ServerWizardActivity, config) { stage ->
-                withContext(Dispatchers.Main) {
-                    appendProgress("• $stage")
-                }
+                runOnUiThread { appendProgress("• $stage") }
             }
             withContext(Dispatchers.Main) {
                 showDeployResult(outcome)

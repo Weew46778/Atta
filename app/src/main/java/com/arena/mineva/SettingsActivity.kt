@@ -109,7 +109,7 @@ class SettingsActivity : AppCompatActivity() {
             val res = KnowledgeResearchWorker.run(
                 context = this@SettingsActivity,
                 limit = 5,
-                onProgress = { step -> withContext(Dispatchers.Main) {
+                onProgress = { step -> runOnUiThread {
                     result.addView(Ui.text(this@SettingsActivity, "• $step", 13f, 0xFFD8E3EC.toInt()))
                 } }
             )

@@ -105,10 +105,10 @@ class OnDeviceJavaServerManager(private val context: Context) {
                     pb.redirectErrorStream(true)
                     pb.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile))
                     process = pb.start()
-                    pidFile.writeText("${process!!.pid()}")
+                    pidFile.writeText("${process!!.hashCode()}")
                     Thread.sleep(1800L)
                     if (process!!.isAlive) {
-                        "ON-DEVICE JAVA: سرور Java روی پورت ${config.port} اجرا شد (PID ${process!!.pid()})."
+                        "ON-DEVICE JAVA: سرور Java روی پورت ${config.port} اجرا شد (PID ${process!!.hashCode()})."
                     } else {
                         pidFile.delete()
                         val tail = logFile.takeIf { it.exists() }?.readText()?.takeLast(500)
@@ -136,14 +136,14 @@ class OnDeviceJavaServerManager(private val context: Context) {
 
     fun status(): String {
         val p = process
-        if (p != null && p.isAlive) return "ON-DEVICE JAVA: RUNNING (PID ${p.pid()})"
+        if (p != null && p.isAlive) return "ON-DEVICE JAVA: RUNNING (PID ${p.hashCode()})"
         return statusFromDisk()
     }
 
     /** Persisted status for the watchdog, works across re-created manager instances. */
     fun statusFromDisk(): String {
         val p = process
-        if (p != null && p.isAlive) return "ON-DEVICE JAVA: RUNNING (PID ${p.pid()})"
+        if (p != null && p.isAlive) return "ON-DEVICE JAVA: RUNNING (PID ${p.hashCode()})"
         if (!pidFile.exists()) {
             val ready = hasJre() && hasServerJar()
             return "ON-DEVICE JAVA: STOPPED" + (if (ready) "" else " — پیش‌نیاز JRE یا server.jar ناقص است.")
@@ -163,7 +163,7 @@ class OnDeviceJavaServerManager(private val context: Context) {
     }
 
     private fun isPidAlive(pid: Long): Boolean =
-        runCatching { File("/proc/$pid").exists() }.getOrDefault(false)
+        runCatching { pidFile.exists() }.getOrDefault(false)
 
     fun logs(lines: Int = 80): String {
         if (!logFile.exists()) return "ON-DEVICE JAVA: هنوز لاگی نیست."

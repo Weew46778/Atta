@@ -116,7 +116,7 @@ class CloudLogActivity : AppCompatActivity() {
         options.addView(
             Ui.button(this, "🔄 به‌روزرسانی", 0xFF35D07F.toInt(), 44f) {
                 if (config.target == ServerTarget.VPS) readVps(currentTailCommand(), refresh = true)
-                else readLocal(refresh = true)
+                else readLocal(lineCount().toString(), refresh = true)
             }, weightParams()
         )
         options.addView(
@@ -164,7 +164,7 @@ class CloudLogActivity : AppCompatActivity() {
         if (config.target == ServerTarget.VPS) {
             readVps(currentTailCommand(), refresh = false)
         } else {
-            readLocal(refresh = false)
+            readLocal(lineCount().toString(), refresh = false)
         }
     }
 
@@ -172,7 +172,7 @@ class CloudLogActivity : AppCompatActivity() {
         if (config.target == ServerTarget.VPS) {
             "journalctl -u MineAva-server -n ${lineCount()} --no-pager 2>/dev/null || tail -n ${lineCount()} ~/minecraft-server/server.log 2>/dev/null || tmux capture-pane -t MineAvaServer -p | tail -n ${lineCount()}"
         } else {
-            lineCount()
+            lineCount().toString()
         }
 
     private fun readVps(command: String, refresh: Boolean = false) {
@@ -256,7 +256,7 @@ class CloudLogActivity : AppCompatActivity() {
 
     private fun renderResult(raw: String, label: String, refresh: Boolean) {
         val filtered = applyFilter(raw)
-        withContext(Dispatchers.Main) {
+        runOnUiThread {
             lastRaw = filtered
             // On manual refresh replace; on auto-refresh append but keep a bounded view.
             if (!refresh || output.childCount == 0 || output.childCount > 24) output.removeAllViews()
@@ -297,7 +297,7 @@ class CloudLogActivity : AppCompatActivity() {
         Ui.text(this, text, 17f, 0xFFF1F5F9.toInt(), bold = true)
 
     private fun weightParams() =
-        LinearLayout.LayoutParams(0, Ui.dp(this, 44), 1f)
+        LinearLayout.LayoutParams(0, Ui.dp(this, 44f), 1f)
 
     private fun field(hint: String) = EditText(this).apply {
         layoutParams = LinearLayout.LayoutParams(

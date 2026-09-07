@@ -80,7 +80,7 @@ class VoiceSettingsActivity : AppCompatActivity() {
                 val url = voiceUrlField.text.toString()
                 if (url.isBlank()) {
                     ttsMessage("اول لینک مستقیم ZIP را وارد کن.")
-                    return@Ui.button
+                    return@button
                 }
                 lifecycleScope.launch(Dispatchers.IO) {
                     val r = VoicePackDownloader.download(this@VoiceSettingsActivity, url)

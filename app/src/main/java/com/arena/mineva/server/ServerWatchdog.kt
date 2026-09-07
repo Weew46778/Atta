@@ -97,7 +97,7 @@ class ServerWatchdog(private val context: Context) {
             if (down && autoRestart) {
                 val r = vpsRunSudo(
                     config,
-                    "systemctl restart MineAva-server; cd \\$HOME/minecraft-server && tmux new-session -d -s MineAvaServer ./run.sh",
+                    "systemctl restart MineAva-server; cd ~/minecraft-server && tmux new-session -d -s MineAvaServer ./run.sh",
                     password,
                     keyPass
                 )

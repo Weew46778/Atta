@@ -70,7 +70,7 @@ class VoiceTopicPickerActivity : AppCompatActivity() {
         root.addView(detailInput)
         root.addView(Ui.button(this, "💾 ذخیره موضوع", 0xFF35D07F.toInt(), 46f) {
             val title = titleInput.text.toString().trim()
-            if (title.isBlank()) { tts.speak("عنوان را بنویس."); return@Ui.button }
+            if (title.isBlank()) { tts.speak("عنوان را بنویس."); return@button }
             val detail = detailInput.text.toString().trim()
             UserTopicStore.add(title, "دایرةالمعارف کاربر", detail)
             titleInput.setText(""); detailInput.setText("")
@@ -80,7 +80,7 @@ class VoiceTopicPickerActivity : AppCompatActivity() {
         root.addView(Ui.button(this, "🎤 گوش دادن به موضوع جدید", 0xFF2E9BFF.toInt(), 48f) {
             if (UserTopicStore.remainingCapacity() <= 0) {
                 tts.speak("هر پنج موضوع را داری. برای تغییر یکی را با لمس حذف کن.")
-                return@Ui.button
+                return@button
             }
             listen("new")
         })

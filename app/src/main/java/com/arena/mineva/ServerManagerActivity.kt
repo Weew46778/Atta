@@ -245,7 +245,7 @@ class ServerManagerActivity : AppCompatActivity() {
                     val cmd = consoleInput.text.toString().trim()
                     if (cmd.isBlank()) {
                         tts.speak("فرمانی برای ارسال ننوشته‌ای.")
-                        return@Ui.button
+                        return@button
                     }
                     val quoted = shQuote(cmd)
                     vpsCommand(current, "tmux send-keys -t MineAvaServer $quoted Enter", consoleOutput, "ارسال", clear = true)

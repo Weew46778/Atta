@@ -93,7 +93,7 @@ class TextToSpeechManager(private val context: Context) {
 
     fun availableVoices(): List<Voice> {
         val engine = tts ?: return emptyList()
-        return runCatching { engine.voices?.toList() }.getOrDefault(emptyList())
+        return runCatching { engine.voices.orEmpty().toList() }.getOrDefault(emptyList())
     }
 
     fun persianVoices(): List<Voice> =
