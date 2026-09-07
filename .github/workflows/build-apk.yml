@@ -52,21 +52,20 @@ jobs:
         run: |
           python3 - <<'PY'
           import os, json, urllib.request
+          import re
           try:
-              lines = open('/tmp/build.log').read().split('\n')
+              log = open('/tmp/build.log').read()
           except Exception:
-              lines = ["no build log"]
-          sel = []
-          for i, l in enumerate(lines):
-              if ('What went wrong' in l or l.startswith('> Task :') or 'FAILURE:' in l
-                      or 'Caused by:' in l or 'BUILD FAILED' in l or 'Could not' in l
-                      or 'error:' in l.lower() or 'e: ' in l or 'Unresolved' in l
-                      or 'Execution failed' in l or 'CausedBy' in l):
-                  sel.append(l)
-                  sel.extend(lines[i+1:i+5])
-                  sel.append('...')
-          log = '\n'.join(sel[:120]) if sel else '\n'.join(lines[-40:])
-          body = "### ⚠️ PixelCraft APK build failed\n```\n" + log + "\n```"
+              log = "no build log"
+          # the failing task(s) and the "What went wrong" block hold the root cause
+          failed = re.findall(r'> Task :[^\s]+ FAILED', log)
+          block = ("Failed task(s):\n" + "\n".join(failed) + "\n\n") if failed else ""
+          i = log.find('What went wrong')
+          if i >= 0:
+              block += log[i:i + 1300]
+          else:
+              block += log[-1500:]
+          body = "### ⚠️ PixelCraft APK build failed\n```\n" + block + "\n```"
           pr = os.environ.get('PR_NUMBER')
           if not pr:
               print("no PR_NUMBER; skipping comment")
