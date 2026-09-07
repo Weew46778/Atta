@@ -41,9 +41,8 @@ class VoiceTopicPickerActivity : AppCompatActivity() {
             tts.speak("خوب. پنج موضوع غیر ماینکرافتی را بگو که دوست داری یاد بگیرم. یکی یکی بگو.")
         }
 
-        val scroll = ScrollView(this)
         val root = Ui.fill(this)
-        scroll.addView(root)
+        val scroll = Ui.scrollable(this, root)
         setContentView(scroll)
 
         root.addView(Ui.text(this, "🎙 انتخاب ۵ موضوع دایرةالمعارف", 21f, 0xFF35D07F.toInt(), bold = true))

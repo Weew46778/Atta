@@ -3,6 +3,7 @@ package com.arena.mineva
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ class DeviceHealthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val root = Ui.fill(this)
+        val scroll = Ui.scrollable(this, root)
         root.addView(Ui.text(this, "💾 سلامت دستگاه", 22f, 0xFFC97C22.toInt(), bold = true))
         body = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.VERTICAL }
         root.addView(body)
@@ -25,7 +27,7 @@ class DeviceHealthActivity : AppCompatActivity() {
         status = Ui.button(this, "🔄 بهروزرسانی", 0xFF2E9BFF.toInt(), 46f)
         status.setOnClickListener { refresh() }
         root.addView(status)
-        setContentView(root)
+        setContentView(scroll)
         refresh()
     }
 

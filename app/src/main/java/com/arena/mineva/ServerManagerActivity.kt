@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
@@ -40,6 +41,7 @@ class ServerManagerActivity : AppCompatActivity() {
         tts.init { tts.speak("مدیریت سرور. وضعیت فعلی را نشان میدهم.") }
 
         val root = Ui.fill(this)
+        val scroll = Ui.scrollable(this, root)
         root.addView(Ui.text(this, "⚙️ مدیریت سرور", 22f, 0xFF2E70B8.toInt(), bold = true))
 
         val current = ServerProfileStore.activeConfig()
@@ -276,7 +278,7 @@ class ServerManagerActivity : AppCompatActivity() {
             root.addView(Ui.text(this, "🔹 اگر سرور قبلاً بدون tmux نصب شده، دوباره از ویزارد ساخت سرور استفاده کن تا اسکریپت‌های tmux و سرویس به‌روز شوند.", 11f, 0xFFC97C22.toInt()))
         }
 
-        setContentView(root)
+        setContentView(scroll)
     }
 
     private fun vpsCommand(

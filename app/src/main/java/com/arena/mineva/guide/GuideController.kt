@@ -181,9 +181,8 @@ class GuideActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         tts = TextToSpeechManager(this)
         tts.init { tts.speak(GuideController.current().speech) }
-        val scroll = ScrollView(this)
         val root = Ui.fill(this)
-        scroll.addView(root)
+        val scroll = Ui.scrollable(this, root)
         setContentView(scroll)
         box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         root.addView(box)

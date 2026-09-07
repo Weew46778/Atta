@@ -39,9 +39,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildHome(): View {
-        val scroll = ScrollView(this)
         val root = Ui.fill(this)
-        scroll.addView(root)
+        val scroll = Ui.scrollable(this, root)
 
         root.addView(title("MineAva", 28f))
         root.addView(Ui.text(

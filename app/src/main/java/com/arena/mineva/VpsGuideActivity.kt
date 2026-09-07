@@ -45,9 +45,8 @@ class VpsGuideActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         tts.init { tts.speak("راهنمای راه‌اندازی سرور مجازی شروع شد.") }
 
-        val scroll = ScrollView(this)
         val root = Ui.fill(this)
-        scroll.addView(root)
+        val scroll = Ui.scrollable(this, root)
         setContentView(scroll)
 
         root.addView(Ui.text(this, "🎓 راهنمای گام‌به‌گام VPS", 22f, 0xFFC97C22.toInt(), bold = true))

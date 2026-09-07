@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -32,6 +33,7 @@ class OnboardingActivity : AppCompatActivity() {
         }
 
         val root = Ui.fill(this)
+        val scroll = Ui.scrollable(this, root)
         list = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             val lp = LinearLayout.LayoutParams(
@@ -48,7 +50,7 @@ class OnboardingActivity : AppCompatActivity() {
             requestCorePermissionsAndFinish()
         }
         root.addView(continueBtn)
-        setContentView(root)
+        setContentView(scroll)
 
         renderChecks()
     }

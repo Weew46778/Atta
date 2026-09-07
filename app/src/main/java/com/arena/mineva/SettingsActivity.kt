@@ -28,6 +28,7 @@ class SettingsActivity : AppCompatActivity() {
         tts.init { tts.speak("تنظیمات هوش مصنوعی. کلید را وارد کن تا آوا بتواند سوالهای خارج از حافظه محلی را هم جواب دهد.") }
 
         val root = Ui.fill(this)
+        val scroll = Ui.scrollable(this, root)
         root.addView(Ui.text(this, "⚙️ تنظیمات", 22f, 0xFF2E9BFF.toInt(), bold = true))
         root.addView(Ui.text(this, "کلید Gemini را در تنظیمات Google AI Studio بسازید. بدون کلید، آوا فقط از دانش آفلاین جواب میدهد.", 13f, 0xFF9FB2C2.toInt()))
 
@@ -88,11 +89,9 @@ class SettingsActivity : AppCompatActivity() {
             }
         )
 
-        val scroll = ScrollView(this)
         result = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        scroll.addView(result)
-        root.addView(scroll, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
-        setContentView(root)
+        root.addView(result)
+        setContentView(scroll)
     }
 
     private fun startResearch() {

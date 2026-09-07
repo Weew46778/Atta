@@ -25,9 +25,8 @@ class ServerDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         tts.init { tts.speak("پیشخوان سرورها باز شد.") }
 
-        val scroll = ScrollView(this)
         val root = Ui.fill(this)
-        scroll.addView(root)
+        val scroll = Ui.scrollable(this, root)
         setContentView(scroll)
 
         root.addView(Ui.text(this, "📋 پیشخوان سرورها", 23f, 0xFF2E70B8.toInt(), bold = true))

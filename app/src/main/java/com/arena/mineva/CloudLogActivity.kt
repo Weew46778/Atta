@@ -8,6 +8,7 @@ import android.text.InputType
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
@@ -53,6 +54,7 @@ class CloudLogActivity : AppCompatActivity() {
         config = ServerProfileStore.activeConfig() ?: ServerConfig()
 
         val root = Ui.fill(this)
+        val scroll = Ui.scrollable(this, root)
         root.addView(Ui.text(this, "🌐 لاگ و کنسول ابری سرور", 22f, 0xFF2E9BFF.toInt(), bold = true))
         root.addView(
             Ui.text(
@@ -150,7 +152,7 @@ class CloudLogActivity : AppCompatActivity() {
         root.addView(output)
 
         refreshOnce()
-        setContentView(root)
+        setContentView(scroll)
     }
 
     override fun onDestroy() {

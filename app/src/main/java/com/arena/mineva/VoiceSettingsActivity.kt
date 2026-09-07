@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.text.InputType
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -29,6 +30,7 @@ class VoiceSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val root = Ui.fill(this)
+        val scroll = Ui.scrollable(this, root)
         root.addView(Ui.text(this, "🎙 تنظیمات صوتی آوا", 22f, 0xFF35D07F.toInt(), bold = true))
         root.addView(Ui.text(this, "صدای فارسی، انتخاب صدای زن و سرعت صحبت.", 13f, 0xFF9FB2C2.toInt()))
 
@@ -132,7 +134,7 @@ class VoiceSettingsActivity : AppCompatActivity() {
         })
         root.addView(seek)
 
-        setContentView(root)
+        setContentView(scroll)
 
         val m = TextToSpeechManager(this)
         manager = m

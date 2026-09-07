@@ -50,9 +50,8 @@ class ServerPanelActivity : AppCompatActivity() {
 
         config = ServerProfileStore.activeConfig() ?: ServerConfig()
 
-        val scroll = ScrollView(this)
         val root = Ui.fill(this)
-        scroll.addView(root)
+        val scroll = Ui.scrollable(this, root)
         setContentView(scroll)
 
         root.addView(Ui.text(this, "🛠 پنل حرفه‌ای سرور", 24f, 0xFF2E70B8.toInt(), bold = true))

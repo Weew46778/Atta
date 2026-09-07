@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 
 object Ui {
@@ -102,5 +103,26 @@ object Ui {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
+    }
+
+    /**
+     * Wraps an arbitrary content view in a full-page ScrollView. The inner view is laid out
+     * with WRAP_CONTENT height so long screens really scroll to the bottom. This is the
+     * default way every multi-section screen should be created.
+     */
+    fun scrollable(context: Context, content: View): ScrollView {
+        val scroll = ScrollView(context)
+        val lp = ScrollView.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        content.layoutParams = lp
+        scroll.addView(content, lp)
+        return scroll
+    }
+
+    fun scrollFill(context: Context): Pair<ScrollView, LinearLayout> {
+        val root = fill(context)
+        return scrollable(context, root) to root
     }
 }

@@ -45,9 +45,8 @@ class ServerWatchdogActivity : AppCompatActivity() {
 
         val config = ServerProfileStore.activeConfig() ?: ServerConfig()
 
-        val scroll = ScrollView(this)
         val root = Ui.fill(this)
-        scroll.addView(root)
+        val scroll = Ui.scrollable(this, root)
         setContentView(scroll)
 
         root.addView(Ui.text(this, "🛡 پایش و ریاستارت خودکار", 22f, 0xFF35D07F.toInt(), bold = true))

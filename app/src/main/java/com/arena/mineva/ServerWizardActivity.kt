@@ -7,6 +7,7 @@ import android.text.InputType
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -69,6 +70,7 @@ class ServerWizardActivity : AppCompatActivity() {
                 }
         }
         val root = Ui.fill(this)
+        val scroll = Ui.scrollable(this, root)
         root.addView(Ui.text(this, "🛠 ساخت سرور خودکار", 22f, 0xFF2E70B8.toInt(), bold = true))
         root.addView(Ui.text(this, "چند سوال کوتاه بپرس، بقیه را آوا خودش انجام میدهد. پاسخ نهایی: فایل دستور آماده.", 13f, 0xFF9FB2C2.toInt()))
 
@@ -197,7 +199,7 @@ class ServerWizardActivity : AppCompatActivity() {
         result = Ui.vertical(this)
         root.addView(result)
 
-        setContentView(root)
+        setContentView(scroll)
     }
 
     // ---------------------------------------------- helpers

@@ -38,9 +38,8 @@ class EncyclopediaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         tts.init { tts.speak("دایرة‌المعارف. جستجو کن یا موضوع جدید اضافه کن.") }
 
-        val scroll = ScrollView(this)
         val root = Ui.fill(this)
-        scroll.addView(root)
+        val scroll = Ui.scrollable(this, root)
         setContentView(scroll)
 
         root.addView(Ui.text(this, "📚 دایرة‌المعارف آوا", 22f, 0xFF7D4DB1.toInt(), bold = true))
