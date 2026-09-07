@@ -30,6 +30,7 @@ import com.arena.mineva.MainActivity
 import com.arena.mineva.Ui
 import com.arena.mineva.assistant.TextToSpeechManager
 import com.arena.mineva.server.BedrockCommandBuilder
+import com.arena.mineva.server.InWorldAvaBuilder
 import com.arena.mineva.server.ServerConfig
 import com.arena.mineva.server.ServerTarget
 import com.arena.mineva.server.SshClient
@@ -341,6 +342,15 @@ class OverlayService : Service() {
             }
         )
         c.addView(Ui.text(this, "اگر سرور VPS با کلید SSH ذخیرهشده فعال باشد، دستورها از همینجا به کنسول سرور ارسال میشوند.", 12f, 0xFF9FB2C2.toInt()))
+        c.addView(
+            Ui.button(this, "🏠 آوردن آوا داخل دنیا (NPC)", 0xFF7D4DB1.toInt(), 46f) {
+                val plan = InWorldAvaBuilder.build(this)
+                val result = InWorldAvaBuilder.deliverWithAppConsole(this)
+                copyToClipboard(plan.commands.joinToString("\n"))
+                tts.speak(if (result.contains("RCON failed") || result.contains("SSH error")) "دستورها آماده شد؛ برای ارسال مستقیم RCON یا SSH لازم است." else "آوا داخل دنیا فراخوانده شد و دستورها ارسال شد.")
+                c.addView(Ui.text(this, result.take(600), 11f, 0xFFD8E3EC.toInt()))
+            }
+        )
         c.addView(Ui.text(this, "🤖 پیشنهادهای لحظهای", 16f, 0xFF2E9BFF.toInt(), bold = true))
         BedrockGameDetector.suggestions(this).forEach { s ->
             c.addView(commandRow(s.title, s.text))

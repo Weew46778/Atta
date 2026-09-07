@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.arena.mineva.AppPrefs
 import com.arena.mineva.Ui
 import com.arena.mineva.assistant.TextToSpeechManager
+import com.arena.mineva.server.RecommendedProfileBuilder
 
 /**
  * Voice-guided, step-by-step assistant tour.
@@ -195,6 +196,17 @@ class GuideActivity : AppCompatActivity() {
                 tts.speak(GuideController.current().speech)
             }
         )
+        root.addView(
+            Ui.button(this, "⚡ یک‌کلیک: پروفایل سرور پیشنهادی (گوشی/Bedrock)", 0xFF35D07F.toInt(), 50f) {
+                val r = RecommendedProfileBuilder.localBedrock()
+                tts.speak(r.note + " حالا از پنل حرفه‌ای می‌توانی آن را روشن کنی.")
+                addStatus("✅ " + r.note)
+            }
+        )
+    }
+
+    private fun addStatus(text: String) {
+        box.addView(Ui.text(this, text, 13f, 0xFF35D07F.toInt()))
     }
 
     private fun render() {

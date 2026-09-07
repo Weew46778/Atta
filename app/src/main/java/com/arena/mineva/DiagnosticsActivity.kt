@@ -8,6 +8,7 @@ import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.arena.mineva.assistant.TextToSpeechManager
+import com.arena.mineva.system.AppStatusReport
 import com.arena.mineva.system.Diagnostics
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -32,6 +33,16 @@ class DiagnosticsActivity : AppCompatActivity() {
         ))
 
         root.addView(
+            Ui.button(this, "🔄 تولید گزارش کامل وضعیت", 0xFF2E9BFF.toInt(), 44f) {
+                val full = AppStatusReport.build(this@DiagnosticsActivity)
+                lastReport = full
+                val cm = getSystemService(ClipboardManager::class.java)
+                cm.setPrimaryClip(ClipData.newPlainText("mineava_full_report", full))
+                list.addView(Ui.text(this@DiagnosticsActivity, full, 12f, 0xFFD8E3EC.toInt()))
+                tts.speak("گزارش کامل وضعیت ساخته شد و کپی شد.")
+            }
+        )
+        root.addView(
             Ui.button(this, "📋 کپی گزارش در کلیپبورد", 0xFF35D07F.toInt(), 48f) {
                 val cm = getSystemService(ClipboardManager::class.java)
                 cm.setPrimaryClip(ClipData.newPlainText("mineava_report", lastReport))
@@ -43,7 +54,8 @@ class DiagnosticsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             delay(500)
             val checks = Diagnostics.run(this@DiagnosticsActivity)
-            lastReport = Diagnostics.report(checks)
+            val sysReport = AppStatusReport.build(this@DiagnosticsActivity)
+            lastReport = sysReport + "\n\n" + Diagnostics.report(checks)
             list.removeAllViews()
             checks.forEach { c ->
                 val color = if (c.ok) 0xFF35D07F.toInt() else 0xFFFF5A5A.toInt()
