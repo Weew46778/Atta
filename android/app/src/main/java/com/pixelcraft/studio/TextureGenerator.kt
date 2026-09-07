@@ -636,7 +636,8 @@ object TextureGenerator {
         val brush = n.fbm(x / s * 30f, y / s * 3f, 4, 2f, 0.5f)
         val dent = n.ridged(x / s * 9f, y / s * 9f, 3, 2f, 0.7f)
         val v = 0.5f + brush * 0.22f - dent * 0.14f
-        val sheen = Math.pow((Math.sin((x + y.toFloat()) / s * Math.PI.toFloat() * 3f + brush * 3f).toDouble()).coerceAtLeast(0.0), 6.0).toFloat() * 0.5f
+        val sbase = (x + y.toFloat()) / s * Math.PI.toFloat() * 3f + brush * 3f
+        val sheen = Math.pow(Math.sin(sbase.toDouble()).coerceAtLeast(0.0), 6.0).toFloat() * 0.5f
         rgb[off] = pack((m0 * (0.62f + v * 0.5f) + sheen * 255 + r() * 8).toInt(),
             (m1 * (0.62f + v * 0.5f) + sheen * 250 + r() * 8).toInt(),
             (m2 * (0.62f + v * 0.5f) + sheen * 240 + r() * 8).toInt(), 255)
@@ -702,7 +703,7 @@ object TextureGenerator {
         val g = if (gilded && gold > 0.62f) 1f else 0f
         rgb[off] = pack((q * 0.5f + g * 200 + r() * 4).toInt(), (q * 0.5f + g * 175 + r() * 4).toInt(),
             (q * 0.56f + g * 70 + r() * 4).toInt(), 255)
-        f * 0.9f + g * 1.4f
+        return f * 0.9f + g * 1.4f
     }
 
     private fun prism(dark: Boolean): PixelGen = PixelGen { x, y, s, n, r, rgb, off ->
@@ -716,7 +717,7 @@ object TextureGenerator {
     }
 
     private val seaLantern = PixelGen { x, y, s, n, r, rgb, off ->
-        val grid = (Math.floor(x / (s / 6f)).toInt() % 2 == 0 && Math.floor(y / (s / 6f)).toInt() % 2 == 0)
+        val grid = (Math.floor(x / (s / 6f).toDouble()).toInt() % 2 == 0 && Math.floor(y / (s / 6f).toDouble()).toInt() % 2 == 0)
         val f = n.fbm(x / s * 20f, y / s * 20f, 2, 2f, 0.5f)
         val v = 0.5f + f * 0.1f
         rgb[off] = pack((if (grid) 190 + v * 40 + r() * 8 else 40 + r() * 6).toInt(),
