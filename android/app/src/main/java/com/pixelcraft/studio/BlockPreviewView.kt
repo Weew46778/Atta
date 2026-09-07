@@ -91,10 +91,6 @@ class BlockPreviewView @JvmOverloads constructor(
         handler.removeCallbacks(spin)
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        scale = minOf(w, h) * 0.40f
-    }
-
     private fun rotY(p: FloatArray): FloatArray {
         val c = cos(yaw); val s = sin(yaw)
         return floatArrayOf(p[0] * c + p[2] * s, p[1], -p[0] * s + p[2] * c)
