@@ -188,7 +188,7 @@ class VpsGuideActivity : AppCompatActivity() {
         tts.speak("شروع استقرار خودکار روی سرور مجازی.")
         lifecycleScope.launch(Dispatchers.IO) {
             val outcome = VpsProvisioner().provision(this@VpsGuideActivity, cfg) { stage ->
-                withContext(Dispatchers.Main) {
+                runOnUiThread {
                     output.addView(Ui.text(this@VpsGuideActivity, "• $stage", 12f, 0xFFD8E3EC.toInt()))
                 }
             }
