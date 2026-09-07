@@ -27,7 +27,7 @@ class SpeechRecognitionManager(private val context: Context) {
         onResult: (String) -> Unit = {},
         onError: (String) -> Unit = {}
     ) {
-        destroy()
+        stop()
         // The whole point of MineAva is to be independent: use the bundled Vosk model first.
         if (AppPrefs.useOfflineSpeech && offline.isReady()) {
             val err = offline.startListening(onPartial, onResult, onError)
@@ -35,6 +35,9 @@ class SpeechRecognitionManager(private val context: Context) {
             onError(err)
             return
         }
+        // If the platform path is used, release the offline model to free memory.
+        // If the offline path is used, the model stays warm between utterances.
+        offline.release()
         if (!isAvailable()) {
             onError("خدمت تشخیص گفتار روی این دستگاه نصب نیست. از تنظیمات صوتی مدل آفلاین را نصب کن.")
             return
