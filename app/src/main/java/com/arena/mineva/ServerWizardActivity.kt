@@ -48,10 +48,11 @@ class ServerWizardActivity : AppCompatActivity() {
     private lateinit var editionHybrid: android.widget.TextView
     private lateinit var result: LinearLayout
     private lateinit var deployButton: TextView
+    private lateinit var localWarning: android.widget.TextView
     private var keyPickerPending = false
 
-    private var target = ServerTarget.LOCAL
-    private var edition = ServerEdition.BEDROCK
+    private var target = ServerTarget.VPS
+    private var edition = ServerEdition.JAVA
 
     private val javaCheck by lazy { CheckBox(this) }
     private val bedrockCheck by lazy { CheckBox(this).apply { isChecked = true } }
@@ -87,8 +88,8 @@ class ServerWizardActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        targetLocal = choice("📱 روی گوشی", true)
-        targetVps = choice("🖥 روی VPS", false)
+        targetLocal = choice("⛔ روی گوشی", false)
+        targetVps = choice("🖥 روی VPS", true)
         targetLocal.setOnClickListener { setTarget(ServerTarget.LOCAL) }
         targetVps.setOnClickListener { setTarget(ServerTarget.VPS) }
         targetRow.addView(targetLocal, marginParams(0, 0, 8, 0))
@@ -115,8 +116,11 @@ class ServerWizardActivity : AppCompatActivity() {
         vpsFields.addView(sshPortField)
         vpsFields.addView(sshPasswordField)
         vpsFields.addView(playitField)
-        vpsFields.visibility = View.GONE
+        vpsFields.visibility = View.VISIBLE
         root.addView(vpsFields)
+        localWarning = Ui.text(this, "", 13f, 0xFFFF8A8A.toInt())
+        localWarning.visibility = View.GONE
+        root.addView(localWarning)
 
         root.addView(section("نوع و نسخه سرور"))
         val editionRow = Ui.horizontal(this).apply {
@@ -125,8 +129,8 @@ class ServerWizardActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        editionJava = choice("Java", false)
-        editionBedrock = choice("Bedrock", true)
+        editionJava = choice("Java", true)
+        editionBedrock = choice("Bedrock", false)
         editionHybrid = choice("Hybrid", false)
         editionJava.setOnClickListener { setEdition(ServerEdition.JAVA) }
         editionBedrock.setOnClickListener { setEdition(ServerEdition.BEDROCK) }
@@ -196,11 +200,13 @@ class ServerWizardActivity : AppCompatActivity() {
         deployButton = Ui.button(this, "🖥 ساخت و اجرای خودکار روی VPS (SSH)", 0xFF2E70B8.toInt(), 56f) {
             deployVps()
         }
-        deployButton.visibility = View.GONE
+        deployButton.visibility = View.VISIBLE
         root.addView(deployButton)
 
         result = Ui.vertical(this)
         root.addView(result)
+
+        setTarget(ServerTarget.VPS)
 
         setContentView(scroll)
     }
@@ -213,7 +219,9 @@ class ServerWizardActivity : AppCompatActivity() {
         updateChoices(targetVps, t == ServerTarget.VPS)
         vpsFields.visibility = if (t == ServerTarget.VPS) LinearLayout.VISIBLE else LinearLayout.GONE
         deployButton.visibility = if (t == ServerTarget.VPS) View.VISIBLE else View.GONE
-        tts.speak(if (t == ServerTarget.LOCAL) "روی گوشی. خیلی هم خوب." else "روی سرور مجازی. مشخصات SSH را بده.")
+        localWarning.visibility = if (t == ServerTarget.LOCAL) View.VISIBLE else View.GONE
+        localWarning.text = "⚠️ روی گوشی بدون root امکان اجرای سرور جاوا/بدراک لینوکسی نیست. این گزینه فقط راهنمای نصب فایل است؛ سرور واقعی را روی VPS بساز."
+        tts.speak(if (t == ServerTarget.LOCAL) "روی گوشی در این نسخه اجرا نمیشود؛ سرور واقعی فقط روی VPS است." else "روی سرور مجازی. مشخصات SSH را بده.")
     }
 
     private fun setEdition(e: ServerEdition) {
