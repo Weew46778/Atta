@@ -1,5 +1,6 @@
 package com.arena.mineva.service
 
+import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -20,6 +21,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -42,33 +44,48 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
- * In-game assistant overlay. Slide the thin left-edge line to the right to reveal vertical
- * tabs. Tap a tab to slide its page in, tap it again (or wait ~3s) to auto-hide.
+ * In-game assistant overlay.
+ *
+ * It only runs while Minecraft (or MineAva itself) is actually in the foreground, shows a
+ * small round floating button that never covers more than a tiny corner, and always has a
+ * visible "✕ بستن اورلای" button that fully stops the service and removes every view.
  */
 class OverlayService : Service() {
+
+    companion object {
+        private const val GAME_PACKAGES = arrayOf(
+            "com.mojang.minecraftpe",
+            "com.mojang.minecraft",
+            "net.kdt.pojavlaunch"
+        )
+        private const val CHECK_MS = 1800L
+    }
 
     private lateinit var windowManager: WindowManager
     private lateinit var tts: TextToSpeechManager
     private val handler = Handler(Looper.getMainLooper())
-    private val autoHide = Runnable { collapsePanel() }
-    private val scope = CoroutineScope(Job() + Dispatchers.IO)
+    private val scope = CoroutineScope(Job() + Dispatchers.Default)
+    private val autoHide = Runnable { if (opened) collapsePanel() }
 
-    private var activityPaused = false
     private var opened = false
     private var selectedTab = -1
 
     private lateinit var handleView: TextView
-    private lateinit var panelRoot: LinearLayout
+    private lateinit var panelView: FrameLayout
     private lateinit var tabsColumn: LinearLayout
-    private lateinit var tabButtons: MutableList<TextView>
     private lateinit var pageContainer: FrameLayout
+    private lateinit var tabButtons: MutableList<TextView>
     private lateinit var pages: MutableList<ScrollView>
 
     private var handleParams: WindowManager.LayoutParams? = null
     private var panelParams: WindowManager.LayoutParams? = null
+    private var handleAdded = false
+    private var panelAdded = false
 
     private data class TabSpec(val title: String, val color: Int, val build: (ViewGroup) -> Unit)
 
@@ -86,107 +103,179 @@ class OverlayService : Service() {
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         tts = TextToSpeechManager(this)
         tts.init {
-            tts.speak("پنل اورلای فعال شد. داخل بازی از لبه چپ صفحه به سمت راست بکش.")
+            // Do not speak when the service starts in the background.
         }
         createNotificationChannel()
         startForeground(1, buildNotification())
         setupOverlay()
+        startForegroundChecker()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
 
     override fun onBind(intent: Intent?): IBinder? = null
 
+    // ---------------------------------------------------------------- lifecycle
+
+    private fun startForegroundChecker() {
+        scope.launch {
+            while (isActive) {
+                if (shouldStayRunning()) {
+                    runOnMain { addHandle() }
+                } else {
+                    runOnMain { closeOverlay() }
+                    break
+                }
+                delay(CHECK_MS)
+            }
+        }
+    }
+
+    private fun shouldStayRunning(): Boolean {
+        return runCatching {
+            val am = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+            val processes = am.runningAppProcesses.orEmpty()
+            val anyForeground = processes.any { p ->
+                p.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND ||
+                    p.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE
+            }
+            if (!anyForeground) return false
+            processes.any { p ->
+                val name = p.processName ?: return@any false
+                val important = p.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND ||
+                    p.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE
+                important && (
+                    name == packageName || name == "${packageName}:overlay" ||
+                        GAME_PACKAGES.any { name.startsWith(it, ignoreCase = true) } ||
+                        name.contains("minecraft", ignoreCase = true)
+                    )
+            }
+        }.getOrDefault(false)
+    }
+
+    private fun runOnMain(action: () -> Unit) {
+        if (Looper.myLooper() == Looper.getMainLooper()) action() else handler.post(action)
+    }
+
+    // ---------------------------------------------------------------- overlay
+
     private fun setupOverlay() {
         buildHandle()
         buildPanel()
+        showHandle()
     }
 
-    // ------------------------------------------------------------------ handle
-
-    private fun buildHandle() {
+    private fun addHandle() {
+        if (handleAdded) return
         handleView = TextView(this).apply {
-            text = "▮"
+            text = "◉"
             setTextColor(Color.WHITE)
-            textSize = 12f
+            textSize = 20f
             gravity = Gravity.CENTER
-            setBackgroundColor(0xFF35D07F.toInt())
+            setBackgroundColor(0xE035D07F.toInt())
         }
         handleParams = WindowManager.LayoutParams(
-            Ui.dp(this, 14f),
-            WindowManager.LayoutParams.MATCH_PARENT,
+            Ui.dp(this, 52f),
+            Ui.dp(this, 52f),
             overlayType(),
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             PixelFormat.TRANSLUCENT
         ).apply {
-            gravity = Gravity.START or Gravity.TOP
-            x = 0
+            gravity = Gravity.CENTER_VERTICAL or Gravity.START
+            x = Ui.dp(this@OverlayService, 6f)
             y = 0
         }
         windowManager.addView(handleView, handleParams)
-
-        handleView.setOnTouchListener(object : View.OnTouchListener {
-            var initialX = 0
-            var downRaw = 0f
-            override fun onTouch(v: View?, event: android.view.MotionEvent?): Boolean {
-                val e = event ?: return false
-                when (e.actionMasked) {
-                    android.view.MotionEvent.ACTION_DOWN -> {
-                        initialX = handleParams?.x ?: 0
-                        downRaw = e.rawX
-                        handler.removeCallbacks(autoHide)
-                    }
-                    android.view.MotionEvent.ACTION_MOVE -> {
-                        val delta = e.rawX - downRaw
-                        if (delta > 10) openPanel()
-                    }
-                    android.view.MotionEvent.ACTION_UP -> {
-                        if (abs(e.rawX - downRaw) < 10) {
-                            if (opened) collapsePanel() else openPanel()
-                        } else {
-                            scheduleAutoHide()
-                        }
-                    }
-                }
-                return true
-            }
-        })
+        handleAdded = true
+        handleView.setOnClickListener {
+            vibrate(30)
+            openPanel()
+        }
     }
 
-    // ------------------------------------------------------------------ panel + tabs
+    private fun removeHandle() {
+        runCatching { if (handleAdded) windowManager.removeView(handleView) }
+        handleAdded = false
+    }
+
+    private fun buildHandle() {
+        addHandle()
+    }
+
+    private fun showHandle() {
+        addHandle()
+        runCatching { panelView.visibility = View.GONE }
+        opened = false
+    }
+
+    private fun closeOverlay() {
+        removePanel()
+        removeHandle()
+        stopForeground(true)
+        stopSelf()
+    }
+
+    // ---------------------------------------------------------------- panel
 
     private fun buildPanel() {
-        panelRoot = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            setBackgroundColor(0xE01C2836.toInt())
+        panelView = FrameLayout(this)
+        panelView.setBackgroundColor(0xF20C1722.toInt())
+        panelView.visibility = View.GONE
+
+        val close = TextView(this).apply {
+            text = "✕ بستن اورلای"
+            setTextColor(Color.WHITE)
+            textSize = 14f
+            gravity = Gravity.CENTER
+            setBackgroundColor(0xFFE0483C.toInt())
+            setTypeface(typeface, Typeface.BOLD)
         }
-        panelParams = WindowManager.LayoutParams(
-            Ui.dp(this, 340f),
-            WindowManager.LayoutParams.MATCH_PARENT,
-            overlayType(),
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            PixelFormat.TRANSLUCENT
-        ).apply {
-            gravity = Gravity.START or Gravity.TOP
-            x = 0
-            y = 0
+        panelView.addView(
+            close,
+            FrameLayout.LayoutParams(Ui.dp(this, 132f), Ui.dp(this, 42f)).apply {
+                gravity = Gravity.TOP or Gravity.END
+                topMargin = Ui.dp(this@OverlayService, 8f)
+                rightMargin = Ui.dp(this@OverlayService, 8f)
+            }
+        )
+        close.setOnClickListener {
+            openCollapseOrStop()
         }
-        windowManager.addView(panelRoot, panelParams)
-        panelRoot.translationX = -Ui.dp(this@OverlayService, 340f).toFloat()
-        panelRoot.alpha = 0f
+
+        val header = Ui.text(this, "آوا — پنل ماینکرافت", 17f, Color.WHITE, bold = true)
+        panelView.addView(
+            header,
+            FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                gravity = Gravity.TOP or Gravity.START
+                topMargin = Ui.dp(this@OverlayService, 10f)
+                leftMargin = Ui.dp(this@OverlayService, 14f)
+                rightMargin = Ui.dp(this@OverlayService, 148f)
+            }
+        )
+
+        val body = FrameLayout(this)
+        panelView.addView(
+            body,
+            FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT).apply {
+                topMargin = Ui.dp(this@OverlayService, 58f)
+                bottomMargin = Ui.dp(this@OverlayService, 12f)
+                leftMargin = Ui.dp(this@OverlayService, 12f)
+                rightMargin = Ui.dp(this@OverlayService, 12f)
+            }
+        )
 
         tabsColumn = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(0xFF121D29.toInt())
         }
-        tabsColumn.layoutParams = LinearLayout.LayoutParams(Ui.dp(this, 52f), ViewGroup.LayoutParams.MATCH_PARENT)
-        panelRoot.addView(tabsColumn)
+        body.addView(tabsColumn, FrameLayout.LayoutParams(Ui.dp(this, 54f), ViewGroup.LayoutParams.MATCH_PARENT))
 
         pageContainer = FrameLayout(this)
-        pageContainer.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
-        panelRoot.addView(pageContainer)
+        body.addView(pageContainer, FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        ))
 
         tabButtons = mutableListOf()
         pages = mutableListOf()
@@ -194,19 +283,15 @@ class OverlayService : Service() {
             val btn = tabButton(spec.title, spec.color)
             btn.tag = index
             btn.setOnClickListener {
-                vibrate(40)
+                vibrate(30)
                 tts.speak(spec.title)
-                if (selectedTab == index && pages[index].translationX == 0f) {
-                    collapsePanel()
-                } else {
-                    selectTab(index)
-                }
+                selectTab(index)
                 scheduleAutoHide()
             }
             tabButtons.add(btn)
             tabsColumn.addView(
                 btn,
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(this, 60f))
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(this, 56f))
             )
 
             val page = ScrollView(this).apply {
@@ -216,8 +301,6 @@ class OverlayService : Service() {
                     inner,
                     ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 )
-                translationX = Ui.dp(this@OverlayService, 300f).toFloat()
-                alpha = 0f
             }
             pages.add(page)
             pageContainer.addView(
@@ -227,141 +310,139 @@ class OverlayService : Service() {
         }
     }
 
+    private fun addPanel() {
+        if (panelAdded) return
+        val w = (resources.displayMetrics.widthPixels * 0.91f).toInt()
+        val h = (resources.displayMetrics.heightPixels * 0.86f).toInt()
+        panelParams = WindowManager.LayoutParams(
+            w,
+            h,
+            overlayType(),
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            PixelFormat.TRANSLUCENT
+        ).apply {
+            gravity = Gravity.CENTER
+        }
+        windowManager.addView(panelView, panelParams)
+        panelAdded = true
+    }
+
+    private fun removePanel() {
+        runCatching { if (panelAdded) windowManager.removeView(panelView) }
+        panelAdded = false
+    }
+
+    private fun openPanel() {
+        addPanel()
+        opened = true
+        removeHandle()
+        panelView.visibility = View.VISIBLE
+        if (selectedTab < 0) selectTab(0)
+        scheduleAutoHide()
+    }
+
+    private fun collapsePanel() {
+        opened = false
+        removePanel()
+        addHandle()
+    }
+
+    private fun openCollapseOrStop() {
+        // First tap hides the panel, second tap fully closes the overlay.
+        if (opened) {
+            collapsePanel()
+        } else {
+            closeOverlay()
+        }
+    }
+
+    private fun scheduleAutoHide() {
+        handler.removeCallbacks(autoHide)
+        handler.postDelayed(autoHide, 12_000L)
+    }
+
+    private fun selectTab(index: Int) {
+        selectedTab = index
+        pages.forEachIndexed { i, p ->
+            p.visibility = if (i == index) View.VISIBLE else View.GONE
+        }
+        tabButtons.forEachIndexed { i, b ->
+            b.alpha = if (i == index) 1f else 0.6f
+        }
+    }
+
     private fun tabButton(title: String, color: Int): TextView = TextView(this).apply {
         text = title
         setTextColor(Color.WHITE)
-        textSize = 12f
+        textSize = 11f
         gravity = Gravity.CENTER
         setTypeface(typeface, Typeface.BOLD)
-        setPadding(
-            Ui.dp(this@OverlayService, 4f),
-            Ui.dp(this@OverlayService, 4f),
-            Ui.dp(this@OverlayService, 4f),
-            Ui.dp(this@OverlayService, 4f)
-        )
         background = GradientDrawable().apply {
             setColor(color)
             cornerRadius = Ui.dp(this@OverlayService, 10f).toFloat()
         }
     }
 
-    private fun selectTab(index: Int) {
-        if (selectedTab == index) {
-            collapsePanel()
-            return
-        }
-        val newPage = pages[index]
-        if (selectedTab >= 0 && selectedTab < pages.size) {
-            val old = pages[selectedTab]
-            old.animate().translationX(-Ui.dp(this, 300f).toFloat()).alpha(0f).setDuration(260).start()
-        }
-        newPage.translationX = Ui.dp(this, 300f).toFloat()
-        newPage.alpha = 0f
-        newPage.animate().translationX(0f).alpha(1f).setDuration(340).start()
-        selectedTab = index
-        tabButtons.forEachIndexed { i, b ->
-            b.alpha = if (i == index) 1f else 0.65f
-        }
-    }
-
-    private fun openPanel() {
-        if (opened) return
-        opened = true
-        panelRoot.animate().translationX(0f).alpha(1f).setDuration(360).start()
-        vibrate(30)
-        if (selectedTab < 0) selectTab(0)
-        scheduleAutoHide()
-    }
-
-    private fun collapsePanel() {
-        if (!opened) return
-        opened = false
-        panelRoot.animate().translationX(-Ui.dp(this, 340f).toFloat()).alpha(0f).setDuration(320).start()
-        vibrate(25)
-    }
-
-    private fun scheduleAutoHide() {
-        handler.removeCallbacks(autoHide)
-        handler.postDelayed(autoHide, 3000L)
-    }
-
-    // ------------------------------------------------------------------ pages
+    // ---------------------------------------------------------------- operator
 
     private fun buildOperatorTab(c: ViewGroup) {
-        c.addView(tabHeader("🎮 اپراتور داخل بازی"))
+        c.addView(tabHeader("🎮 اپراتور"))
         c.addView(Ui.text(
             this,
-            "این دستورها از طریق RCON یا کنسول tmux به سرور ارسال میشوند (نه با هک داخل کلاینت). اگر سرور درحال اجرا باشد، بلافاصله در دنیای بازی اثر میکنند.",
-            11f,
-            0xFFD8E3EC.toInt()
+            "دستورها از RCON یا کنسول tmux به سرور میرسند و در دنیا اعمال میشوند.",
+            11f, 0xFFD8E3EC.toInt()
         ))
-
-        val commandBox = android.widget.EditText(this).apply {
+        val commandBox = EditText(this).apply {
             hint = "/weather rain  یا هر دستور دلخواه"
             setTextColor(Color.WHITE)
             setHintTextColor(0xFF9FB2C2.toInt())
             setSingleLine(true)
             textSize = 13f
             background = Ui.card(this@OverlayService).background
-            setPadding(
-                Ui.dp(this@OverlayService, 10f),
-                Ui.dp(this@OverlayService, 8f),
-                Ui.dp(this@OverlayService, 10f),
-                Ui.dp(this@OverlayService, 8f)
-            )
         }
         c.addView(commandBox)
-        c.addView(Ui.button(this, "⚡ ارسال دستور به کنسول سرور", 0xFFE0483C.toInt(), 46f) {
+        c.addView(Ui.button(this, "⚡ ارسال به کنسول سرور", 0xFFE0483C.toInt(), 46f) {
             val raw = commandBox.text.toString().trim()
             if (raw.isNotBlank()) {
                 sendConsoleAction(raw)
                 commandBox.setText("")
             }
         })
-
-        c.addView(Ui.text(this, "دستورهای سریع اپراتور", 15f, Color.WHITE, bold = true))
-        val quick = listOf(
-            "☔ باران بیار" to "/weather rain",
-            "☀️ آسمان صاف" to "/weather clear",
+        c.addView(Ui.text(this, "دستورهای سریع", 15f, Color.WHITE, bold = true))
+        listOf(
+            "☔ باران" to "/weather rain",
+            "☀️ صاف" to "/weather clear",
             "🕐 صبح" to "/time set day",
             "💎 ۶۴ الماس" to "/give @p diamond 64",
             "🥇 اپراتور من" to "/op @p",
-            "🎮 حالت خلاق" to "/gamemode creative",
-            "🛠 حالت بقا" to "/gamemode survival",
-            "🩹 پر کردن سلامت" to "/effect @p minecraft:instant_health 1 10",
-            "🌦 اعلام آبوهوا به همه" to "/weather rain"
-        )
-        quick.forEach { (label, cmd) -> c.addView(commandRow(label, cmd)) }
-        c.addView(Ui.text(this, "برای اثرگذاری، باید اپراتور/سطح دسترسی (OP) در سرور فعال باشد.", 11f, 0xFFFF8A8A.toInt()))
+            "🎮 خلاق" to "/gamemode creative",
+            "🛠 بقا" to "/gamemode survival",
+            "🩹 سلامتی" to "/effect @p minecraft:instant_health 1 10"
+        ).forEach { (label, cmd) -> c.addView(commandRow(label, cmd)) }
     }
 
     private fun sendConsoleAction(command: String) {
         val normalized = if (command.startsWith("/")) command else "/$command"
         vibrate(25)
         copyToClipboard(normalized)
-        val sent = trySendToServerConsole(normalized)
         tts.speak(
-            if (sent) "دستور به کنسول سرور ارسال شد و در دنیا اعمال میشود."
-            else "دستور در کلیپبورد کپی شد؛ برای ارسال مستقیم باید سرور با RCON یا SSH تنظیم شده باشد."
+            if (trySendToServerConsole(normalized))
+                "دستور به کنسول سرور ارسال شد."
+            else
+                "دستور در کلیپبورد کپی شد. سرور باید به RCON یا SSH وصل باشد."
         )
         scheduleAutoHide()
     }
 
+    // ---------------------------------------------------------------- pages
+
     private fun buildToolsTab(c: ViewGroup) {
         c.addView(tabHeader("ابزارهای سریع"))
-        c.addView(commandRow(
-            "⚔ شمشیر نتریت",
-            BedrockCommandBuilder.giveNetheriteSword(BedrockCommandBuilder.Edition.BEDROCK)
-        ))
-        c.addView(commandRow(
-            "🛡 سپر نتریت",
-            BedrockCommandBuilder.giveProtectedChestplate(BedrockCommandBuilder.Edition.BEDROCK)
-        ))
-        c.addView(commandRow(
-            "🥚 اژدها (تخم اسپان)",
-            BedrockCommandBuilder.giveSpawnEgg("ender_dragon", BedrockCommandBuilder.Edition.BEDROCK)
-        ))
-        c.addView(Ui.text(this, "دستور برای سرور بدراک ساخته میشود؛ روی پنل کنسول سرور اجرا یا در کلیپبورد کپی میشود. (اینجکشن مستقیم داخل کلاینت بدراک با API عمومی ممکن نیست)", 11f, 0xFF9FB2C2.toInt()))
+        c.addView(commandRow("⚔ شمشیر نتریت", BedrockCommandBuilder.giveNetheriteSword(BedrockCommandBuilder.Edition.BEDROCK)))
+        c.addView(commandRow("🛡 سپر نتریت", BedrockCommandBuilder.giveProtectedChestplate(BedrockCommandBuilder.Edition.BEDROCK)))
+        c.addView(commandRow("🥚 اژدها", BedrockCommandBuilder.giveSpawnEgg("ender_dragon", BedrockCommandBuilder.Edition.BEDROCK)))
+        c.addView(Ui.text(this, "دستور برای سرور بدراک است؛ از RCON یا کنسول سرور اجرا میشود.", 11f, 0xFF9FB2C2.toInt()))
     }
 
     private fun buildStructuresTab(c: ViewGroup) {
@@ -369,55 +450,36 @@ class OverlayService : Service() {
         c.addView(commandRow("کشاورزی خودکار", buildWheatFarm()))
         c.addView(commandRow("آهنخودکار", buildIronFarm()))
         c.addView(commandRow("فارم تجربه", buildXpFarm()))
-        c.addView(Ui.text(this, "طرح سازه به کلیپبورد کپی میشود یا از طریق کنسول سرور به بازیکن نمایش داده میشود.", 12f, 0xFF9FB2C2.toInt()))
+        c.addView(Ui.text(this, "طرح سازه در کلیپبورد کپی میشود.", 12f, 0xFF9FB2C2.toInt()))
     }
 
     private fun buildWeaponsTab(c: ViewGroup) {
         c.addView(tabHeader("سفارش وسایل ویژه"))
-        c.addView(commandRow(
-            "شمشیر نتریت + تیز",
-            BedrockCommandBuilder.giveNetheriteSword(BedrockCommandBuilder.Edition.BEDROCK, enchants = listOf("sharpness", "unbreaking", "looting"))
-        ))
-        c.addView(commandRow(
-            "کمان بیپایان",
-            "give @p bow 1 0 {\"ench\":[{\"id\":\"infinity\",\"lvl\":1},{\"id\":\"power\",\"lvl\":10}]}"
-        ))
-        c.addView(commandRow(
-            "زره محافظ",
-            BedrockCommandBuilder.giveProtectedChestplate(BedrockCommandBuilder.Edition.BEDROCK)
-        ))
-        c.addView(Ui.text(this, "دستورات با قواعد بدراک ساخته شدهاند و برای اجرا باید اپراتور/پایت روی سرور داشته باشی.", 12f, 0xFF9FB2C2.toInt()))
+        c.addView(commandRow("شمشیر نتریت + تیز", BedrockCommandBuilder.giveNetheriteSword(
+            BedrockCommandBuilder.Edition.BEDROCK,
+            enchants = listOf("sharpness", "unbreaking", "looting")
+        )))
+        c.addView(commandRow("کمان بیپایان", "give @p bow 1 0 {\"ench\":[{\"id\":\"infinity\",\"lvl\":1},{\"id\":\"power\",\"lvl\":10}]}"))
+        c.addView(commandRow("زره محافظ", BedrockCommandBuilder.giveProtectedChestplate(BedrockCommandBuilder.Edition.BEDROCK)))
+        c.addView(Ui.text(this, "برای اجرا باید اپراتور روی سرور باشی.", 12f, 0xFF9FB2C2.toInt()))
     }
 
     private fun buildAssistantTab(c: ViewGroup) {
         c.addView(tabHeader("دستیار آوا"))
-        c.addView(Ui.text(this, "آوا:", 13f, 0xFF35D07F.toInt(), bold = true))
         val snap = DeviceMonitor.snapshot(this)
-        c.addView(Ui.text(
-            this,
-            "سلام! اینجایم. رم آزاد: ${snap.freeRamMb}MB. میگم چه کاری بکنم؟",
-            14f
-        ))
-        c.addView(
-            Ui.button(this, "🎤 گفتگوی صوتی", 0xFF7D4DB1.toInt(), 46f) {
-                val i = Intent(this, com.arena.mineva.VoiceAssistantActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(i)
-            }
-        )
-        c.addView(Ui.text(this, "اگر سرور VPS با کلید SSH ذخیرهشده فعال باشد، دستورها از همینجا به کنسول سرور ارسال میشوند.", 12f, 0xFF9FB2C2.toInt()))
-        c.addView(
-            Ui.button(this, "🏠 آوردن آوا داخل دنیا (NPC)", 0xFF7D4DB1.toInt(), 46f) {
-                val plan = InWorldAvaBuilder.build(this)
-                val result = InWorldAvaBuilder.deliverWithAppConsole(this)
-                copyToClipboard(plan.commands.joinToString("\n"))
-                tts.speak(if (result.contains("RCON failed") || result.contains("SSH error")) "دستورها آماده شد؛ برای ارسال مستقیم RCON یا SSH لازم است." else "آوا داخل دنیا فراخوانده شد و دستورها ارسال شد.")
-                c.addView(Ui.text(this, result.take(600), 11f, 0xFFD8E3EC.toInt()))
-            }
-        )
-        c.addView(Ui.text(this, "🤖 پیشنهادهای لحظهای", 16f, 0xFF2E9BFF.toInt(), bold = true))
-        BedrockGameDetector.suggestions(this).forEach { s ->
-            c.addView(commandRow(s.title, s.text))
-        }
+        c.addView(Ui.text(this, "سلام! رم آزاد: ${snap.freeRamMb}MB. چه کاری انجام بدهم؟", 14f))
+        c.addView(Ui.button(this, "🎤 گفتگوی صوتی", 0xFF7D4DB1.toInt(), 46f) {
+            val i = Intent(this, com.arena.mineva.VoiceAssistantActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(i)
+        })
+        c.addView(Ui.button(this, "🏠 آوردن آوا داخل دنیا (NPC)", 0xFF7D4DB1.toInt(), 46f) {
+            val plan = InWorldAvaBuilder.build(this)
+            val result = InWorldAvaBuilder.deliverWithAppConsole(this)
+            copyToClipboard(plan.commands.joinToString("\n"))
+            tts.speak(if (result.contains("RCON failed") || result.contains("SSH error")) "دستورها آماده شد؛ برای ارسال مستقیم RCON یا SSH لازم است." else "دستورها ارسال شد.")
+            c.addView(Ui.text(this, result.take(500), 11f, 0xFFD8E3EC.toInt()))
+        })
     }
 
     private fun buildHealthTab(c: ViewGroup) {
@@ -428,32 +490,27 @@ class OverlayService : Service() {
         c.addView(Ui.text(this, "حافظه: ${snap.freeStorageMb}/${snap.totalStorageMb} MB", 14f))
         c.addView(Ui.text(this, "دما: ${if (snap.temperatureC > 0) "${snap.temperatureC}°C" else "نامشخص"}", 14f))
         c.addView(Ui.text(this, "CPU: ${snap.cpuLoadPercent}%", 14f))
-        c.addView(
-            Ui.button(this, "🧹 پاکسازی کش", 0xFF1F8F8F.toInt(), 46f) {
-                DeviceMonitor.clearAppCache(this)
-                tts.speak("کش پاک شد.")
-                buildHealthTab(c)
-            }
-        )
+        c.addView(Ui.button(this, "🧹 پاکسازی کش", 0xFF1F8F8F.toInt(), 46f) {
+            DeviceMonitor.clearAppCache(this)
+            tts.speak("کش پاک شد.")
+            buildHealthTab(c)
+        })
     }
 
     private fun tabHeader(title: String): TextView = Ui.text(this, title, 18f, Color.WHITE, bold = true)
 
-    private fun commandRow(title: String, command: String): TextView {
-        return Ui.text(this, "$title:\n$command", 12f, 0xFFD8E3EC.toInt()).apply {
+    private fun commandRow(title: String, command: String): TextView =
+        Ui.text(this, "$title:\n$command", 12f, 0xFFD8E3EC.toInt()).apply {
             setOnClickListener {
                 vibrate(20)
                 copyToClipboard(command)
                 val sent = trySendToServerConsole(command)
                 tts.speak(
-                    if (sent)
-                        "$title در کلیپبورد کپی شد و در صورت اتصال SSH به کنسول سرور نیز ارسال شد."
-                    else
-                        "$title در کلیپبورد کپی شد."
+                    if (sent) "$title به کنسول سرور ارسال شد."
+                    else "$title در کلیپبورد کپی شد."
                 )
             }
         }
-    }
 
     private fun copyToClipboard(command: String) {
         val cm = getSystemService(android.content.ClipboardManager::class.java)
@@ -470,7 +527,6 @@ class OverlayService : Service() {
         if (!rconReady && !sshReady) return false
 
         scope.launch {
-            // 1) Real RCON is the strongest path: works for on-device and VPS servers.
             if (rconReady) {
                 val host = config?.host?.ifBlank { "127.0.0.1" } ?: "127.0.0.1"
                 runCatching {
@@ -483,8 +539,6 @@ class OverlayService : Service() {
                     }
                 }
             }
-
-            // 2) VPS console over SSH/tmux.
             if (sshReady && config != null) {
                 runCatching {
                     val ssh = SshClient()
@@ -498,8 +552,6 @@ class OverlayService : Service() {
                     )
                     val quoted = "'" + clean.replace("'", "'\\''") + "'"
                     ssh.exec(session, "tmux send-keys -t MineAvaServer $quoted Enter")
-                    // Also drop the command into the on-screen game chat as a server-side message.
-                    ssh.exec(session, "tmux send-keys -t MineAvaServer \"say MineAva: $clean\" Enter")
                     session.disconnect()
                 }
             }
@@ -508,30 +560,27 @@ class OverlayService : Service() {
     }
 
     private fun buildWheatFarm(): String = """
-        ساخت فارم گندم ساده (1x1 کارت):
+        ساخت فارم گندم ساده:
         1) گودال 1x1 و آب وسط.
         2) دورش ردیف خاک و گندم.
-        3) پایین/بالا دکمه + ردیف آب برای برداشت.
-        دستور کمک: /structure save mineava:wheat_farm 10 60 10 20 70 20
+        3) پایین/بالا دکمه + ردیف آب.
     """.trimIndent()
 
     private fun buildIronFarm(): String = """
-        فارم آهن خودکار (نسخه ساده):
+        فارم آهن خودکار (ساده):
         1) نی رو 3 پلاک بالای زمین.
-        2) با فاصله 3 بلاک، 3 گلمب تعویضهای ساده.
+        2) با فاصله 3 بلاک، 3 گلمب.
         3) زیرش هاپر + چست.
-        4) تذکر: از نسخه جاوا 1.19.2 رفتار کوتاه تغییر کرده است.
     """.trimIndent()
 
     private fun buildXpFarm(): String = """
         فارم تجربه:
-        1) یک اتاق 8x8 با اسپانر.
+        1) اتاق 8x8 با اسپانر.
         2) رسیدن موجود به قلب 1 ضربه.
-        3) هاپر و آب برای آوردن به نقطه صفر.
-        4) در بدراک نسخههای 1.21 نیاز به تایمر ندارد.
+        3) هاپر و آب برای رساندن به نقطه صفر.
     """.trimIndent()
 
-    // ------------------------------------------------------------------ utility
+    // ---------------------------------------------------------------- util
 
     private fun overlayType(): Int =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -572,8 +621,8 @@ class OverlayService : Service() {
         )
         return NotificationCompat.Builder(this, "mineava_overlay")
             .setSmallIcon(android.R.drawable.ic_menu_view)
-            .setContentTitle("آوا فعال است")
-            .setContentText("پنل اورلای داخل بازی در حال اجراست.")
+            .setContentTitle("آوا")
+            .setContentText("پنل ماینکرافت فقط هنگام بازی فعال است.")
             .setContentIntent(contentIntent)
             .setOngoing(true)
             .build()
@@ -582,8 +631,8 @@ class OverlayService : Service() {
     override fun onDestroy() {
         scope.cancel()
         handler.removeCallbacksAndMessages(null)
-        panelParams?.let { windowManager.removeView(panelRoot) }
-        handleParams?.let { windowManager.removeView(handleView) }
+        removePanel()
+        removeHandle()
         tts.shutdown()
         super.onDestroy()
     }

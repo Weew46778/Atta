@@ -29,6 +29,7 @@ class VoiceSettingsActivity : AppCompatActivity() {
     private lateinit var voiceUrlField: EditText
     private lateinit var modelStatus: android.widget.TextView
     private lateinit var modelButton: android.widget.TextView
+    private lateinit var offlineToggle: android.widget.TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,14 +51,13 @@ class VoiceSettingsActivity : AppCompatActivity() {
             downloadSpeechModels()
         }
         root.addView(modelButton)
-        root.addView(
-            Ui.button(this, "🎤 استفاده از موتور داخل اپ: OFF", 0xFF35D07F.toInt(), 46f) {
-                AppPrefs.useOfflineTts = !AppPrefs.useOfflineTts
-                AppPrefs.useOfflineSpeech = AppPrefs.useOfflineTts
-                refreshModelState()
-                manager?.speak("موتور صوتی داخل اپ " + if (AppPrefs.useOfflineTts) "فعال شد." else "غیرفعال شد.")
-            }
-        )
+        offlineToggle = Ui.button(this, "🎤 موتور صوتی داخل اپ: OFF", 0xFF35D07F.toInt(), 46f) {
+            AppPrefs.useOfflineTts = !AppPrefs.useOfflineTts
+            AppPrefs.useOfflineSpeech = AppPrefs.useOfflineTts
+            refreshModelState()
+            manager?.speak("موتور صوتی داخل اپ " + if (AppPrefs.useOfflineTts) "فعال شد." else "غیرفعال شد.")
+        }
+        root.addView(offlineToggle)
         bundledButton = Ui.button(this, "📦 وارد کردن بستهٔ صوتی زن فارسی (ZIP)", 0xFF35D07F.toInt(), 48f) {
             pickVoicePack()
         }
@@ -176,8 +176,12 @@ class VoiceSettingsActivity : AppCompatActivity() {
         val s = SpeechModelStore.status(this)
         modelStatus.text = s.detail
         modelButton.text = if (s.sttReady && s.ttsReady) "🧠 موتور داخل اپ کاملاً آماده ✓" else "🧠 دانلود موتور صوتی و تشخیص گفتار داخل اپ"
+        offlineToggle.text = if (AppPrefs.useOfflineTts) "🎤 موتور صوتی داخل اپ: ON" else "🎤 موتور صوتی داخل اپ: OFF"
         if (AppPrefs.useOfflineTts && s.sttReady && s.ttsReady) {
             modelStatus.text = "✓ آفلاین فعال است\n" + s.detail
+        }
+        if (!AppPrefs.useOfflineTts && s.sttReady && s.ttsReady) {
+            modelStatus.text = "— موتور داخل اپ حاضر است ولی فعلاً خاموش است."
         }
     }
 
