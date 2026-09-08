@@ -58,7 +58,7 @@ import kotlinx.coroutines.launch
 class OverlayService : Service() {
 
     companion object {
-        private const val GAME_PACKAGES = arrayOf(
+        private val GAME_PACKAGES = arrayOf(
             "com.mojang.minecraftpe",
             "com.mojang.minecraft",
             "net.kdt.pojavlaunch"
