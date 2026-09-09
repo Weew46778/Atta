@@ -1,0 +1,3 @@
+import {defineConfig} from '@playwright/test';
+import chromium from '@sparticuz/chromium';
+export default defineConfig({testDir:'./tests/family',fullyParallel:true,timeout:90000,workers:2,reporter:[['list'],['json',{outputFile:'test-results/family-results.json'}]],use:{baseURL:'http://localhost:5173',actionTimeout:10000,viewport:{width:1440,height:1000},reducedMotion:'reduce',launchOptions:{executablePath:await chromium.executablePath(),args:['--no-sandbox','--disable-dev-shm-usage'],env:{...process.env,LD_LIBRARY_PATH:process.cwd()+'/.tools/chromium-libs/lib'}},screenshot:'only-on-failure'},webServer:{command:'npm run dev -- --port 5173',url:'http://localhost:5173',reuseExistingServer:true}});

@@ -1,0 +1,4 @@
+7de9a3a32b4831c517cc3d4bdf6bdfb9956253b2543cbc4646c9defc616f5272  releases/family-v2/Bagh-explorer-v2.0.0.apk
+a2dadc1500fcdfcf4f3c0686a5e1ee4b4ddd136cdc06d0f1288aa49ea32c75b8  releases/family-v2/Bagh-father-v2.0.0.apk
+18c3b0c9971bd40457f059e51af694d5c9db8d36c952ced9bb8999a0c01fe436  releases/family-v2/Bagh-mother-v2.0.0.apk
+8856865047906536d4553c2d2272268da3c35f6bec3d61220a63c067872271cb  releases/family-v2/Bagh-toddler-v2.0.0.apk
