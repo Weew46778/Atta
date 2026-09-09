@@ -1,0 +1,3 @@
+import {defineConfig} from '@playwright/test';
+import chromium from '@sparticuz/chromium';
+export default defineConfig({testDir:'./tests/browser',timeout:120000,workers:1,reporter:[['list'],['json',{outputFile:'test-results/results.json'}]],use:{actionTimeout:10000,reducedMotion:'reduce',baseURL:'http://localhost:5173',viewport:{width:1440,height:1000},launchOptions:{executablePath:await chromium.executablePath(),args:['--no-sandbox','--disable-dev-shm-usage'],env:{...process.env,LD_LIBRARY_PATH:process.cwd()+'/.tools/chromium-libs/lib'}},screenshot:'only-on-failure'},webServer:{command:'npm run dev -- --port 5173',url:'http://localhost:5173',reuseExistingServer:true}});

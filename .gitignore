@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.tools/
+android/build/
+*.keystore
+*.jks
+test-results/
+playwright-report/
+*.p12
+*.idsig
+.family-data/
+*.sqlite*
+*.key

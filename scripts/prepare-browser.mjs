@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import zlib from 'node:zlib';
+import {execFileSync} from 'node:child_process';
+import chromium from '@sparticuz/chromium';
+fs.mkdirSync('.tools/chromium-libs',{recursive:true});
+const bin=path.resolve('node_modules/@sparticuz/chromium/bin/al2023.tar.br');
+fs.writeFileSync('.tools/al2023.tar',zlib.brotliDecompressSync(fs.readFileSync(bin)));
+execFileSync('tar',['-xf','.tools/al2023.tar','-C','.tools/chromium-libs']);
+console.log('Browser ready:',await chromium.executablePath());

@@ -1,0 +1,39 @@
+{
+  "status": "dual-narrator-picker-implemented",
+  "userFeedback": "هر دوصدا عالیه",
+  "auditionBattle": "06",
+  "registeredVoiceId": "voice-06",
+  "language": "fa-IR",
+  "gender": "feminine",
+  "auditionUseCase": "narration",
+  "auditionIndex": 4,
+  "note": "Both auditions used fa-IR, feminine narration, index 4 and the same audition text. The second audition asked the user to select the previously unselected candidate. Voice registration IDs are session-specific; eight MP3 assets are bundled locally.",
+  "rejectedPreviousVoiceIds": [
+    "voice-00",
+    "voice-01",
+    "voice-02",
+    "voice-03",
+    "voice-04",
+    "voice-05"
+  ],
+  "direction": {
+    "shared": "صدای زن، فارسی ایران، تلفظ طبیعی و صحیح، گرم، مهربان، واضح و آرام با سرزندگی ملایم. بدون تغییر مصنوعی زیر و بمی یا تقلید صدای کودک.",
+    "toddler": "جمله‌های کوتاه و کلمات کامل، روایت آرام و فرصت پاسخ؛ همراهی با والد و بدون فشار برای حرف‌زدن یا نمرهٔ تلفظ.",
+    "explorer": "روایت قصه‌گو و کنجکاوی‌برانگیز، بیان روشن و هیجان ملایم؛ بدون تندی یا اغراق.",
+    "mother": "آرام، صمیمی، محترمانه و حمایتگر؛ بدون سرزنش و لحن نصیحت‌گر.",
+    "father": "همان کیفیت راهنمای والدین؛ متن متناسب با ده روز دوری و پنج روز حضور."
+  },
+  "scope": "Two selectable narrators, four role-specific welcome clips each, local per-role preferences and sample playback are implemented in the current web app. Full v2 four-app redesign, all-stage narration, cross-device voice preferences and rebuilt Android packages remain pending.",
+  "narrators": [
+    {
+      "id": "first",
+      "registeredVoiceId": "voice-06",
+      "audition": "06"
+    },
+    {
+      "id": "second",
+      "registeredVoiceId": "voice-07",
+      "audition": "07"
+    }
+  ]
+}
