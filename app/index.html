@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#160d33">
+  <meta name="description" content="آتا — همراهِ بازی و یادگیریِ فارسیِ کودکان؛ قصه، معما، ریاضی، اخلاق و آرامش؛ بدون اینترنت و بدون تبلیغ.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="آتا">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/img/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+  <title>آتا — ماجراجویِ کوچکِ من</title>
+  <link rel="preload" href="assets/fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/base.css">
+  <style>
+    /* صحنهٔ آغازین پیش از اجرای جاوااسکریپت */
+    #boot-screen { position: fixed; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, #2b1c58, #160d33); z-index: 200; transition: opacity .5s; }
+    #boot-screen.hide { opacity: 0; pointer-events: none; }
+    #boot-screen .b-logo { font-size: 4.2em; animation: bfloat 2s ease-in-out infinite; }
+    #boot-screen .b-title { color: #ffd166; font-weight: 900; font-size: 1.5em; margin-top: 8px; }
+    #boot-screen .b-sub { color: #b8a8e0; font-size: .85em; margin-top: 6px; }
+    @keyframes bfloat { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
+  </style>
+</head>
+<body>
+  <div id="boot-screen" role="status" aria-label="در حال بارگذاری">
+    <div style="text-align:center">
+      <div class="b-logo">🦅</div>
+      <div class="b-title">آتا</div>
+      <div class="b-sub">ماجراجویِ کوچکِ من…</div>
+    </div>
+  </div>
+  <noscript>
+    <div style="position:fixed;inset:0;display:grid;place-items:center;background:#160d33;color:#fff;text-align:center;padding:24px;z-index:999">
+      برای اجرایِ آتا، جاوااسکریپت باید روشن باشد.
+    </div>
+  </noscript>
+
+  <!-- هسته -->
+  <script src="js/util.js"></script>
+  <script src="js/data-core.js"></script>
+  <script src="js/voice.js"></script>
+  <!-- محتوا -->
+  <script src="js/content-quiz.js"></script>
+  <script src="js/content-story.js"></script>
+  <script src="js/content-word.js"></script>
+  <script src="js/content-ethics.js"></script>
+  <script src="js/content-facts.js"></script>
+  <script src="js/content-toon.js"></script>
+  <script src="js/content-toddler.js"></script>
+  <script src="js/content-parent.js"></script>
+  <!-- رابط و موتورها -->
+  <script src="js/ui.js"></script>
+  <script src="js/activities.js"></script>
+  <script src="js/explorer.js"></script>
+  <script src="js/toddler.js"></script>
+  <script src="js/parent.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    /* پنهان‌کردنِ صحنهٔ آغازین پس از بوت */
+    (function () {
+      var hide = function () {
+        var b = document.getElementById('boot-screen');
+        if (b) { b.classList.add('hide'); setTimeout(function () { b.remove(); }, 600); }
+      };
+      if (window.AT && window.AT.app && window.AT.app.boot) setTimeout(hide, 300);
+      else window.addEventListener('load', function () { setTimeout(hide, 800); });
+    })();
+  </script>
+</body>
+</html>
