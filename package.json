@@ -1,0 +1,22 @@
+{
+  "name": "little-star",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build && node scripts/build-sw.js",
+    "test": "node --test tests/content.test.js",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@sparticuz/chromium": "^152.0.0",
+    "sharp": "^0.35.4",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "@fontsource/vazirmatn": "^5.2.7",
+    "@twemoji/api": "^17.0.3"
+  }
+}

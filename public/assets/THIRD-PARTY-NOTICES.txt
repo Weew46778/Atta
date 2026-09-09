@@ -1,0 +1,17 @@
+Little Star / ستاره‌کوچولو — third-party notices
+
+Twemoji graphics: Copyright Twitter, Inc. and other contributors.
+Graphics license: Creative Commons Attribution 4.0 International (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+https://github.com/twitter/twemoji
+Selected SVG files bundled locally from @twemoji/svg 15.0.0. No remote image requests.
+The package wrapper is MIT licensed (assets/emoji/LICENSE.txt).
+Twemoji parser (@twemoji/api): MIT License; Copyright Twitter, Inc. and contributors.
+
+Vazirmatn font: Copyright 2015 The Vazirmatn Project Authors (https://github.com/rastikerdar/vazirmatn).
+SIL Open Font License 1.1. See FONT-LICENSE.txt.
+
+The space adventure illustration is AI-generated for this application.
+All narrative, interaction design and game code were created for this project.
+Android platform libraries belong to their respective copyright holders; no Java runtime,
+compiler, Android SDK tool, analytics SDK, or advertising SDK is included in the APK.
