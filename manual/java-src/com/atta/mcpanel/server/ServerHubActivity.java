@@ -163,33 +163,46 @@ public class ServerHubActivity extends Activity {
     private void selectSegment(int idx) {
         // استایل منو: بخش فعال برجسته
         for (int i = 0; i < segViews.length; i++) {
-            int kind = (i == idx) ? UiKit.KIND_ACCENT : UiKit.KIND_PLAIN;
-            GradientDrawable g;
-            if (i == idx) {
-                g = UiKit.roundedSolid(0xFF4E8A33, UiKit.dp(this, 999));
-            } else {
-                g = UiKit.roundedSolid(0xFF1D2532, UiKit.dp(this, 999));
-            }
+            GradientDrawable g = (i == idx)
+                    ? UiKit.roundedSolid(0xFF4E8A33, UiKit.dp(this, 999))
+                    : UiKit.roundedSolid(0xFF1D2532, UiKit.dp(this, 999));
             segViews[i].setBackground(g);
             segViews[i].setTextColor(i == idx ? Palette.ON_ACCENT : Palette.CHIP_TEXT);
         }
         page.removeAllViews();
         diag.setVisibility(View.GONE);
+
+        // نوار وضعیت بالای صفحه: اگر صفحه ساخته نشود این خط خودش می‌گوید چرا
+        final TextView status = new TextView(this);
+        status.setTextSize(10.5f);
+        status.setTextColor(Palette.TEXT_DIM);
+        status.setText("⟳ در حال ساخت بخش…");
+        page.addView(status, UiKit.wrapParams(status, 2, 0));
+
+        final String[] names = {"VPS", "Aternos", "اتصال پالس"};
         try {
             if (idx == 0) buildVpsPage();
             else if (idx == 1) buildAternosPage();
             else buildPulsePage();
+            int items = Math.max(0, page.getChildCount() - 1);
+            status.setText("✔ بخش " + names[Math.max(0, Math.min(idx, names.length - 1))]
+                    + " آماده است (" + items + " المان)");
+            status.setTextColor(0xFF57C15B);
         } catch (Throwable t) {
-            TextView tv = new TextView(this);
-            tv.setText("❌ خطا در ساخت صفحه:\n" + t.toString());
-            tv.setTextColor(0xFFFF6B6B);
-            tv.setTextSize(12f);
-            page.addView(tv, UiKit.wrapParams(tv, 2, 0));
+            status.setText("❌ خطا در ساخت صفحه:\n" + t.toString());
+            status.setTextColor(0xFFFF6B6B);
         }
     }
 
     private int dp(float v) {
         return Math.round(v * getResources().getDisplayMetrics().density);
+    }
+
+    /** پارامتر ردیف دکمه با ارتفاع واقعی dp (درست‌شده برای تراکم‌های بالا) */
+    private LinearLayout.LayoutParams wRow(float weight, int hDp) {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp(hDp), weight);
+        lp.setMargins(dp(2), 0, dp(2), 0);
+        return lp;
     }
 
     private void toast(String m) {
@@ -290,8 +303,8 @@ public class ServerHubActivity extends Activity {
         LinearLayout row1 = UiKit.hrow(this);
         fPort = input("پورت", prefs.getString("vps_port", "22"), InputType.TYPE_CLASS_NUMBER);
         fUser = input("کاربر", prefs.getString("vps_user", "root"), 0);
-        row1.addView(fPort, UiKit.m(0, 46, 0.4f, 2));
-        row1.addView(fUser, UiKit.m(0, 46, 0.6f, 2));
+        row1.addView(fPort, wRow(0.4f, 46));
+        row1.addView(fUser, wRow(0.6f, 46));
         card.addView(row1, UiKit.wrapParams(row1, 2, 0));
 
         fPass = input("رمز SSH", prefs.getString("vps_pass", ""),
@@ -301,34 +314,34 @@ public class ServerHubActivity extends Activity {
         LinearLayout row2 = UiKit.hrow(this);
         row2.addView(UiKit.chip(this, "💾 ذخیره", new Runnable() {
             @Override public void run() { saveVps(); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         row2.addView(UiKit.chip(this, "🔄 تست اتصال", UiKit.KIND_ACCENT, new Runnable() {
             @Override public void run() { runOp("test"); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         card.addView(row2, UiKit.wrapParams(row2, 2, 0));
 
         LinearLayout row3 = UiKit.hrow(this);
         row3.addView(UiKit.chip(this, "🚀 نصب خودکار سرور", UiKit.KIND_PLAIN, new Runnable() {
             @Override public void run() { runOp("setup"); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         row3.addView(UiKit.chip(this, "▶ استارت", UiKit.KIND_ACCENT, new Runnable() {
             @Override public void run() { runOp("start"); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         row3.addView(UiKit.chip(this, "⏹ توقف", UiKit.KIND_DANGER, new Runnable() {
             @Override public void run() { runOp("stop"); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         card.addView(row3, UiKit.wrapParams(row3, 2, 0));
 
         LinearLayout row4 = UiKit.hrow(this);
         row4.addView(UiKit.chip(this, "📊 وضعیت", new Runnable() {
             @Override public void run() { runOp("status"); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         row4.addView(UiKit.chip(this, "🔐 فعال‌سازی RCON", new Runnable() {
             @Override public void run() { runOp("rcon"); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         row4.addView(UiKit.chip(this, "📜 لاگ", new Runnable() {
             @Override public void run() { runOp("log"); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         card.addView(row4, UiKit.wrapParams(row4, 2, 0));
 
         addLabel(card, "حافظهٔ جاوا (مثلاً 2G):");
@@ -510,13 +523,13 @@ public class ServerHubActivity extends Activity {
         LinearLayout row = UiKit.hrow(this);
         row.addView(UiKit.chip(this, "🔌 پنل", new Runnable() {
             @Override public void run() { openUrl("https://aternos.org/go/"); }
-        }), UiKit.m(0, 42, 1f, 2));
+        }), wRow(1f, 42));
         row.addView(UiKit.chip(this, "🎛 کنسول", new Runnable() {
             @Override public void run() { openUrl("https://aternos.org/server/"); }
-        }), UiKit.m(0, 42, 1f, 2));
+        }), wRow(1f, 42));
         row.addView(UiKit.chip(this, "🧩 پلاگین‌ها", new Runnable() {
             @Override public void run() { openUrl("https://aternos.org/plugins/"); }
-        }), UiKit.m(0, 42, 1f, 2));
+        }), wRow(1f, 42));
         card.addView(row, UiKit.wrapParams(row, 2, 0));
 
         addLabel(card, "نصب یک‌باره (راهنما):");
@@ -586,20 +599,20 @@ public class ServerHubActivity extends Activity {
         LinearLayout row1 = UiKit.hrow(this);
         pPort = input("پورت", String.valueOf(prefs.getRconPort()), InputType.TYPE_CLASS_NUMBER);
         pPass = input("رمز RCON", prefs.getRconPassword(), 0);
-        row1.addView(pPort, UiKit.m(0, 46, 0.35f, 2));
-        row1.addView(pPass, UiKit.m(0, 46, 0.65f, 2));
+        row1.addView(pPort, wRow(0.35f, 46));
+        row1.addView(pPass, wRow(0.65f, 46));
         card.addView(row1, UiKit.wrapParams(row1, 2, 0));
 
         LinearLayout row2 = UiKit.hrow(this);
         row2.addView(UiKit.chip(this, "💾 ذخیره", new Runnable() {
             @Override public void run() { savePulse(); }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         row2.addView(UiKit.chip(this, "🧪 تست اتصال RCON", UiKit.KIND_ACCENT, new Runnable() {
             @Override public void run() {
                 savePulse();
                 testRcon();
             }
-        }), UiKit.m(0, 44, 1f, 2));
+        }), wRow(1f, 44));
         card.addView(row2, UiKit.wrapParams(row2, 2, 0));
 
         pulseLogTv = logBox();

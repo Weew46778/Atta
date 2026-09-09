@@ -10,7 +10,7 @@ AAPT2=$T/aapt2
 DEX=$T/r8/compatdx-master.jar
 SIGN=$T/wb/libs/apksigner/apksigner.jar
 KS=$M/keystore/ks.jks
-OUT=${1:-/home/user/Atta/Atta-2.0.1.apk}
+OUT=${1:-/home/user/Atta/Atta-2.0.2.apk}
 W=$(mktemp -d /tmp/attab2-XXXXXX)
 cd "$M"
 echo "== resources =="
