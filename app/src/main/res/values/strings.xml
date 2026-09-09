@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Atta</string>
+    <string name="tile_label">پنل اپراتور</string>
+    <string name="channel_name">پنل شناور روی بازی</string>
+    <string name="channel_desc">اعلان همیشگی سرویس پنل شناور Atta</string>
+    <string name="notif_title">پنل اپراتور Atta فعال است</string>
+    <string name="notif_text">برای باز کردن پنل، از لبهٔ سمت چپ صفحه یک خط را به داخل بکش</string>
+    <string name="notif_stop">توقف پنل</string>
+</resources>

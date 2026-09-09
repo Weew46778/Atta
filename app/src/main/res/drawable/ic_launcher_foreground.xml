@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- مکعب ماینکرفتی: رویهٔ روشن، وجه چپ/راست تیره‌تر -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- top face -->
+    <path
+        android:fillColor="#9BD653"
+        android:pathData="M54,32.4 L81.2,52.2 L54,72 L26.8,52.2 Z" />
+
+    <!-- left face -->
+    <path
+        android:fillColor="#5E9E39"
+        android:pathData="M26.8,52.2 L54,72 L54,95.4 L26.8,75.6 Z" />
+
+    <!-- right face -->
+    <path
+        android:fillColor="#3E7A26"
+        android:pathData="M81.2,52.2 L54,72 L54,95.4 L81.2,75.6 Z" />
+
+    <!-- درزهای خیاطی (ترک‌های پیکسل) -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,0"
+        android:strokeColor="#00000000" />
+</vector>

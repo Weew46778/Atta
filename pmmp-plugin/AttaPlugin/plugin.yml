@@ -1,0 +1,19 @@
+name: AttaPlugin
+main: Atta\AttaPlugin
+version: 1.0.0
+api: [5.0.0, 4.0.0]
+src-namespace-prefix: Atta\
+author: Atta
+description: "پلاگین کنترل اپراتور Atta — اجرای کدهای خاص با فرمان کوتاه atta (اتصال RCON از اپ Atta)"
+
+commands:
+  atta:
+    description: "اجرای کد اپراتوری Atta روی بازیکن/دنیا"
+    usage: "/atta <کد> [بازیکن]"
+    aliases: [a]
+    permission: atta.cmd
+
+permissions:
+  atta.cmd:
+    default: op
+    description: "اجازهٔ اجرای کدهای اپراتوری Atta"

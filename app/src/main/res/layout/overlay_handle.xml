@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- دستگیرهٔ کشویی لبهٔ چپ صفحه (نوار سبز با سه خط) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/handleRoot"
+    android:layout_width="56dp"
+    android:layout_height="130dp"
+    android:layoutDirection="ltr">
+
+    <FrameLayout
+        android:layout_width="28dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_handle">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_grip" />
+    </FrameLayout>
+</FrameLayout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Atta — مانیفست دستی (بدون وابستگی به کتابخانه‌های خارجی)
+  package: com.atta.mcpanel | minSdk 26 | targetSdk 29
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.atta.mcpanel"
+    android:versionCode="30"
+    android:versionName="2.0.0">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission"
+        xmlns:tools="http://schemas.android.com/tools" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="AttaPanel"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:theme="@android:style/Theme.Material.NoActionBar">
+
+        <activity
+            android:name="com.atta.mcpanel.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- مرکز سرور v2: VPS + Aternos + اتصال پالس (همه از راه دور) -->
+        <activity
+            android:name="com.atta.mcpanel.server.ServerHubActivity"
+            android:exported="true" />
+
+        <!-- سرویس پنل شناور روی بازی -->
+        <service
+            android:name="com.atta.mcpanel.overlay.OverlayService"
+            android:exported="false"
+            android:stopWithTask="false" />
+
+        <!-- کاشی تنظیمات سریع -->
+        <service
+            android:name="com.atta.mcpanel.overlay.OverlayTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_stat"
+            android:label="پنل اپراتور"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.atta.mcpanel.overlay.OverlayReceiver"
+            android:exported="false" />
+
+        <!-- سرویس دسترسی‌پذیری: لمس خودکار دکمهٔ چت برای اجرای یک‌کلیکی در بازی -->
+        <service
+            android:name="com.atta.mcpanel.auto.AutoAccessibilityService"
+            android:exported="true"
+            android:label="اجرای خودکار Atta"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_config" />
+        </service>
+
+        <!-- کیبورد Atta: دستور را خودش در چت بازی تایپ و ارسال می‌کند -->
+        <service
+            android:name="com.atta.mcpanel.auto.AttaIme"
+            android:exported="true"
+            android:label="کیبورد Atta"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/ime_keyboard" />
+        </service>
+    </application>
+</manifest>

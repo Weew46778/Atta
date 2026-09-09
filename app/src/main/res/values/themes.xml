@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Atta" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorOnPrimary">@color/onAccent</item>
+        <item name="colorSecondary">@color/gold</item>
+        <item name="colorOnSecondary">@color/onGold</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="android:colorBackground">@color/colorRoot</item>
+        <item name="android:statusBarColor">@color/colorRoot</item>
+        <item name="android:navigationBarColor">@color/colorRoot</item>
+        <item name="android:windowBackground">@color/colorRoot</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme.Atta</item>
+    </style>
+
+    <style name="AlertDialogTheme.Atta" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorSurface">@color/colorSurfaceHi</item>
+    </style>
+
+    <style name="TextAppearance.Atta.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/textMain</item>
+    </style>
+</resources>

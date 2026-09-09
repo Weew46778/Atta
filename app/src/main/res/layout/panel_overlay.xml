@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ساختار پنل کشویی: سربرگ + نوار زبانه‌ها + محتوای لغزنده -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/panelRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    android:background="@drawable/bg_panel"
+    android:orientation="vertical">
+
+    <!-- سربرگ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="6dp">
+
+        <TextView
+            android:id="@+id/tvPanelTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="ابزارها"
+            android:textColor="@color/textMain"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnClosePanel"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_close"
+            android:gravity="center"
+            android:text="✕"
+            android:textColor="@color/textSub"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorStroke" />
+
+    <!-- نوار زبانه‌ها: دکمه‌ها به صورت برنامه‌ای ساخته می‌شوند -->
+    <LinearLayout
+        android:id="@+id/tabStrip"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorStroke" />
+
+    <!-- بدنه: هر زبانه یک صفحهٔ خودش را دارد و با انیمیشن جابه‌جا می‌شود -->
+    <android.widget.ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
