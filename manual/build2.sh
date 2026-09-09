@@ -10,7 +10,7 @@ AAPT2=$T/aapt2
 DEX=$T/r8/compatdx-master.jar
 SIGN=$T/wb/libs/apksigner/apksigner.jar
 KS=$M/keystore/ks.jks
-OUT=${1:-/home/user/Atta/Atta-2.0.0.apk}
+OUT=${1:-/home/user/Atta/Atta-2.0.1.apk}
 W=$(mktemp -d /tmp/attab2-XXXXXX)
 cd "$M"
 echo "== resources =="
@@ -23,7 +23,7 @@ echo "== link =="
 "$AAPT2" link -o "$W/base.apk" -I "$ANDROID_JAR" \
   --manifest AndroidManifest.xml \
   --min-sdk-version 26 --target-sdk-version 28 \
-  --version-code 30 --version-name 2.0.0 \
+  --version-code ${VCODE:-30} --version-name ${VNAME:-2.0.0} \
   "$W/res.zip" 2>&1 | tail -5
 echo "== javac =="
 find "$M/java-src" -name '*.java' > "$W/sources.txt"
