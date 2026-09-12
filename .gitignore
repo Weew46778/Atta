@@ -11,3 +11,6 @@ playwright-report/
 .family-data/
 *.sqlite*
 *.key
+
+# بستهٔ فشردهٔ انتشار (APKها جداگانه نگه داشته می‌شوند)
+releases/Bagh-Ghesse3-all.zip
