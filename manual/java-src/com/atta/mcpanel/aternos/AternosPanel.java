@@ -339,6 +339,19 @@ public class AternosPanel {
                     engine.setFocusableInTouchMode(false);
                     engine.addJavascriptInterface(new Bridge(), "AttaBridge");
                     engine.setWebViewClient(new WebViewClient() {
+                        @Override public void onPageStarted(WebView v, String url, android.graphics.Bitmap favicon) {
+                            log("⟳ باز شدن: " + (url == null ? "?" : url.replace("https://aternos.org", "")));
+                        }
+                        @Override public void onReceivedError(WebView v, android.webkit.WebResourceRequest req, android.webkit.WebResourceError err) {
+                            try {
+                                if (req.isForMainFrame()) log("❌ خطای بارگذاری صفحه (کد " + err.getErrorCode() + ") — اینترنت/کلودفلر را چک کن");
+                            } catch (Throwable ignored) {}
+                        }
+                        @Override public void onReceivedHttpError(WebView v, android.webkit.WebResourceRequest req, android.webkit.WebResourceResponse rsp) {
+                            try {
+                                if (req.isForMainFrame()) log("⚠ Aternos پاسخ HTTP " + rsp.getStatusCode() + " داد");
+                            } catch (Throwable ignored) {}
+                        }
                         @Override public void onPageFinished(WebView v, String url) {
                             pageLoading = false;
                             lastPageLoad = System.currentTimeMillis();
@@ -455,7 +468,7 @@ public class AternosPanel {
     // پل جاوااسکریپت ← جاوا
     // ------------------------------------------------------------------
 
-    private final class Bridge {
+    public final class Bridge {
         @JavascriptInterface
         public void post(final String type, final String data) {
             ui.post(new Runnable() { @Override public void run() { onBridge(type, data); }});
@@ -508,8 +521,24 @@ public class AternosPanel {
             Object o = MiniJson.parse(lsPart);
             Map<String, Object> m = MiniJson.object(o);
             if (m != null) cb.atStatus(m, domPart);
+        } else if ("diag".equals(type)) {
+            log("🔎 " + data);
         } else if ("ready".equals(type)) {
-            boolean tokenOk = data.contains("token-ok");
+            // data = "token-ok|SERVERID" یا "no-token|"
+            String sid = "";
+            int bar = data.indexOf('|');
+            String head = data;
+            if (bar >= 0) {
+                head = data.substring(0, bar);
+                sid = data.substring(bar + 1).trim();
+            }
+            boolean tokenOk = head.contains("token-ok");
+            if (sid.length() > 0 && serverId.length() == 0) {
+                serverId = sid;
+                prefs.setString("aternos_server_id", sid);
+                applyServerCookie(sid);
+                log("🖥 شناسهٔ سرور خوانده شد: " + sid);
+            }
             if (!ready) {
                 ready = true;
                 log(tokenOk
@@ -544,28 +573,38 @@ public class AternosPanel {
     // اسکریپت‌های تزریقی
     // ------------------------------------------------------------------
 
-    /** فهرست سرورها از صفحهٔ /servers/ */
+    /** فهرست سرورها از صفحهٔ /servers/ — با تلاش مجدد و گزارش تشخیصی */
     private static final String JS_SERVERS =
             "(function(){try{" +
+            "function grab(){" +
             "var out=[],seen={};var els=document.querySelectorAll('[data-id]');" +
             "for(var i=0;i<els.length;i++){var el=els[i];var id=el.getAttribute('data-id');" +
             "if(!id||seen[id])continue;seen[id]=1;" +
             "var n=el.querySelector('.server-name, .server-description, .server-body, .server-title');" +
             "var nm=n?String(n.textContent).replace(/\\s+/g,' ').trim().slice(0,60):'';" +
             "out.push({id:id,name:nm});}" +
-            "AttaBridge.post('servers',JSON.stringify(out));" +
+            "if(out.length){AttaBridge.post('servers',JSON.stringify(out));return true;}" +
+            "var ti=(document.title||'');" +
+            "if(ti.indexOf('Just a moment')>=0){AttaBridge.post('diag','صفحهٔ محافظ کلودفلر — چند ثانیه دیگر خودش رد می‌شود');return false;}" +
+            "if(location.pathname==='/server/'||location.pathname==='/server'){AttaBridge.post('diag','مستقیم روی صفحهٔ سرور افتادیم (اکانت تک‌سرور)');return true;}" +
+            "var bt=(document.body?String(document.body.innerText):'').replace(/\\s+/g,' ').trim().slice(0,200);" +
+            "AttaBridge.post('diag','سروری در صفحهٔ فهرست پیدا نشد | عنوان: '+ti.slice(0,50)+' | متن: '+bt);return false;" +
+            "}" +
+            "if(grab())return;" +
+            "var n=0;var iv=setInterval(function(){n++;if(grab()||n>6){clearInterval(iv);}},1200);" +
             "}catch(e){AttaBridge.post('err','servers:'+e)}})();";
 
-    /** پس از بارگذاری صفحهٔ سرور: خواندن توکن + lastStatus + اعلام آمادگی */
+    /** پس از بارگذاری صفحهٔ سرور: توکن + lastStatus + شناسهٔ سرور از کوکی خود پنل */
     private static final String JS_READY =
             "(function(){try{" +
             "var t=window.AJAX_TOKEN||'';" +
             "if(!t){var hs=document.head.innerHTML;var m=hs.match(/\\(\\(\\)[\\s\\S]*?\\)\\)\\(\\);/);" +
             "if(m){try{(0,eval)(m[0]);}catch(e){}t=window.AJAX_TOKEN||'';}}" +
             "window.ATTA_TOKEN=t;" +
+            "var sid='';var cm=document.cookie.match(/(?:^|;\\s*)ATERNOS_SERVER=([^;]+)/);if(cm)sid=cm[1];" +
             "var ls='{}';try{ls=JSON.stringify(window.lastStatus||{})}catch(e){}" +
             "AttaBridge.post('status',ls+'@@');" +
-            "AttaBridge.post('ready',t?'token-ok':'no-token');" +
+            "AttaBridge.post('ready',(t?'token-ok':'no-token')+'|'+(sid||''));" +
             "}catch(e){AttaBridge.post('err','ready:'+e)}})();";
 
     /** خواندن سبک وضعیت بدون بارگذاری دوبارهٔ صفحه */
