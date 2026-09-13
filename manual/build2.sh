@@ -10,7 +10,7 @@ AAPT2=$T/aapt2
 DEX=$T/r8/compatdx-master.jar
 SIGN=$T/wb/libs/apksigner/apksigner.jar
 KS=$M/keystore/ks.jks
-OUT=${1:-/home/user/Atta/Atta-2.0.3.apk}
+OUT=${1:-/home/user/Atta/Atta-2.0.4.apk}
 W=$(mktemp -d /tmp/attab2-XXXXXX)
 cd "$M"
 echo "== resources =="
@@ -18,18 +18,20 @@ rm -rf res/xml res/values res/values-*
 mkdir -p res/xml res/values
 cp -f res-src/xml/*.xml res/xml/
 cp -f res-src/values/*.xml res/values/ 2>/dev/null || true
-"$AAPT2" compile --dir res -o "$W/res.zip" 2>&1 | tail -3
+"$AAPT2" compile --dir res -o "$W/res.zip" 2>&1 | { tail -3 || true; }
 echo "== link =="
 "$AAPT2" link -o "$W/base.apk" -I "$ANDROID_JAR" \
   --manifest AndroidManifest.xml \
   --min-sdk-version 26 --target-sdk-version 28 \
   --version-code ${VCODE:-30} --version-name ${VNAME:-2.0.0} \
-  "$W/res.zip" 2>&1 | tail -5
+  "$W/res.zip" 2>&1 | { tail -5 || true; }
 echo "== javac =="
 find "$M/java-src" -name '*.java' > "$W/sources.txt"
 mkdir -p "$W/classes"
+set -o pipefail
 "$J" -cp "$JAVAC" com.sun.tools.javac.Main -source 1.8 -target 1.8 -encoding UTF-8 -nowarn \
-  -bootclasspath "$ANDROID_JAR" -d "$W/classes" @"$W/sources.txt" 2>&1 | grep -vE 'Note|deprecat' | head -10
+  -bootclasspath "$ANDROID_JAR" -d "$W/classes" @"$W/sources.txt" 2>&1 | { grep -vE 'Note|deprecat' || true; } | head -10
+test -f "$W/classes/com/atta/mcpanel/MainActivity.class" || { echo "❌ javac failed"; exit 1; }
 echo "compile ok ($(wc -l < "$W/sources.txt") files)"
 echo "== dex =="
 find "$W/classes" -name '*.class' > "$W/cls.txt"
@@ -58,8 +60,8 @@ print('assembled dex=%d bytes files=%d' % (len(dz), len(names) + 1))
 PY
 echo "== sign =="
 "$J" -jar "$SIGN" sign --ks "$KS" --ks-key-alias atta --ks-pass pass:atta123 \
-  --v1-signing-enabled true --v2-signing-enabled true --out "$OUT" "$W/out.apk" 2>&1 | head -5
-"$J" -jar "$SIGN" verify --print-certs "$OUT" 2>/dev/null | grep -iE 'Verifies|sha-256' | head -2
-"$AAPT2" dump badging "$OUT" 2>/dev/null | head -4
+  --v1-signing-enabled true --v2-signing-enabled true --out "$OUT" "$W/out.apk" 2>&1 | { head -5 || true; }
+"$J" -jar "$SIGN" verify --print-certs "$OUT" 2>/dev/null | { grep -iE 'Verifies|sha-256' || true; } | { head -2 || true; }
+"$AAPT2" dump badging "$OUT" 2>/dev/null | { head -4 || true; }
 ls -la "$OUT"
 rm -rf "$W"

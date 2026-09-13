@@ -215,6 +215,15 @@ public class AternosPanel {
                             pageLoading = false;
                             lastPageLoad = System.currentTimeMillis();
                             if (url == null) return;
+                            if (url.contains("/go/") || url.equals(BASE + "/") || url.equals(BASE)) {
+                                // ریدایرکت به صفحهٔ ورود = نشست منقضی شده
+                                if (ready || hasSession()) {
+                                    ready = false;
+                                    log("⚠ نشست Aternos منقضی شده — دوباره «ورود / اتصال» را بزن");
+                                    cb.atGone("expired");
+                                }
+                                return;
+                            }
                             if (url.contains("/servers")) {
                                 v.evaluateJavascript(JS_SERVERS, null);
                             } else if (url.contains("/server") || url.contains("/panel")) {
@@ -263,7 +272,13 @@ public class AternosPanel {
                 log("❌ اول وارد Aternos شو (دکمهٔ ورود داخل اپ)");
                 return;
             }
-            if (!pageOk()) { reloadServerPage(); }
+            String u = engine.getUrl() == null ? "" : engine.getUrl();
+            boolean onServerPage = u.contains("/server") && !u.contains("/servers");
+            if (!pageOk() || !onServerPage) {
+                reloadServerPage();
+                log("⏳ صفحهٔ سرور در حال آماده‌سازی است — وقتی «✅ متصل» را دیدی دوباره بزن");
+                return;
+            }
             String js = JS_ACTION.replace("%ACT%", act_);
             engine.evaluateJavascript(js, null);
             log("📤 فرمان «" + act_ + "» به پنل Aternos فرستاده شد…");
