@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیش‌نمایش طراحی صفحهٔ Aternos — نسخهٔ ۲.۰.۵</title>
+<style>
+  /* مقیاس: ۱dp = ۱px در صفحهٔ ۳۶۰dp (رایج‌ترین عرض گوشی) — همان متریک‌های واقعی کد */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background:#0b0f16; font-family:Tahoma,"Segoe UI",sans-serif; color:#e8ecf3; padding:24px 12px 60px; }
+  .note { max-width:576px; margin:0 auto 18px; background:#1d2532; border:1px solid #2a3547; border-radius:12px; padding:12px 16px; font-size:12.5px; color:#c7d2e2; line-height:2; }
+  .phone { width:360px; margin:0 auto; background:linear-gradient(180deg,#10141d,#151b28); border:1px solid #2a3547; border-radius:22px; padding:14px 10px 24px; }
+  .scroller { max-height:78vh; overflow-y:auto; padding:4px 2px; }
+  .card { background:linear-gradient(135deg,#17202C,#10151D); border:1px solid rgba(255,255,255,.2); border-radius:16px; padding:6px 12px 8px; margin:0 2px 14px; }
+  .card .title { font-size:15px; font-weight:700; padding:10px 2px 4px; }
+  .seclabel { font-size:13px; font-weight:700; color:#7ec850; padding:14px 4px 5px; }
+  .caption { font-size:11.5px; color:#93a0b4; padding:0 4px 3px; line-height:1.9; }
+  .row { display:flex; flex-direction:row; padding:0 2px; margin-bottom:7px; }
+  .chip { flex:1; height:44px; line-height:44px; text-align:center; font-size:12px; font-weight:700; border-radius:14px; margin:0 3px; white-space:nowrap; overflow:hidden; }
+  .chip.small { font-size:10px; }   /* معادل متن‌خودتنظیم ۸-۱۲sp برای برچسب‌های بلند */
+  .plain { background:#232c3b; color:#dbe4f0; }
+  .accent { background:#3a6b26; color:#fff; }
+  .danger { background:#5c2323; color:#ffb3b3; }
+  .status { background:#0D1420; border:1px solid rgba(255,255,255,.19); border-radius:12px; padding:10px 12px; font-size:14.5px; font-weight:700; line-height:1.75; margin:0 2px; min-height:56px; color:#9aa7ba; }
+  .status.ok { color:#57C15B; }
+  .log { background:#0A0E13; border:1px solid rgba(255,255,255,.19); border-radius:10px; padding:6px 8px; font-size:11px; line-height:1.9; color:#d6e0ea; height:230px; overflow:hidden; margin:0 2px; font-family:monospace; text-align:right; direction:rtl; }
+  .space { height:4px; }
+  .seg { display:flex; gap:6px; margin:0 2px 12px; }
+  .seg div { flex:1; height:34px; line-height:34px; text-align:center; font-size:11.5px; font-weight:700; border-radius:999px; }
+  .seg .on { background:#4E8A33; color:#fff; }
+  .seg .off { background:#1D2532; color:#9aa7ba; }
+  .st { font-size:10.5px; color:#57C15B; padding:6px 4px 2px; }
+</style>
+</head>
+<body>
+<div class="note">
+  🔍 <b>پیش‌نمایش طراحی (نه عکسِ گوشی):</b> این صفحه با <b>همان متریک‌های واقعی کد ۲.۰.۵</b> رسم شده —
+  هر ۱ پیکسل اینجا = ۱dp روی گوشیِ ۳۶۰dp عرض (رایج). دکمه‌ها ۴۴dp، جعبهٔ گزارش ۲۳۰dp،
+  حاشیه‌ها و گردیها عین کد. یعنی چیزی که می‌بینی همان نسبت‌هایی است که روی گوشی ساخته می‌شود.
+  <br>🐞 باگ نسخهٔ قبل: ردیف‌های دکمه به‌اشتباه ارتفاع ۴dp داشتند (به‌جای فاصله، «ارتفاع» ست شده بود) + متن دکمه‌ها بریده می‌شد — هر دو رفع شد.
+</div>
+
+<div class="phone">
+  <div class="scroller">
+
+    <div class="seg">
+      <div class="off">🛰 VPS</div>
+      <div class="on">🌐 Aternos</div>
+      <div class="off">🔌 اتصال پالس</div>
+    </div>
+    <div class="st">✔ بخش Aternos آماده است (۲ المان)</div>
+
+    <div class="card">
+      <div class="title">🌐 Aternos — پنل مدیریت داخل اپ</div>
+
+      <div class="seclabel">۱) اتصال به حساب Aternos</div>
+      <div class="caption">یک بار با اکانت خودت وارد شو؛ نشست ذخیره می‌شود و دفعات بعد بدون ورود دوباره وصل می‌شود. همهٔ دکمه‌های این صفحه روی خود سرور واقعی Aternos اجرا می‌شوند.</div>
+      <div class="row">
+        <div class="chip accent">🔑 ورود / اتصال</div>
+        <div class="chip small plain">🔄 تازه‌سازی وضعیت</div>
+      </div>
+      <div class="status" id="st">وضعیت: متصل نیست<br><br>— پس از اتصال: خاموش/روشن/در حال روشن‌شدن + آدرس سرور + بازیکنان آنلاین</div>
+      <div class="space"></div>
+
+      <div class="seclabel">۲) کنترل سرور</div>
+      <div class="row">
+        <div class="chip accent">▶ استارت</div>
+        <div class="chip danger">⏹ توقف</div>
+      </div>
+      <div class="row">
+        <div class="chip small plain">🔁 ری‌استارت</div>
+        <div class="chip plain">✅ تأیید صف</div>
+      </div>
+      <div class="row">
+        <div class="chip plain">📜 قبول EULA</div>
+        <div class="chip small danger">🔒 خروج از Aternos</div>
+      </div>
+      <div class="space"></div>
+
+      <div class="seclabel">۳) گزارش زنده (پاسخ‌های واقعی Aternos)</div>
+      <div class="log">— پنل Aternos —
+۱) «🔑 ورود / اتصال» را بزن و در صفحهٔ داخل اپ وارد شو
+۲) بعد از اتصال، دکمه‌های استارت/توقف روی سرور واقعی اجرا می‌شوند
+هر پاسخ Aternos همین‌جا می‌آید.</div>
+    </div>
+
+    <div class="card">
+      <div class="title">🧩 تنظیم یک‌بارهٔ سرور (فقط دفعهٔ اول)</div>
+      <div class="log" style="height:150px">۱) سایت Aternos ← نرم‌افزار ← Paper (جاوا) ← ذخیره
+۲) پلاگین‌ها ← نصب: Geyser، Floodgate، ViaVersion
+۳) استارت؛ بعد از Online شدن، در بدراک: you.aternos.me
+۴) روزانه فقط همین صفحه: «استارت» بزن و تمام</div>
+      <div class="row" style="margin-top:7px">
+        <div class="chip small plain">🌐 باز کردن سایت کامل (تنظیم اولیه)</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

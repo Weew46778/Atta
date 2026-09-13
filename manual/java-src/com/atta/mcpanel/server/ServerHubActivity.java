@@ -237,7 +237,7 @@ public class ServerHubActivity extends Activity {
     /** پارامتر ردیف دکمه با ارتفاع واقعی dp (درست‌شده برای تراکم‌های بالا) */
     private LinearLayout.LayoutParams wRow(float weight, int hDp) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp(hDp), weight);
-        lp.setMargins(dp(2), 0, dp(2), 0);
+        lp.setMargins(dp(3), 0, dp(3), dp(7));
         return lp;
     }
 
@@ -346,39 +346,43 @@ public class ServerHubActivity extends Activity {
         fPass = input("رمز SSH", prefs.getString("vps_pass", ""),
                 InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         card.addView(fPass, UiKit.wrapParams(fPass, 2, 46));
+UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "💾 ذخیره", new Runnable() {
+                    @Override public void run() { saveVps(); }
+                }),
+                UiKit.chip(this, "🔄 تست اتصال", UiKit.KIND_ACCENT, new Runnable() {
+                    @Override public void run() { runOp("test"); }
+                })
+        }, 2, card);
 
-        LinearLayout row2 = UiKit.hrow(this);
-        row2.addView(UiKit.chip(this, "💾 ذخیره", new Runnable() {
-            @Override public void run() { saveVps(); }
-        }), wRow(1f, 44));
-        row2.addView(UiKit.chip(this, "🔄 تست اتصال", UiKit.KIND_ACCENT, new Runnable() {
-            @Override public void run() { runOp("test"); }
-        }), wRow(1f, 44));
-        card.addView(row2, UiKit.wrapParams(row2, 2, 0));
+        
+        
 
-        LinearLayout row3 = UiKit.hrow(this);
-        row3.addView(UiKit.chip(this, "🚀 نصب خودکار سرور", UiKit.KIND_PLAIN, new Runnable() {
-            @Override public void run() { runOp("setup"); }
-        }), wRow(1f, 44));
-        row3.addView(UiKit.chip(this, "▶ استارت", UiKit.KIND_ACCENT, new Runnable() {
-            @Override public void run() { runOp("start"); }
-        }), wRow(1f, 44));
-        row3.addView(UiKit.chip(this, "⏹ توقف", UiKit.KIND_DANGER, new Runnable() {
-            @Override public void run() { runOp("stop"); }
-        }), wRow(1f, 44));
-        card.addView(row3, UiKit.wrapParams(row3, 2, 0));
+        
 
-        LinearLayout row4 = UiKit.hrow(this);
-        row4.addView(UiKit.chip(this, "📊 وضعیت", new Runnable() {
-            @Override public void run() { runOp("status"); }
-        }), wRow(1f, 44));
-        row4.addView(UiKit.chip(this, "🔐 فعال‌سازی RCON", new Runnable() {
-            @Override public void run() { runOp("rcon"); }
-        }), wRow(1f, 44));
-        row4.addView(UiKit.chip(this, "📜 لاگ", new Runnable() {
-            @Override public void run() { runOp("log"); }
-        }), wRow(1f, 44));
-        card.addView(row4, UiKit.wrapParams(row4, 2, 0));
+UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "🚀 نصب خودکار سرور", new Runnable() {
+                    @Override public void run() { runOp("setup"); }
+                }),
+                UiKit.chip(this, "▶ استارت", UiKit.KIND_ACCENT, new Runnable() {
+                    @Override public void run() { runOp("start"); }
+                }),
+                UiKit.chip(this, "⏹ توقف", UiKit.KIND_DANGER, new Runnable() {
+                    @Override public void run() { runOp("stop"); }
+                })
+        }, 3, card);
+
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "📊 وضعیت", new Runnable() {
+                    @Override public void run() { runOp("status"); }
+                }),
+                UiKit.chip(this, "🔐 فعال‌سازی RCON", new Runnable() {
+                    @Override public void run() { runOp("rcon"); }
+                }),
+                UiKit.chip(this, "📜 لاگ", new Runnable() {
+                    @Override public void run() { runOp("log"); }
+                })
+        }, 3, card);
 
         addLabel(card, "حافظهٔ جاوا (مثلاً 2G):");
         fMem = input("2G", prefs.getString("vps_mem", "2G"), 0);
@@ -387,13 +391,17 @@ public class ServerHubActivity extends Activity {
         addLabel(card, "فرمان دلخواه به کنسول سرور (مثلاً op gaser):");
         final EditText cmd = input("op gaser / list / save-all", "", 0);
         card.addView(cmd, UiKit.wrapParams(cmd, 2, 44));
-        card.addView(UiKit.chip(this, "📤 ارسال به کنسول", UiKit.KIND_ACCENT, new Runnable() {
-            @Override public void run() {
-                String cc = cmd.getText().toString().trim();
-                if (cc.isEmpty()) { toast("فرمان را بنویس"); return; }
-                runOp("cmd:" + cc);
-            }
-        }), UiKit.wrapParams(cmd, 2, 44));
+        
+
+UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "📤 ارسال به کنسول", UiKit.KIND_ACCENT, new Runnable() {
+                    @Override public void run() {
+                        String cc = cmd.getText().toString().trim();
+                        if (cc.isEmpty()) { toast("فرمان را بنویس"); return; }
+                        runOp("cmd:" + cc);
+                    }
+                })
+        }, 1, card);
 
         vpsLogTv = logBox();
         card.addView(vpsLogTv, UiKit.wrapParams(vpsLogTv, 2, 230));
@@ -545,10 +553,9 @@ public class ServerHubActivity extends Activity {
         g.setCornerRadius(dp(16));
         g.setStroke(1, 0x33FFFFFF);
         card.setBackground(g);
+        page.addView(card, UiKit.wrapParams(card, 2, 0));
 
         cardTitle(card, "🌐 Aternos — پنل مدیریت داخل اپ");
-        addLabel(card, "یک بار با اکانت Aternos خودت داخل اپ وارد شو؛ از آن پس استارت/توقف/وضعیت سرور "
-                + "همه از همین دکمه‌ها روی خود Aternos اجرا می‌شود (API خود پنل Aternos با نشست تو).");
 
         // موتور Aternos (یک بار ساخته می‌شود)
         if (aternos == null) {
@@ -560,98 +567,116 @@ public class ServerHubActivity extends Activity {
                     atRender(ls, dom);
                 }
                 @Override public void atReady(String serverId) {
-                    atStatusText = "وضعیت: متصل ✓ (دکمه‌ها فعال‌اند)";
-                    atStatusColor = 0xFF57C15B;
-                    if (atStatusTv != null) {
-                        atStatusTv.setText(atStatusText);
-                        atStatusTv.setTextColor(atStatusColor);
-                    }
+                    atSetStatus("وضعیت: متصل ✓ (دکمه‌ها فعال‌اند)", 0xFF57C15B);
                 }
                 @Override public void atGone(String reason) {
-                    atStatusText = "وضعیت: متصل نیست";
-                    atStatusColor = 0xFF9AA7BA;
-                    if (atStatusTv != null) {
-                        atStatusTv.setText(atStatusText);
-                        atStatusTv.setTextColor(atStatusColor);
-                    }
+                    atSetStatus("وضعیت: متصل نیست" + ("expired".equals(reason) ? " — نشست منقضی شد، دوباره وارد شو" : ""), 0xFF9AA7BA);
                 }
             });
         }
 
-        // نمایشگر وضعیت
+        // ---------- ۱) اتصال ----------
+        card.addView(UiKit.sectionLabel(this, "۱) اتصال به حساب Aternos"));
+        TextView cap1 = UiKit.caption(this, "یک بار با اکانت خودت وارد شو؛ نشست ذخیره می‌شود و دفعات بعد بدون ورود دوباره وصل می‌شود. همهٔ دکمه‌های این صفحه روی خود سرور واقعی Aternos اجرا می‌شوند.", true);
+        card.addView(cap1, UiKit.wrapParams(cap1, 2, 0));
+
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "🔑 ورود / اتصال", UiKit.KIND_ACCENT, new Runnable() {
+                    @Override public void run() { aternos.begin(); }
+                }),
+                UiKit.chip(this, "🔄 تازه‌سازی وضعیت", new Runnable() {
+                    @Override public void run() {
+                        if (aternos.isReady()) aternos.reloadServerPage();
+                        else aternos.begin();
+                    }
+                })
+        }, 2, card);
+
+        // جعبهٔ وضعیت — ارتفاع خودکار، هرگز فشرده نمی‌شود
         atStatusTv = new TextView(this);
-        atStatusTv.setTextSize(15f);
+        atStatusTv.setTextSize(14.5f);
         atStatusTv.setTypeface(Typeface.DEFAULT_BOLD);
+        atStatusTv.setLineSpacing(dp(3), 1f);
+        atStatusTv.setMinLines(2);
         atStatusTv.setText(atStatusText);
         atStatusTv.setTextColor(atStatusColor);
-        card.addView(atStatusTv, UiKit.wrapParams(atStatusTv, 2, 8));
+        GradientDrawable sg = UiKit.roundedSolid(0xFF0D1420, dp(12));
+        sg.setStroke(1, 0x30FFFFFF);
+        atStatusTv.setBackground(sg);
+        atStatusTv.setPadding(dp(12), dp(10), dp(12), dp(10));
+        card.addView(atStatusTv, UiKit.wrapParams(atStatusTv, 2, 0));
 
-        LinearLayout rowL = UiKit.hrow(this);
-        rowL.addView(UiKit.chip(this, "🔑 ورود / اتصال", UiKit.KIND_ACCENT, new Runnable() {
-            @Override public void run() { aternos.begin(); }
-        }), wRow(1f, 46));
-        rowL.addView(UiKit.chip(this, "🔄 وضعیت", new Runnable() {
-            @Override public void run() {
-                if (aternos.isReady()) aternos.reloadServerPage();
-                else aternos.begin();
-            }
-        }), wRow(1f, 46));
-        card.addView(rowL, UiKit.wrapParams(rowL, 2, 4));
+        card.addView(UiKit.space(this, 4));
 
-        // دکمه‌های اجرایی روی خود Aternos
-        LinearLayout rowA = UiKit.hrow(this);
-        rowA.addView(UiKit.chip(this, "▶ استارت", UiKit.KIND_ACCENT, new Runnable() {
-            @Override public void run() { aternos.doAction("start"); }
-        }), wRow(1f, 46));
-        rowA.addView(UiKit.chip(this, "⏹ توقف", UiKit.KIND_DANGER, new Runnable() {
-            @Override public void run() { aternos.doAction("stop"); }
-        }), wRow(1f, 46));
-        rowA.addView(UiKit.chip(this, "🔁 ری‌استارت", new Runnable() {
-            @Override public void run() { aternos.doAction("restart"); }
-        }), wRow(1f, 46));
-        card.addView(rowA, UiKit.wrapParams(rowA, 2, 4));
+        // ---------- ۲) کنترل ----------
+        card.addView(UiKit.sectionLabel(this, "۲) کنترل سرور"));
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "▶ استارت", UiKit.KIND_ACCENT, new Runnable() {
+                    @Override public void run() { aternos.doAction("start"); }
+                }),
+                UiKit.chip(this, "⏹ توقف", UiKit.KIND_DANGER, new Runnable() {
+                    @Override public void run() { aternos.doAction("stop"); }
+                })
+        }, 2, card);
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "🔁 ری‌استارت", new Runnable() {
+                    @Override public void run() { aternos.doAction("restart"); }
+                }),
+                UiKit.chip(this, "✅ تأیید صف", new Runnable() {
+                    @Override public void run() { aternos.doAction("confirm"); }
+                })
+        }, 2, card);
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "📜 قبول EULA", new Runnable() {
+                    @Override public void run() { aternos.doAction("accept-eula"); }
+                }),
+                UiKit.chip(this, "🔒 خروج از Aternos", UiKit.KIND_DANGER, new Runnable() {
+                    @Override public void run() { aternos.logout(); }
+                })
+        }, 2, card);
 
-        LinearLayout rowB = UiKit.hrow(this);
-        rowB.addView(UiKit.chip(this, "✅ تأیید صف", new Runnable() {
-            @Override public void run() { aternos.doAction("confirm"); }
-        }), wRow(1f, 44));
-        rowB.addView(UiKit.chip(this, "📜 قبول EULA", new Runnable() {
-            @Override public void run() { aternos.doAction("accept-eula"); }
-        }), wRow(1f, 44));
-        rowB.addView(UiKit.chip(this, "🔒 خروج", UiKit.KIND_DANGER, new Runnable() {
-            @Override public void run() { aternos.logout(); }
-        }), wRow(1f, 44));
-        card.addView(rowB, UiKit.wrapParams(rowB, 2, 4));
+        card.addView(UiKit.space(this, 4));
 
-        // کادر لاگ واقعی API
+        // ---------- ۳) گزارش ----------
+        card.addView(UiKit.sectionLabel(this, "۳) گزارش زنده (پاسخ‌های واقعی Aternos)"));
         atLogTv = logBox();
         atLogTv.setText("— پنل Aternos —\n"
-                + "۱) «ورود / اتصال» را بزن و در صفحهٔ داخل اپ وارد شو\n"
-                + "۲) بعد از اتصال، دکمه‌های استارت/توقف همین‌جا روی سرور واقعی اجرا می‌شوند\n"
-                + "هر پاسخ Aternos همین کادر می‌آید.");
-        card.addView(atLogTv, UiKit.wrapParams(atLogTv, 2, 190));
+                + "۱) «🔑 ورود / اتصال» را بزن و در صفحهٔ داخل اپ وارد شو\n"
+                + "۲) بعد از اتصال، دکمه‌های استارت/توقف روی سرور واقعی اجرا می‌شوند\n"
+                + "هر پاسخ Aternos همین‌جا می‌آید.");
+        card.addView(atLogTv, UiKit.wrapParams(atLogTv, 2, 230));
 
-        page.addView(card, UiKit.wrapParams(card, 2, 0));
-
-        // راهنمای یک‌بارهٔ ساختار سرور (Paper + Geyser) — فقط یک بار لازم است
+        // ---------- کارت راهنمای یک‌باره ----------
         LinearLayout card2 = UiKit.vcol(this, 12);
         GradientDrawable g2 = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
                 new int[]{0xFF141B26, 0xFF10151D});
         g2.setCornerRadius(dp(16));
         g2.setStroke(1, 0x2A3547);
         card2.setBackground(g2);
+        page.addView(card2, UiKit.wrapParams(card2, 2, 0));
+
         cardTitle(card2, "🧩 تنظیم یک‌بارهٔ سرور (فقط دفعهٔ اول)");
         TextView steps = logBox();
         steps.setText("۱) سایت Aternos ← نرم‌افزار ← Paper (جاوا) ← ذخیره\n"
                 + "۲) پلاگین‌ها ← نصب: Geyser، Floodgate، ViaVersion\n"
                 + "۳) استارت؛ بعد از Online شدن، در بدراک: you.aternos.me\n"
-                + "۴) روزانه فقط همین صفحهٔ اپ: «استارت» بزن و تمام");
+                + "۴) روزانه فقط همین صفحه: «استارت» بزن و تمام");
         card2.addView(steps, UiKit.wrapParams(steps, 2, 150));
-        TextView bSite = UiKit.chip(this, "🌐 باز کردن سایت کامل (فقط برای تنظیم اولیه)", new Runnable() {
-            @Override public void run() { openUrl("https://aternos.org/server/"); }
-        });
-        card2.addView(bSite, UiKit.wrapParams(bSite, 2, 44));
-        page.addView(card2, UiKit.wrapParams(card2, 2, 0));
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "🌐 باز کردن سایت کامل (تنظیم اولیه)", new Runnable() {
+                    @Override public void run() { openUrl("https://aternos.org/server/"); }
+                })
+        }, 1, card2);
+    }
+
+    /** به‌روزرسانی امن جعبهٔ وضعیت */
+    private void atSetStatus(String text, int color) {
+        atStatusText = text;
+        atStatusColor = color;
+        if (atStatusTv != null) {
+            atStatusTv.setText(text);
+            atStatusTv.setTextColor(color);
+        }
     }
 
     /** ترجمهٔ lastStatus پنل Aternos به متن فارسی خوانا */
@@ -734,17 +759,19 @@ public class ServerHubActivity extends Activity {
         row1.addView(pPass, wRow(0.65f, 46));
         card.addView(row1, UiKit.wrapParams(row1, 2, 0));
 
-        LinearLayout row2 = UiKit.hrow(this);
-        row2.addView(UiKit.chip(this, "💾 ذخیره", new Runnable() {
-            @Override public void run() { savePulse(); }
-        }), wRow(1f, 44));
-        row2.addView(UiKit.chip(this, "🧪 تست اتصال RCON", UiKit.KIND_ACCENT, new Runnable() {
-            @Override public void run() {
-                savePulse();
-                testRcon();
-            }
-        }), wRow(1f, 44));
-        card.addView(row2, UiKit.wrapParams(row2, 2, 0));
+        
+
+UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "💾 ذخیره", new Runnable() {
+                    @Override public void run() { savePulse(); }
+                }),
+                UiKit.chip(this, "🧪 تست اتصال RCON", UiKit.KIND_ACCENT, new Runnable() {
+                    @Override public void run() {
+                        savePulse();
+                        testRcon();
+                    }
+                })
+        }, 2, card);
 
         pulseLogTv = logBox();
         card.addView(pulseLogTv, UiKit.wrapParams(pulseLogTv, 2, 170));
