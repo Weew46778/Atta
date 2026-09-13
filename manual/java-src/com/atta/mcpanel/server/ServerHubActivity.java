@@ -23,6 +23,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.atta.mcpanel.aternos.AternosPanel;
+import com.atta.mcpanel.aternos.MiniJson;
 import com.atta.mcpanel.core.AppPrefs;
 import com.atta.mcpanel.core.Palette;
 import com.atta.mcpanel.overlay.UiKit;
@@ -55,6 +57,13 @@ public class ServerHubActivity extends Activity {
     // فیلدهای اتصال پالس
     private EditText pHost, pPort, pPass;
     private TextView pulseLogTv;
+    // فیلدهای Aternos
+    private AternosPanel aternos;
+    private TextView atStatusTv, atLogTv;
+    private int currentSegment = 0;
+    private boolean resumedFlag = false;
+    private String atStatusText = "وضعیت: متصل نیست";
+    private int atStatusColor = 0xFF9AA7BA;
 
     private final java.util.concurrent.ExecutorService exec =
             java.util.concurrent.Executors.newSingleThreadExecutor();
@@ -77,10 +86,36 @@ public class ServerHubActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        resumedFlag = true;
+        ui.postDelayed(atPoll, 4000);
+    }
+
+    @Override
+    protected void onPause() {
+        resumedFlag = false;
+        ui.removeCallbacks(atPoll);
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         exec.shutdownNow();
+        if (aternos != null) aternos.destroy();
         super.onDestroy();
     }
+
+    /** هر ۶ ثانیه وضعیت Aternos را تازه می‌کند (فقط وقتی بخشش باز است) */
+    private final Runnable atPoll = new Runnable() {
+        @Override public void run() {
+            if (!resumedFlag) return;
+            try {
+                if (aternos != null && currentSegment == 1 && aternos.isReady()) aternos.poll();
+            } catch (Throwable ignored) {}
+            ui.postDelayed(this, 6000);
+        }
+    };
 
     private void diag(String s) {
         if (diag != null) {
@@ -161,6 +196,7 @@ public class ServerHubActivity extends Activity {
     private TextView[] segViews;
 
     private void selectSegment(int idx) {
+        currentSegment = idx;
         // استایل منو: بخش فعال برجسته
         for (int i = 0; i < segViews.length; i++) {
             GradientDrawable g = (i == idx)
@@ -499,7 +535,7 @@ public class ServerHubActivity extends Activity {
     }
 
     // =====================================================================
-    // صفحهٔ Aternos
+    // صفحهٔ Aternos — پنل مدیریت واقعی داخل خود اپ
     // =====================================================================
 
     private void buildAternosPage() {
@@ -510,69 +546,164 @@ public class ServerHubActivity extends Activity {
         g.setStroke(1, 0x33FFFFFF);
         card.setBackground(g);
 
-        cardTitle(card, "🌐 Aternos — سرور رایگان ابری");
-        addLabel(card, "Aternos از بیرون RCON نمی‌دهد؛ مدیریت از «پنل داخل همین اپ» با اکانت خودت انجام می‌شود. "
-                + "با Geyser روی نسخهٔ Paper، بدراک ۱.۲۶ هم وارد می‌شود.");
+        cardTitle(card, "🌐 Aternos — پنل مدیریت داخل اپ");
+        addLabel(card, "یک بار با اکانت Aternos خودت داخل اپ وارد شو؛ از آن پس استارت/توقف/وضعیت سرور "
+                + "همه از همین دکمه‌ها روی خود Aternos اجرا می‌شود (API خود پنل Aternos با نشست تو).");
 
-        TextView bWeb = UiKit.chip(this, "🌐 باز کردن پنل Aternos داخل اپ", UiKit.KIND_ACCENT,
-                new Runnable() {
-                    @Override public void run() { openAternosDialog(); }
-                });
-        card.addView(bWeb, UiKit.wrapParams(bWeb, 2, 46));
+        // موتور Aternos (یک بار ساخته می‌شود)
+        if (aternos == null) {
+            aternos = new AternosPanel(this, prefs, new AternosPanel.Ui() {
+                @Override public void atLog(String line) {
+                    if (atLogTv != null) appendLog(atLogTv, line);
+                }
+                @Override public void atStatus(java.util.Map<String, Object> ls, String dom) {
+                    atRender(ls, dom);
+                }
+                @Override public void atReady(String serverId) {
+                    atStatusText = "وضعیت: متصل ✓ (دکمه‌ها فعال‌اند)";
+                    atStatusColor = 0xFF57C15B;
+                    if (atStatusTv != null) {
+                        atStatusTv.setText(atStatusText);
+                        atStatusTv.setTextColor(atStatusColor);
+                    }
+                }
+                @Override public void atGone(String reason) {
+                    atStatusText = "وضعیت: متصل نیست";
+                    atStatusColor = 0xFF9AA7BA;
+                    if (atStatusTv != null) {
+                        atStatusTv.setText(atStatusText);
+                        atStatusTv.setTextColor(atStatusColor);
+                    }
+                }
+            });
+        }
 
-        LinearLayout row = UiKit.hrow(this);
-        row.addView(UiKit.chip(this, "🔌 پنل", new Runnable() {
-            @Override public void run() { openUrl("https://aternos.org/go/"); }
-        }), wRow(1f, 42));
-        row.addView(UiKit.chip(this, "🎛 کنسول", new Runnable() {
-            @Override public void run() { openUrl("https://aternos.org/server/"); }
-        }), wRow(1f, 42));
-        row.addView(UiKit.chip(this, "🧩 پلاگین‌ها", new Runnable() {
-            @Override public void run() { openUrl("https://aternos.org/plugins/"); }
-        }), wRow(1f, 42));
-        card.addView(row, UiKit.wrapParams(row, 2, 0));
+        // نمایشگر وضعیت
+        atStatusTv = new TextView(this);
+        atStatusTv.setTextSize(15f);
+        atStatusTv.setTypeface(Typeface.DEFAULT_BOLD);
+        atStatusTv.setText(atStatusText);
+        atStatusTv.setTextColor(atStatusColor);
+        card.addView(atStatusTv, UiKit.wrapParams(atStatusTv, 2, 8));
 
-        addLabel(card, "نصب یک‌باره (راهنما):");
-        TextView steps = logBox();
-        steps.setText("۱) پنل ← «نرم‌افزار» ← Paper ← ذخیره\n"
-                + "۲) «پلاگین‌ها» ← نصب: GeyserMC، Floodgate، ViaVersion\n"
-                + "۳) تنظیمات ← RAM را تا ۳-۴GB ببر\n"
-                + "۴) استارت؛ صبر کن Online شود\n"
-                + "۵) در بازی «افزودن سرور» ← آدرس you.aternos.me ← پورت 19132\n"
-                + "۶) نام تو در بازی: gaser\n"
-                + "۷) روشن‌کردن هر بار: همین پنل داخل اپ ← استارت");
-        card.addView(steps, UiKit.wrapParams(steps, 2, 210));
+        LinearLayout rowL = UiKit.hrow(this);
+        rowL.addView(UiKit.chip(this, "🔑 ورود / اتصال", UiKit.KIND_ACCENT, new Runnable() {
+            @Override public void run() { aternos.begin(); }
+        }), wRow(1f, 46));
+        rowL.addView(UiKit.chip(this, "🔄 وضعیت", new Runnable() {
+            @Override public void run() {
+                if (aternos.isReady()) aternos.reloadServerPage();
+                else aternos.begin();
+            }
+        }), wRow(1f, 46));
+        card.addView(rowL, UiKit.wrapParams(rowL, 2, 4));
+
+        // دکمه‌های اجرایی روی خود Aternos
+        LinearLayout rowA = UiKit.hrow(this);
+        rowA.addView(UiKit.chip(this, "▶ استارت", UiKit.KIND_ACCENT, new Runnable() {
+            @Override public void run() { aternos.doAction("start"); }
+        }), wRow(1f, 46));
+        rowA.addView(UiKit.chip(this, "⏹ توقف", UiKit.KIND_DANGER, new Runnable() {
+            @Override public void run() { aternos.doAction("stop"); }
+        }), wRow(1f, 46));
+        rowA.addView(UiKit.chip(this, "🔁 ری‌استارت", new Runnable() {
+            @Override public void run() { aternos.doAction("restart"); }
+        }), wRow(1f, 46));
+        card.addView(rowA, UiKit.wrapParams(rowA, 2, 4));
+
+        LinearLayout rowB = UiKit.hrow(this);
+        rowB.addView(UiKit.chip(this, "✅ تأیید صف", new Runnable() {
+            @Override public void run() { aternos.doAction("confirm"); }
+        }), wRow(1f, 44));
+        rowB.addView(UiKit.chip(this, "📜 قبول EULA", new Runnable() {
+            @Override public void run() { aternos.doAction("accept-eula"); }
+        }), wRow(1f, 44));
+        rowB.addView(UiKit.chip(this, "🔒 خروج", UiKit.KIND_DANGER, new Runnable() {
+            @Override public void run() { aternos.logout(); }
+        }), wRow(1f, 44));
+        card.addView(rowB, UiKit.wrapParams(rowB, 2, 4));
+
+        // کادر لاگ واقعی API
+        atLogTv = logBox();
+        atLogTv.setText("— پنل Aternos —\n"
+                + "۱) «ورود / اتصال» را بزن و در صفحهٔ داخل اپ وارد شو\n"
+                + "۲) بعد از اتصال، دکمه‌های استارت/توقف همین‌جا روی سرور واقعی اجرا می‌شوند\n"
+                + "هر پاسخ Aternos همین کادر می‌آید.");
+        card.addView(atLogTv, UiKit.wrapParams(atLogTv, 2, 190));
 
         page.addView(card, UiKit.wrapParams(card, 2, 0));
+
+        // راهنمای یک‌بارهٔ ساختار سرور (Paper + Geyser) — فقط یک بار لازم است
+        LinearLayout card2 = UiKit.vcol(this, 12);
+        GradientDrawable g2 = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                new int[]{0xFF141B26, 0xFF10151D});
+        g2.setCornerRadius(dp(16));
+        g2.setStroke(1, 0x2A3547);
+        card2.setBackground(g2);
+        cardTitle(card2, "🧩 تنظیم یک‌بارهٔ سرور (فقط دفعهٔ اول)");
+        TextView steps = logBox();
+        steps.setText("۱) سایت Aternos ← نرم‌افزار ← Paper (جاوا) ← ذخیره\n"
+                + "۲) پلاگین‌ها ← نصب: Geyser، Floodgate، ViaVersion\n"
+                + "۳) استارت؛ بعد از Online شدن، در بدراک: you.aternos.me\n"
+                + "۴) روزانه فقط همین صفحهٔ اپ: «استارت» بزن و تمام");
+        card2.addView(steps, UiKit.wrapParams(steps, 2, 150));
+        TextView bSite = UiKit.chip(this, "🌐 باز کردن سایت کامل (فقط برای تنظیم اولیه)", new Runnable() {
+            @Override public void run() { openUrl("https://aternos.org/server/"); }
+        });
+        card2.addView(bSite, UiKit.wrapParams(bSite, 2, 44));
+        page.addView(card2, UiKit.wrapParams(card2, 2, 0));
     }
 
-    private void openAternosDialog() {
-        try {
-            final AlertDialog dlg = new AlertDialog.Builder(this).create();
-            dlg.setTitle("پنل Aternos (ورود با اکانت خودت)");
-            WebView wv = new WebView(this);
-            WebSettings ws = wv.getSettings();
-            ws.setJavaScriptEnabled(true);
-            ws.setDomStorageEnabled(true);
-            ws.setDatabaseEnabled(true);
-            ws.setUserAgentString(ws.getUserAgentString().replace("; wv", ""));
-            ws.setLoadWithOverviewMode(true);
-            ws.setUseWideViewPort(true);
-            wv.loadUrl("https://aternos.org/go/");
+    /** ترجمهٔ lastStatus پنل Aternos به متن فارسی خوانا */
+    private void atRender(java.util.Map<String, Object> ls, String dom) {
+        StringBuilder sb = new StringBuilder();
+        int color = 0xFF9AA7BA;
+        if (ls != null && !ls.isEmpty()) {
+            double st = MiniJson.num(ls, "status", -1);
+            String txt;
+            if (st == 0) { txt = "⏻ خاموش"; color = 0xFF9AA7BA; }
+            else if (st == 1) { txt = "● روشن — سرور در دسترس است"; color = 0xFF57C15B; }
+            else if (st == 2) { txt = "⟳ در حال روشن‌شدن… (۱-۳ دقیقه، صف رایگان)"; color = 0xFFF0B45B; }
+            else if (st == 3) { txt = "⏳ در حال خاموش‌شدن…"; color = 0xFFF0B45B; }
+            else if (st == 6) { txt = "⏳ در حال بارگذاری…"; color = 0xFFF0B45B; }
+            else if (st == 7) { txt = "❌ خطا در سرور"; color = 0xFFE46B6B; }
+            else if (st == 10) { txt = "⏳ در صف Aternos — «تأیید صف» را بزن"; color = 0xFFF0B45B; }
+            else txt = "وضعیت: " + (st < 0 ? MiniJson.str(ls, "status", "?") : String.valueOf((int) st));
+            sb.append(txt);
 
-            LinearLayout box = UiKit.vcol(this, 8);
-            int wvh = Math.min(dp(560),
-                    Math.round(getResources().getDisplayMetrics().heightPixels * 0.7f));
-            box.addView(wv, new LinearLayout.LayoutParams(-1, wvh));
-            TextView bClose = UiKit.chip(this, "بستن", new Runnable() {
-                @Override public void run() { dlg.dismiss(); }
-            });
-            box.addView(bClose, UiKit.wrapParams(bClose, 4, 46));
-            dlg.setView(box);
-            dlg.show();
-        } catch (Exception e) {
-            toast("پنل باز نشد: " + e.getMessage());
-            openUrl("https://aternos.org/go/");
+            String ip = MiniJson.str(ls, "ip", "");
+            double port = MiniJson.num(ls, "port", 0);
+            if (ip.length() > 0) {
+                sb.append("\n📍 آدرس: ").append(ip);
+                if (port > 0 && port != 25565) sb.append(":").append((int) port);
+            }
+            String motd = MiniJson.str(ls, "motd", "");
+            if (motd.length() > 0) sb.append("\n💬 ").append(motd);
+
+            Object pl = ls.get("playerlist");
+            if (pl instanceof java.util.List && !((java.util.List<?>) pl).isEmpty()) {
+                StringBuilder names = new StringBuilder();
+                for (Object e : (java.util.List<?>) pl) {
+                    String n;
+                    if (e instanceof java.util.Map) n = MiniJson.str(e, "name", "");
+                    else n = String.valueOf(e);
+                    if (n == null || n.length() == 0) continue;
+                    if (names.length() > 0) names.append("، ");
+                    names.append(n);
+                }
+                if (names.length() > 0) sb.append("\n👥 آنلاین: ").append(names);
+            }
+            String msg = MiniJson.str(ls, "message", "");
+            if (msg.length() > 0) sb.append("\nℹ ").append(msg);
+        } else {
+            sb.append("وضعیت خوانده نشد");
+            if (dom != null && dom.length() > 0) sb.append(" (پنل: ").append(dom).append(")");
+        }
+        atStatusText = sb.toString();
+        atStatusColor = color;
+        if (atStatusTv != null) {
+            atStatusTv.setText(atStatusText);
+            atStatusTv.setTextColor(atStatusColor);
         }
     }
 
