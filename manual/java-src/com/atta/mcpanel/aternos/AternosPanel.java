@@ -74,6 +74,7 @@ public class AternosPanel {
     private String serverId = "";
     private String lastServerName = "";
     private int pollTick = 0;
+    private int emptyPolls = 0;
     private boolean pageLoading = false;
     private long lastPageLoad = 0L;
 
@@ -476,7 +477,12 @@ public class AternosPanel {
     }
 
     private void onBridge(String type, String data) {
-        if ("servers".equals(type)) {
+        try {
+            if (!"status".equals(type)) {
+                log("📩 " + type + ((data == null || data.length() == 0) ? "" : ": "
+                        + (data.length() > 90 ? data.substring(0, 90) + "…" : data)));
+            }
+            if ("servers".equals(type)) {
             Object o = MiniJson.parse(data);
             List<Object> list = o instanceof List ? (List<Object>) o : null;
             if (list == null || list.isEmpty()) {
@@ -499,32 +505,55 @@ public class AternosPanel {
             }
             String saved = prefs.getString("aternos_server_id", "");
             String chosen = null;
-            for (String[] s : sv) if (s[0].equals(saved)) chosen = s[0];
+            for (String[] s2 : sv) if (s2[0].equals(saved)) chosen = s2[0];
             if (chosen == null) chosen = sv.get(0)[0];
             serverId = chosen;
             prefs.setString("aternos_server_id", chosen);
             applyServerCookie(chosen);
-            for (String[] s : sv) {
-                lastServerName = s[1];
-                log("🖥 سرور: " + (s[1].length() > 0 ? s[1] : ("#" + s[0])) + (s[0].equals(chosen) ? "  ← انتخاب شد" : ""));
+            for (String[] s2 : sv) {
+                lastServerName = s2[1];
+                log("🖥 سرور: " + (s2[1].length() > 0 ? s2[1] : ("#" + s2[0])) + (s2[0].equals(chosen) ? "  ← انتخاب شد" : ""));
             }
             if (sv.size() > 1) log("ℹ چند سرور داری؛ برای عوض‌کردن، در سایت Aternos سرور دلخواه را باز کن و دوباره «اتصال» بزن");
             loadEngine();
         } else if ("status".equals(type)) {
-            String lsPart = data;
-            String domPart = "";
+            // قالب: lastStatus@@DOM@@XHR — سه منبع وضعیت
+            String lsPart = data, domPart = "", xhrPart = "";
             int at = data.indexOf("@@");
             if (at >= 0) {
                 lsPart = data.substring(0, at);
-                domPart = data.substring(at + 2);
+                String rest = data.substring(at + 2);
+                int at2 = rest.indexOf("@@");
+                if (at2 >= 0) {
+                    domPart = rest.substring(0, at2);
+                    xhrPart = rest.substring(at2 + 2);
+                } else {
+                    domPart = rest;
+                }
             }
-            Object o = MiniJson.parse(lsPart);
-            Map<String, Object> m = MiniJson.object(o);
-            if (m != null) cb.atStatus(m, domPart);
+            Map<String, Object> m = MiniJson.object(MiniJson.parse(lsPart));
+            if ((m == null || m.isEmpty()) && xhrPart.trim().length() > 0) {
+                Map<String, Object> xm = MiniJson.object(MiniJson.parse(xhrPart));
+                if (xm != null && !xm.isEmpty()) {
+                    m = xm;
+                    domPart = domPart.length() > 0 ? domPart + " • از جریان خود پنل" : "از جریان خود پنل";
+                }
+            }
+            boolean hasData = (m != null && !m.isEmpty()) || domPart.trim().length() > 0;
+            if (hasData) {
+                emptyPolls = 0;
+                cb.atStatus(m, domPart);
+            } else {
+                emptyPolls++;
+                log("⏳ وضعیت هنوز از پنل نرسیده (" + emptyPolls + ")…");
+                if (emptyPolls == 3) {
+                    log("🔄 تازه‌سازی صفحهٔ سرور…");
+                    reloadServerPage();
+                }
+            }
         } else if ("diag".equals(type)) {
             log("🔎 " + data);
         } else if ("ready".equals(type)) {
-            // data = "token-ok|SERVERID" یا "no-token|"
             String sid = "";
             int bar = data.indexOf('|');
             String head = data;
@@ -549,7 +578,6 @@ public class AternosPanel {
             pollTick = 0;
         } else if ("action".equals(type)) {
             log("📥 " + data);
-            // اگر استارت به EULA خورد، قبول کن و دوباره استارت بزن
             if (data.contains("eula")) {
                 log("ℹ پذیرش EULA و تلاش دوباره برای استارت…");
                 doAction("accept-eula");
@@ -557,6 +585,9 @@ public class AternosPanel {
             }
         } else if ("err".equals(type)) {
             log("⚠ " + data);
+        }
+        } catch (Throwable t) {
+            log("❌ پردازش پیام پل (" + type + "): " + t);
         }
     }
 
@@ -594,27 +625,24 @@ public class AternosPanel {
             "var n=0;var iv=setInterval(function(){n++;if(grab()||n>6){clearInterval(iv);}},1200);" +
             "}catch(e){AttaBridge.post('err','servers:'+e)}})();";
 
-    /** پس از بارگذاری صفحهٔ سرور: توکن + lastStatus + شناسهٔ سرور از کوکی خود پنل */
+    /** پس از بارگذاری صفحهٔ سرور: توکن + وضعیت سه‌منبعی (lastStatus + DOM + جریان XHR خود پنل) */
     private static final String JS_READY =
-            "(function(){try{" +
-            "var t=window.AJAX_TOKEN||'';" +
-            "if(!t){var hs=document.head.innerHTML;var m=hs.match(/\\(\\(\\)[\\s\\S]*?\\)\\)\\(\\);/);" +
-            "if(m){try{(0,eval)(m[0]);}catch(e){}t=window.AJAX_TOKEN||'';}}" +
-            "window.ATTA_TOKEN=t;" +
-            "var sid='';var cm=document.cookie.match(/(?:^|;\\s*)ATERNOS_SERVER=([^;]+)/);if(cm)sid=cm[1];" +
-            "var ls='{}';try{ls=JSON.stringify(window.lastStatus||{})}catch(e){}" +
-            "AttaBridge.post('status',ls+'@@');" +
-            "AttaBridge.post('ready',(t?'token-ok':'no-token')+'|'+(sid||''));" +
-            "}catch(e){AttaBridge.post('err','ready:'+e)}})();";
+            "(function(){try{ var ti=(document.title||''); if(ti.indexOf('Just a moment')>=0){AttaBridge.post('diag','محافظ کلودفلر — کمی صبر کن؛ خودش رد می‌شود');return;} if(!window.ATTA_HOOKE" +
+            "D){ window.ATTA_HOOKED=1;window.ATTA_STATUS=''; try{ var of=window.fetch; if(of){ window.fetch=function(){ var p=of.apply(this,arguments); try{ p.then(function(r){ r.clone().text()" +
+            ".then(function(t){ try{if(t&&t.length<4000&&t.indexOf('\"status\"')>=0){window.ATTA_STATUS=t;}}catch(e){} }); }); }catch(e){} return p; }; } }catch(e){} try{ var oo=XMLHttpRequest." +
+            "prototype.open; var os=XMLHttpRequest.prototype.send; XMLHttpRequest.prototype.open=function(m,u){this._atta_u=u;return oo.apply(this,arguments);}; XMLHttpRequest.prototype.send=fu" +
+            "nction(){ var x=this; try{ x.addEventListener('load',function(){ try{if(x.responseText&&x.responseText.length<4000&&x.responseText.indexOf('\"status\"')>=0){window.ATTA_STATUS=x.re" +
+            "sponseText;}}catch(e){} }); }catch(e){} return os.apply(this,arguments); }; }catch(e){} } var t=window.AJAX_TOKEN||''; if(!t){var hs=document.head.innerHTML;var m=hs.match(/\\(\\(" +
+            "\\)[\\s\\S]*?\\)\\)\\(\\);/);if(m){try{(0,eval)(m[0]);}catch(e){}t=window.AJAX_TOKEN||'';}} window.ATTA_TOKEN=t; var sid='';var cm=document.cookie.match(/(?:^|;\\s*)ATERNOS_SERVER=" +
+            "([^;]+)/);if(cm){sid=cm[1];} var ls='{}';try{ls=JSON.stringify(window.lastStatus||{});}catch(e){} var st='';try{var el=document.querySelector('.status, #status, .server-status, [cl" +
+            "ass*=\"status\"]');if(el){st=String(el.className+' | '+el.textContent).replace(/\\s+/g,' ').trim().slice(0,140);}}catch(e){} AttaBridge.post('status',ls+'@@'+st+'@@'+(window.ATTA_S" +
+            "TATUS||'')); AttaBridge.post('ready',(t?'token-ok':'no-token')+'|'+(sid||'')); }catch(e){AttaBridge.post('err','ready:'+e)}})();";
 
-    /** خواندن سبک وضعیت بدون بارگذاری دوبارهٔ صفحه */
+    /** خواندن سبک وضعیت: lastStatus + DOM + جریان شنودشدهٔ XHR پنل */
     private static final String JS_POLL =
-            "(function(){try{" +
-            "var ls='{}';try{ls=JSON.stringify(window.lastStatus||{})}catch(e){}" +
-            "var el=document.querySelector('.status');" +
-            "var dom=el?(el.className+'|'+String(el.textContent).trim()):'';" +
-            "AttaBridge.post('status',ls+'@@'+dom);" +
-            "}catch(e){AttaBridge.post('err','poll:'+e)}})();";
+            "(function(){try{ var ls='{}';try{ls=JSON.stringify(window.lastStatus||{});}catch(e){} var st='';try{var el=document.querySelector('.status, #status, .server-status, [class*=\"statu" +
+            "s\"]');if(el){st=String(el.className+' | '+el.textContent).replace(/\\s+/g,' ').trim().slice(0,140);}}catch(e){} AttaBridge.post('status',ls+'@@'+st+'@@'+(window.ATTA_STATUS||''));" +
+            " }catch(e){AttaBridge.post('err','poll:'+e)}})();";
 
     /** اجرای عملیات روی سرور — همان API خود پنل؛ در نبود توکن، کلیک روی دکمهٔ واقعی */
     private static final String JS_ACTION =

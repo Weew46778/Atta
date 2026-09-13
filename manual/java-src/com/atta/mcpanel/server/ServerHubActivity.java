@@ -681,6 +681,11 @@ UiKit.chipRow(this, new TextView[]{
 
     /** ترجمهٔ lastStatus پنل Aternos به متن فارسی خوانا */
     private void atRender(java.util.Map<String, Object> ls, String dom) {
+        // هیچ داده‌ای نرسیده: وضعیت فعلی را بازنویسی نکن (اتصال برقرار است) — فقط لاگ
+        if ((ls == null || ls.isEmpty()) && (dom == null || dom.trim().isEmpty())) {
+            if (atLogTv != null) appendLog(atLogTv, "⏳ وضعیت هنوز از پنل نرسیده — اتصال برقرار است، چند ثانیه بعد دوباره می‌خواند");
+            return;
+        }
         StringBuilder sb = new StringBuilder();
         int color = 0xFF9AA7BA;
         if (ls != null && !ls.isEmpty()) {
@@ -721,8 +726,16 @@ UiKit.chipRow(this, new TextView[]{
             String msg = MiniJson.str(ls, "message", "");
             if (msg.length() > 0) sb.append("\nℹ ").append(msg);
         } else {
-            sb.append("وضعیت خوانده نشد");
-            if (dom != null && dom.length() > 0) sb.append(" (پنل: ").append(dom).append(")");
+            // lastStatus خالی بود — از متن نمایشی خودِ صفحهٔ پنل ترجمه کن
+            String d = dom == null ? "" : dom.toLowerCase();
+            String txt;
+            if (d.contains("offline")) { txt = "⏻ خاموش (از نمایش پنل)"; }
+            else if (d.contains("online")) { txt = "● روشن (از نمایش پنل)"; color = 0xFF57C15B; }
+            else if (d.contains("start") || d.contains("load")) { txt = "⟳ در حال روشن‌شدن… (از نمایش پنل)"; color = 0xFFF0B45B; }
+            else if (d.contains("queue") || d.contains("wait")) { txt = "⏳ در صف Aternos — «تأیید صف» را بزن"; color = 0xFFF0B45B; }
+            else if (d.contains("error")) { txt = "❌ خطا در سرور (از نمایش پنل)"; color = 0xFFE46B6B; }
+            else txt = "پنل: " + dom;
+            sb.append(txt);
         }
         atStatusText = sb.toString();
         atStatusColor = color;
