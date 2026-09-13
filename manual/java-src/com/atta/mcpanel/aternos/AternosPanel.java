@@ -1,13 +1,17 @@
 package com.atta.mcpanel.aternos;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.graphics.Typeface;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -62,7 +66,9 @@ public class AternosPanel {
     private final Handler ui = new Handler(Looper.getMainLooper());
 
     private WebView engine;          // WebView مخفی — موتور اصلی
-    private AlertDialog loginDlg;    // دیالوگ ورود (فقط وقتی نشست نیست)
+    private FrameLayout loginOverlay; // ورود تمام‌صفحه داخل خود اکتیویتی
+    private WebView loginWeb;
+    private TextView loginInfo;
     private boolean ready = false;
     private String serverId = "";
     private String lastServerName = "";
@@ -106,17 +112,19 @@ public class AternosPanel {
         }});
     }
 
-    /** ورود داخل اپ — WebView تمام‌صفحه با برداشت خودکار کوکی پس از لاگین */
+    /**
+     * ورود داخل اپ — تمام‌صفحه روی خود اکتیویتی (نه دیالوگ).
+     * دلیل: کیبورد نرم داخل WebViewِ AlertDialog باز نمی‌شود (رفتار شناخته‌شدهٔ اندروید)؛
+     * در حالت تمام‌صفحه + SOFT_INPUT_ADJUST_RESIZE کیبورد مثل مرورگر عادی کار می‌کند.
+     */
     public void showLogin() {
         uiOnUiThread(new Runnable() { @Override public void run() {
             try {
+                if (loginOverlay != null) return; // باز است
                 CookieManager cm = CookieManager.getInstance();
                 cm.setAcceptCookie(true);
-                final AlertDialog dlg = new AlertDialog.Builder(act).create();
-                loginDlg = dlg;
-                dlg.setTitle("ورود به Aternos (حساب خودت)");
 
-                WebView wv = new WebView(act);
+                final WebView wv = new WebView(act);
                 WebSettings ws = wv.getSettings();
                 ws.setJavaScriptEnabled(true);
                 ws.setDomStorageEnabled(true);
@@ -124,49 +132,125 @@ public class AternosPanel {
                 ws.setUserAgentString(ws.getUserAgentString().replace("; wv", ""));
                 ws.setLoadWithOverviewMode(true);
                 ws.setUseWideViewPort(true);
-                android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(wv, true);
+                wv.setFocusable(true);
+                wv.setFocusableInTouchMode(true);
+                CookieManager.getInstance().setAcceptThirdPartyCookies(wv, true);
 
                 wv.setWebViewClient(new WebViewClient() {
                     @Override public void onPageFinished(WebView v, String url) {
+                        // ترفند شناخته‌شده: فوکوس پایین صفحه تا اولین لمسِ فیلد ورودی کیبورد بیاورد
+                        v.requestFocus(View.FOCUS_DOWN);
                         if (sessionAppeared()) {
                             try { CookieManager.getInstance().flush(); } catch (Throwable ignored) {}
+                            if (loginInfo != null) loginInfo.setText("✅ وارد شدی — در حال بازگشت به پنل…");
                             log("✅ ورود انجام شد — نشست ذخیره شد");
-                            dlg.dismiss();
-                            loginDlg = null;
-                            loadEngine();
+                            ui.postDelayed(new Runnable() { @Override public void run() {
+                                closeLogin();
+                                loadEngine();
+                            }}, 700);
                         }
                     }
                 });
                 wv.loadUrl(URL_LOGIN);
 
-                LinearLayout box = UiKit.vcol(act, 8);
-                int wvh = Math.min(UiKit.dp(act, 560),
-                        Math.round(act.getResources().getDisplayMetrics().heightPixels * 0.7f));
-                box.addView(wv, new LinearLayout.LayoutParams(-1, wvh));
-                TextView bDone = UiKit.chip(act, "✅ وارد شدم — ادامه", UiKit.KIND_ACCENT, new Runnable() {
+                // دکمهٔ برگشت سخت‌افزاری = بستن صفحهٔ ورود
+                final View.OnKeyListener backClose = new View.OnKeyListener() {
+                    @Override public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK
+                                && event.getAction() == KeyEvent.ACTION_UP) {
+                            closeLogin();
+                            return true;
+                        }
+                        return false;
+                    }
+                };
+                wv.setOnKeyListener(backClose);
+
+                // نوار بالا: عنوان + دکمه‌ها
+                LinearLayout bar = UiKit.hrow(act);
+                bar.setBackgroundColor(0xFF10151D);
+                bar.setPadding(UiKit.dp(act, 8), UiKit.dp(act, 6), UiKit.dp(act, 8), UiKit.dp(act, 6));
+                TextView title = new TextView(act);
+                title.setText("🔑 ورود به Aternos");
+                title.setTextColor(0xFFE8ECF3);
+                title.setTextSize(14.5f);
+                title.setTypeface(Typeface.DEFAULT_BOLD);
+                bar.addView(title, new LinearLayout.LayoutParams(0, -2, 1f));
+                TextView bDone = UiKit.chip(act, "✅ وارد شدم", UiKit.KIND_ACCENT, new Runnable() {
                     @Override public void run() {
                         if (sessionAppeared()) {
                             try { CookieManager.getInstance().flush(); } catch (Throwable ignored) {}
                             log("✅ نشست Aternos ذخیره شد");
-                            dlg.dismiss();
-                            loginDlg = null;
+                            closeLogin();
                             loadEngine();
                         } else {
-                            Toast.makeText(act, "هنوز کوکی نشست نیامده — اول در صفحهٔ بالا وارد شو", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(act, "هنوز وارد نشده‌ای — اول در صفحهٔ زیر نام‌کاربری/رمز را بزن", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-                box.addView(bDone, UiKit.wrapParams(bDone, 4, 46));
-
-                TextView bClose = UiKit.chip(act, "بستن", new Runnable() {
-                    @Override public void run() { dlg.dismiss(); loginDlg = null; }
+                bar.addView(bDone, new LinearLayout.LayoutParams(-2, UiKit.dp(act, 44)));
+                TextView bClose = UiKit.chip(act, "بستن", UiKit.KIND_DANGER, new Runnable() {
+                    @Override public void run() { closeLogin(); }
                 });
-                box.addView(bClose, UiKit.wrapParams(bClose, 4, 40));
-                dlg.setView(box);
-                dlg.show();
+                bar.addView(bClose, new LinearLayout.LayoutParams(-2, UiKit.dp(act, 44)));
+
+                loginInfo = new TextView(act);
+                loginInfo.setTextSize(11.5f);
+                loginInfo.setTextColor(0xFF93A0B4);
+                loginInfo.setPadding(UiKit.dp(act, 10), UiKit.dp(act, 4), UiKit.dp(act, 10), UiKit.dp(act, 4));
+                loginInfo.setText("در انتظار ورود… بعد از زدن دکمهٔ ورود سایت، خودکار برمی‌گردد.");
+
+                LinearLayout box = UiKit.vcol(act, 0);
+                box.setBackgroundColor(0xFF0B0F16);
+                box.addView(bar, new LinearLayout.LayoutParams(-1, -2));
+                box.addView(loginInfo, new LinearLayout.LayoutParams(-1, -2));
+                box.addView(wv, new LinearLayout.LayoutParams(-1, 0, 1f));
+
+                FrameLayout overlay = new FrameLayout(act);
+                overlay.setBackgroundColor(0xFF0B0F16);
+                overlay.addView(box, new FrameLayout.LayoutParams(-1, -1));
+                overlay.setFocusableInTouchMode(true);
+                overlay.setOnKeyListener(backClose);
+
+                ViewGroup content = (ViewGroup) act.findViewById(android.R.id.content);
+                content.addView(overlay, new FrameLayout.LayoutParams(-1, -1));
+                loginOverlay = overlay;
+                loginWeb = wv;
+
+                // پنجرهٔ اکتیویتی با باز شدن کیبورد کوچک می‌شود تا فیلد ورودی دیده شود
+                try {
+                    act.getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
+                                    | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                } catch (Throwable ignored) {}
+
+                log("🔑 صفحهٔ ورود باز شد — کیبورد داخل خودش کار می‌کند");
             } catch (Throwable t) {
                 log("❌ بازکردن ورود: " + t);
             }
+        }});
+    }
+
+    /** بستن صفحهٔ ورود تمام‌صفحه */
+    private void closeLogin() {
+        uiOnUiThread(new Runnable() { @Override public void run() {
+            try {
+                if (loginOverlay != null) {
+                    ViewGroup par = (ViewGroup) loginOverlay.getParent();
+                    if (par != null) par.removeView(loginOverlay);
+                    loginOverlay = null;
+                }
+                if (loginWeb != null) {
+                    loginWeb.loadUrl("about:blank");
+                    loginWeb.destroy();
+                    loginWeb = null;
+                }
+            } catch (Throwable ignored) {}
+            try {
+                act.getWindow().setSoftInputMode(
+                        WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED
+                                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+            } catch (Throwable ignored) {}
         }});
     }
 
@@ -209,6 +293,8 @@ public class AternosPanel {
                     ws.setDomStorageEnabled(true);
                     ws.setUserAgentString(ws.getUserAgentString().replace("; wv", ""));
                     engine.setBackgroundColor(Color.TRANSPARENT);
+                    engine.setFocusable(false);
+                    engine.setFocusableInTouchMode(false);
                     engine.addJavascriptInterface(new Bridge(), "AttaBridge");
                     engine.setWebViewClient(new WebViewClient() {
                         @Override public void onPageFinished(WebView v, String url) {

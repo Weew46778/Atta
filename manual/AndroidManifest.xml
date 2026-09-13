@@ -5,8 +5,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.atta.mcpanel"
-    android:versionCode="35"
-    android:versionName="2.0.5">
+    android:versionCode="36"
+    android:versionName="2.0.6">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -38,6 +38,7 @@
         <!-- مرکز سرور v2: VPS + Aternos + اتصال پالس (همه از راه دور) -->
         <activity
             android:name="com.atta.mcpanel.server.ServerHubActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true" />
 
         <!-- سرویس پنل شناور روی بازی -->
