@@ -59,6 +59,7 @@ public class ServerHubActivity extends Activity {
     private TextView pulseLogTv;
     // فیلدهای Aternos
     private AternosPanel aternos;
+    private TextView atConsoleTv;
     private TextView atStatusTv, atLogTv;
     private int currentSegment = 0;
     private boolean resumedFlag = false;
@@ -572,6 +573,9 @@ UiKit.chipRow(this, new TextView[]{
                 @Override public void atGone(String reason) {
                     atSetStatus("وضعیت: متصل نیست" + ("expired".equals(reason) ? " — نشست منقضی شد، دوباره وارد شو" : ""), 0xFF9AA7BA);
                 }
+                @Override public void atConsole(String line) {
+                    if (atConsoleTv != null) appendLog(atConsoleTv, line);
+                }
             });
         }
 
@@ -645,6 +649,48 @@ UiKit.chipRow(this, new TextView[]{
                 + "۲) بعد از اتصال، دکمه‌های استارت/توقف روی سرور واقعی اجرا می‌شوند\n"
                 + "هر پاسخ Aternos همین‌جا می‌آید.");
         card.addView(atLogTv, UiKit.wrapParams(atLogTv, 2, 230));
+
+        card.addView(UiKit.space(this, 4));
+
+        // ---------- ۴) کنسول زندهٔ سرور ----------
+        card.addView(UiKit.sectionLabel(this, "۴) کنسول سرور (زنده — مثل کنسول خود Aternos)"));
+        TextView cap4 = UiKit.caption(this, "سرور باید روشن باشد. «اتصال کنسول» را بزن تا خطوط زندهٔ سرور بیاید؛ بعد هر دستوری (مثلاً list یا op gaser) را بنویس و ارسال کن — دقیقاً روی کنسول خود Aternos اجرا می‌شود.", true);
+        card.addView(cap4, UiKit.wrapParams(cap4, 2, 0));
+
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "🟢 اتصال کنسول", UiKit.KIND_ACCENT, new Runnable() {
+                    @Override public void run() { aternos.consoleConnect(); }
+                })
+        }, 1, card);
+
+        final EditText cmdIn = input("دستور کنسول (مثلاً list یا op gaser)", "", 0);
+        card.addView(cmdIn, UiKit.wrapParams(cmdIn, 2, 46));
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "📤 ارسال دستور", UiKit.KIND_ACCENT, new Runnable() {
+                    @Override public void run() {
+                        String c = cmdIn.getText().toString().trim();
+                        if (c.length() == 0) { toast("دستور را بنویس"); return; }
+                        if (atConsoleTv != null) appendLog(atConsoleTv, "> " + c);
+                        aternos.sendConsoleCommand(c.startsWith("/") ? c.substring(1) : c);
+                    }
+                }),
+                UiKit.chip(this, "👥 list", new Runnable() {
+                    @Override public void run() {
+                        if (atConsoleTv != null) appendLog(atConsoleTv, "> list");
+                        aternos.sendConsoleCommand("list");
+                    }
+                }),
+                UiKit.chip(this, "💾 save-all", new Runnable() {
+                    @Override public void run() {
+                        if (atConsoleTv != null) appendLog(atConsoleTv, "> save-all");
+                        aternos.sendConsoleCommand("save-all");
+                    }
+                })
+        }, 3, card);
+
+        atConsoleTv = logBox();
+        atConsoleTv.setText("— کنسول Aternos —\nبعد از روشن‌بودن سرور، «🟢 اتصال کنسول» را بزن.");
+        card.addView(atConsoleTv, UiKit.wrapParams(atConsoleTv, 2, 260));
 
         // ---------- کارت راهنمای یک‌باره ----------
         LinearLayout card2 = UiKit.vcol(this, 12);
@@ -757,10 +803,10 @@ UiKit.chipRow(this, new TextView[]{
         g.setStroke(1, 0x33FFFFFF);
         card.setBackground(g);
 
-        cardTitle(card, "🔌 اتصال پالس — کنترل اوورلی روی سرور");
-        addLabel(card, "زبانهٔ «سرور» در پنل روی بازی، دستورها را با این اتصال RCON می‌فرستد. "
+        cardTitle(card, "🔌 اتصال پالس — کنترل اوورلی روی سرور (VPS)");
+        addLabel(card, "این اتصال RCON فقط برای سرور VPS است (Aternos پورت RCON نمی‌دهد). "
                 + "VPS: دکمهٔ «فعال‌سازی RCON» در صفحهٔ VPS و بازکردن پورت 25575 در فایروال. "
-                + "Aternos معمولاً RCON بیرونی نمی‌دهد.");
+                + "برای Aternos، کنسول کامل در تب Aternos (بخش ۴) در دسترس است.");
 
         pHost = input("آدرس سرور (IP یا you.aternos.me)", prefs.getRconHost(), 0);
         card.addView(pHost, UiKit.wrapParams(pHost, 2, 46));

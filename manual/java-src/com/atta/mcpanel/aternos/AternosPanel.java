@@ -54,6 +54,7 @@ public class AternosPanel {
         void atStatus(Map<String, Object> lastStatus, String dom); // وضعیت سرور
         void atReady(String serverId);                             // موتور آماده است
         void atGone(String reason);                                // نشست از دست رفت
+        void atConsole(String line);                               // خط کنسول زنده (استریم hermes)
     }
 
     private static final String BASE = "https://aternos.org";
@@ -427,6 +428,39 @@ public class AternosPanel {
         }});
     }
 
+    /** اتصال به کنسول زندهٔ Aternos (وبسوکت hermes خود پنل) */
+    public void consoleConnect() {
+        uiOnUiThread(new Runnable() { @Override public void run() {
+            if (engine == null || !hasSession()) {
+                log("❌ اول وارد Aternos شو (دکمهٔ ورود داخل اپ)");
+                return;
+            }
+            String u = engine.getUrl() == null ? "" : engine.getUrl();
+            if (!u.contains("aternos.org") || !pageOk()) {
+                reloadServerPage();
+                log("⏳ صفحهٔ پنل در حال آماده‌سازی است — وقتی «✅ متصل» را دیدی دوباره «اتصال کنسول» را بزن");
+                return;
+            }
+            engine.evaluateJavascript(JS_HERMES, null);
+            log("🟢 در حال اتصال به کنسول زندهٔ Aternos…");
+        }});
+    }
+
+    /** ارسال دستور به کنسول سرور Aternos (بدون / اول) */
+    public void sendConsoleCommand(String cmd) {
+        final String safe = cmd == null ? "" : cmd.trim();
+        if (safe.length() == 0) return;
+        uiOnUiThread(new Runnable() { @Override public void run() {
+            if (engine == null) {
+                cb.atConsole("⚠ اول «اتصال کنسول» را بزن");
+                return;
+            }
+            String esc = safe.replace("\\", "\\\\").replace("'", "\\'")
+                    .replace("\"", "\\\"").replace("\r", " ").replace("\n", " ");
+            engine.evaluateJavascript(JS_WSCMD.replace("%CMD%", esc), null);
+        }});
+    }
+
     /** وضعیت لحظه‌ای (سبک) — هر چند فراخوانی یک‌بار صفحه تازه می‌شود */
     public void poll() {
         uiOnUiThread(new Runnable() { @Override public void run() {
@@ -583,6 +617,8 @@ public class AternosPanel {
                 doAction("accept-eula");
                 ui.postDelayed(new Runnable() { @Override public void run() { doAction("start"); }}, 1200);
             }
+        } else if ("wss".equals(type)) {
+            handleWss(data);
         } else if ("err".equals(type)) {
             log("⚠ " + data);
         }
@@ -663,4 +699,56 @@ public class AternosPanel {
             ".then(function(x){AttaBridge.post('action',act+' → '+x)})" +
             ".catch(function(e){AttaBridge.post('action',act+' ❌ '+e)});" +
             "}catch(e){AttaBridge.post('err','act:'+e)}})();";
+
+    /** پردازش پیام‌های وبسوکت hermes (کنسول/وضعیت/TPS/RAM پنل Aternos) */
+    private void handleWss(String data) {
+        if (data == null) return;
+        if ("open".equals(data)) { cb.atConsole("🟢 کنسول متصل شد — استریم خطوط فعال شد"); return; }
+        if ("closed".equals(data)) { cb.atConsole("🔴 اتصال کنسول قطع شد — دوباره «اتصال کنسول» را بزن"); return; }
+        if ("error".equals(data)) { cb.atConsole("⚠ خطای وبسوکت کنسول — یک بار دیگر «اتصال کنسول» را بزن"); return; }
+        if ("no-socket".equals(data)) { cb.atConsole("⚠ اتصال کنسول برقرار نیست — اول «اتصال کنسول» را بزن"); return; }
+        if ("sent".equals(data)) return; // خود دستور در ورودی کاربر نشان داده می‌شود
+        Object o = MiniJson.parse(data);
+        Map<String, Object> m = MiniJson.object(o);
+        if (m == null) { cb.atConsole("ℹ " + trunc(data)); return; }
+        String t = MiniJson.str(m, "type", "");
+        if ("line".equals(t)) {
+            cb.atConsole(MiniJson.str(m, "data", ""));
+        } else if ("status".equals(t)) {
+            // message یک رشتهٔ JSON است — دوباره parse می‌شود
+            Map<String, Object> st = MiniJson.object(MiniJson.parse(MiniJson.str(m, "message", "")));
+            if (st != null && !st.isEmpty()) cb.atStatus(st, "از استریم زندهٔ پنل");
+        } else if ("heap".equals(t)) {
+            Map<String, Object> d = MiniJson.object(m.get("data"));
+            if (d != null) cb.atConsole("🧠 رم سرور: " + MiniJson.num(d, "usage", 0) + " MB");
+        } else if ("tick".equals(t)) {
+            Map<String, Object> d = MiniJson.object(m.get("data"));
+            if (d != null) {
+                double avg = MiniJson.num(d, "averageTickTime", 0);
+                double tps = avg > 0 ? Math.min(20.0, 1000.0 / avg) : 0;
+                cb.atConsole("⏱ TPS: " + String.format(java.util.Locale.US, "%.1f", tps));
+            }
+        } else if ("connected".equals(t)) {
+            cb.atConsole("✔ استریم کنسول فعال شد — دستور بفرست (مثلاً list)");
+        } else {
+            cb.atConsole("ℹ " + trunc(data));
+        }
+    }
+
+    private String trunc(String s) {
+        if (s == null) return "";
+        return s.length() > 160 ? s.substring(0, 160) + "…" : s;
+    }
+
+    /** اتصال وبسوکت hermes — کنسول زنده و ارسال دستور خود پنل Aternos */
+    private static final String JS_HERMES =
+            "(function(){ try{ if(window.ATTA_WS){try{window.ATTA_WS.close();}catch(e){}} var ws=new WebSocket('wss://aternos.org/hermes/'); window.ATTA_WS=ws; var ka=null; ws.onopen=function()" +
+            "{ AttaBridge.post('wss','open'); try{ws.send(JSON.stringify({stream:'console',type:'start'}));}catch(e){} ka=setInterval(function(){try{ws.send('{\"type\":\"\\u2764\"}');}catch(e){" +
+            "}},45000); }; ws.onmessage=function(ev){ try{AttaBridge.post('wss',String(ev.data).slice(0,1500));}catch(e){} }; ws.onclose=function(){ if(ka){clearInterval(ka);} AttaBridge.post('" +
+            "wss','closed'); window.ATTA_WS=null; }; ws.onerror=function(){AttaBridge.post('wss','error');}; }catch(e){AttaBridge.post('err','hermes:'+e);} })();";
+
+    /** ارسال دستور از طریق وبسوکت باز‌شده */
+    private static final String JS_WSCMD =
+            "(function(){ try{ var ws=window.ATTA_WS; if(!ws||ws.readyState!==1){AttaBridge.post('wss','no-socket');return;} ws.send(JSON.stringify({stream:'console',type:'command',data:'%CMD%'" +
+            "})); AttaBridge.post('wss','sent'); }catch(e){AttaBridge.post('err','cmd:'+e);} })();";
 }
