@@ -25,9 +25,23 @@ public final class ServerTab {
         final LinearLayout col = UiKit.vcol(ctx, 14);
 
         // ---- اتصال
-        col.addView(UiKit.sectionLabel(ctx, "اتصال RCON به سرور شخصی"));
+        col.addView(UiKit.sectionLabel(ctx, "سرور Aternos — کنسول زنده"));
+        final TextView btnAt = UiKit.chip(ctx, "🌐 اتصال کنسول Aternos", UiKit.KIND_ACCENT, new Runnable() {
+            @Override public void run() {
+                if (host.isAtConConnected()) host.atDisconnect();
+                else host.atConnect();
+            }
+        });
+        LinearLayout.LayoutParams atLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, UiKit.dp(ctx, 46));
+        atLp.setMargins(UiKit.dp(ctx, 4), UiKit.dp(ctx, 2), UiKit.dp(ctx, 4), UiKit.dp(ctx, 8));
+        col.addView(btnAt, atLp);
         col.addView(UiKit.caption(ctx,
-                "سرور روی همین دستگاه: localhost · روی سیستم دیگر: IP همان سیستم در شبکه", false));
+                "اگر از اپ وارد Aternos شده باشی، همین دکمه پنل را به کنسول سرور وصل می‌کند و همهٔ دستورها و کیت‌ها روی سرور اجرا می‌شوند.", false));
+
+        col.addView(UiKit.sectionLabel(ctx, "سرور شخصی/VPS — اتصال RCON"));
+        col.addView(UiKit.caption(ctx,
+                "روی VPS: آدرس و رمز RCON (از صفحهٔ VPS اپ فعال می‌شود)", false));
 
         final EditText hostEt = host.newInput(
                 "آدرس سرور", InputType.TYPE_CLASS_TEXT, host.getPrefs().getRconHost());
@@ -156,9 +170,9 @@ public final class ServerTab {
 
         // ---- به‌روزرسانی وضعیت
         host.registerStateListener(new PanelHost.StateListener() {
-            @Override public void onState() { updateState(host, dot, tvState, btnConnect); }
+            @Override public void onState() { updateState(host, dot, tvState, btnConnect, btnAt); }
         });
-        updateState(host, dot, tvState, btnConnect);
+        updateState(host, dot, tvState, btnConnect, btnAt);
 
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -195,15 +209,22 @@ public final class ServerTab {
         host.getPrefs().setRconPassword(pass.getText().toString());
     }
 
-    private static void updateState(PanelHost host, View dot, TextView tv, TextView btn) {
-        boolean connected = host.isRconConnected();
+    private static void updateState(PanelHost host, View dot, TextView tv, TextView btn, TextView btnAt) {
+        boolean rcon = host.isRconConnected();
+        boolean at = host.isAtConConnected();
         boolean attempting = host.isRconAttempting();
+        boolean connected = rcon || at;
         int color = connected ? Palette.DOT_OK : (attempting ? Palette.DOT_BUSY : Palette.DOT_BAD);
         UiKit.dotColor(dot, color);
-        tv.setText(connected ? "وصل است — می‌توانی دستور بدهی"
+        tv.setText(rcon ? "RCON وصل است — می‌توانی دستور بدهی"
+                : at ? "کنسول Aternos وصل است — دستورها روی سرور اجرا می‌شوند"
                 : attempting ? "در حال اتصال…" : "آفلاین — دکمهٔ اتصال را بزن");
         tv.setTextColor(connected ? Palette.DOT_OK : Palette.TEXT_SUB);
-        btn.setText(connected ? "قطع اتصال" : "اتصال");
+        btn.setText(rcon ? "قطع اتصال" : "اتصال");
         btn.setGravity(Gravity.CENTER);
+        if (btnAt != null) {
+            btnAt.setText(at ? "🌐 قطع کنسول Aternos" : "🌐 اتصال کنسول Aternos");
+            btnAt.setGravity(Gravity.CENTER);
+        }
     }
 }

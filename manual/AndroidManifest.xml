@@ -5,8 +5,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.atta.mcpanel"
-    android:versionCode="47"
-    android:versionName="2.3.1">
+    android:versionCode="48"
+    android:versionName="2.4.0">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />

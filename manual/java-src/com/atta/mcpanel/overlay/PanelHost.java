@@ -45,6 +45,7 @@ import com.atta.mcpanel.core.Palette;
 import com.atta.mcpanel.overlay.tabs.ControlsTab;
 import com.atta.mcpanel.overlay.tabs.EffectsTab;
 import com.atta.mcpanel.overlay.tabs.ItemsTab;
+import com.atta.mcpanel.aternos.AternosConsoleClient;
 import com.atta.mcpanel.overlay.tabs.ServerTab;
 import com.atta.mcpanel.overlay.tabs.ChallengesTab;
 import com.atta.mcpanel.overlay.tabs.SettingsTab;
@@ -1281,11 +1282,22 @@ public class PanelHost {
         if (r != null && r.isOpen()) {
             boolean ok = r.send(raw);
             flash(ok ? "✓ اجرا شد" : "خطا در اجرا", raw);
+        } else if (atCon != null && atCon.isOpen()) {
+            boolean ok = atCon.send(raw);
+            flash(ok ? "✓ اجرا شد (کنسول Aternos)" : "خطا در اجرا", raw);
         } else if (r != null || hasRconConfig()) {
             pendingCommands.add(raw);
             if (r == null) {
                 flash("در حال اتصال خودکار به سرور…", "دستور پس از وصل اجرا می‌شود");
                 rconConnect();
+            } else {
+                flash("در حال اتصال…", "دستور در صف است");
+            }
+        } else if (AternosConsoleClient.hasSession()) {
+            pendingCommands.add(raw);
+            if (atCon == null) {
+                flash("در حال اتصال به کنسول Aternos…", "دستور پس از وصل اجرا می‌شود");
+                atConnect();
             } else {
                 flash("در حال اتصال…", "دستور در صف است");
             }
@@ -1307,6 +1319,10 @@ public class PanelHost {
             main.post(new Runnable() {
                 @Override public void run() { runKitNow(cmds, kitName); }
             });
+        } else if (atCon != null && atCon.isOpen()) {
+            main.post(new Runnable() {
+                @Override public void run() { runKitAt(cmds, kitName); }
+            });
         } else if (r != null || hasRconConfig()) {
             for (String c : cmds) pendingCommands.add(c);
             if (r == null) {
@@ -1315,6 +1331,10 @@ public class PanelHost {
             } else {
                 flash("در حال اتصال…", "کیت «" + kitName + "» در صف است");
             }
+        } else if (AternosConsoleClient.hasSession()) {
+            for (String c : cmds) pendingCommands.add(c);
+            flash("در حال اتصال به کنسول Aternos…", "کیت «" + kitName + "» پس از وصل داده می‌شود");
+            atConnect();
         } else if (AutoAccessibilityService.isEnabled()) {
             // تک‌نفره: کیت = چند دستور پشت‌سرهم در چت بازی (صف خودکار)
             for (String c : cmds) startChatAuto(c);
@@ -1326,6 +1346,16 @@ public class PanelHost {
         }
     }
 
+    /** اجرای کیت از طریق کنسول Aternos */
+    private void runKitAt(String[] cmds, String kitName) {
+        for (String c : cmds) {
+            if (atCon == null || !atCon.isOpen()) break;
+            atCon.send(c);
+            try { Thread.sleep(160); } catch (InterruptedException ignored) {}
+        }
+        flash("✓ کیت «" + kitName + "» روی سرور Aternos داده شد");
+    }
+
     private void runKitNow(String[] cmds, String kitName) {
         for (String c : cmds) {
             RconConnection r = rcon;
@@ -1334,6 +1364,63 @@ public class PanelHost {
             try { Thread.sleep(160); } catch (InterruptedException ignored) {}
         }
         flash("✓ کیت «" + kitName + "» داده شد");
+    }
+
+    // =====================================================================
+    // کنسول مستقیم Aternos (وبسوکت hermes) — بدون WebView، از داخل سرویس
+    // =====================================================================
+
+    private AternosConsoleClient atCon;
+
+    public boolean isAtConConnected() { return atCon != null && atCon.isOpen(); }
+
+    public boolean atConnect() {
+        interact();
+        if (!AternosConsoleClient.hasSession()) {
+            flash("نشست Aternos نیست", "از اپ: صفحهٔ «سرور Aternos» ← ورود؛ بعد برگرد و دوباره بزن");
+            return false;
+        }
+        if (atCon != null) atCon.close();
+        atCon = AternosConsoleClient.connect(new AternosConsoleClient.Listener() {
+            @Override public void onOpen() {
+                main.post(new Runnable() { @Override public void run() {
+                    if (prefs.getVibrationOn()) UiKit.vibrate(ctx, 30);
+                    int n = pendingCommands.size();
+                    for (String c : new java.util.ArrayList<String>(pendingCommands)) {
+                        if (atCon != null) atCon.send(c);
+                    }
+                    pendingCommands.clear();
+                    flash(n > 0 ? "✓ به کنسول Aternos وصل شدی — " + n + " دستور اجرا شد"
+                               : "✓ به کنسول Aternos وصل شدی");
+                    notifyState();
+                }});
+            }
+            @Override public void onLine(final String line) {
+                main.post(new Runnable() { @Override public void run() {
+                    for (ConsoleListener l : consoleListeners) {
+                        try { l.onLine(line); } catch (Exception ignored) {}
+                    }
+                }});
+            }
+            @Override public void onClosed(final String reason) {
+                main.post(new Runnable() { @Override public void run() {
+                    for (ConsoleListener l : consoleListeners) {
+                        try { l.onLine("⛔ کنسول Aternos: " + reason); } catch (Exception ignored) {}
+                    }
+                    notifyState();
+                }});
+            }
+        });
+        return true;
+    }
+
+    public void atDisconnect() {
+        pendingCommands.clear();
+        if (atCon != null) {
+            atCon.close();
+            atCon = null;
+        }
+        notifyState();
     }
 
     public boolean rconConnect() {
@@ -1414,6 +1501,10 @@ public class PanelHost {
         if (r != null && r.isOpen()) {
             if (!r.send(command)) {
                 flash("ارسال ناموفق بود", "اتصال را دوباره برقرار کن");
+            }
+        } else if (atCon != null && atCon.isOpen()) {
+            if (!atCon.send(command)) {
+                flash("ارسال ناموفق بود", "اتصال کنسول Aternos را دوباره برقرار کن");
             }
         } else {
             quickCommand(command, false);
