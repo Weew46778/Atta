@@ -55,6 +55,7 @@ public class AternosPanel {
         void atReady(String serverId);                             // موتور آماده است
         void atGone(String reason);                                // نشست از دست رفت
         void atConsole(String line);                               // خط کنسول زنده (استریم hermes)
+        void atPhase(String text, int color);                     // فاز اتصال (در حال اتصال/خطا/…)
     }
 
     private static final String BASE = "https://aternos.org";
@@ -74,6 +75,8 @@ public class AternosPanel {
     private boolean ready = false;
     private boolean sessionKnownDead = false;   // نشست منقضی شده — دفعهٔ بعد مستقیم فرم ورود باز شود
     private String deadSessionValue = null;      // «مقدار» کوکی مرده — فقط مقدار جدید یعنی لاگین واقعی
+    private Runnable loginPoll;                  // پایشگر کوکی ورود (SPA-ها onPageFinished نمی‌دهند)
+    private boolean watchdogFired = false;
     private String serverId = "";
     private String lastServerName = "";
     private int pollTick = 0;
@@ -121,6 +124,7 @@ public class AternosPanel {
     /** شروع: اگر نشست نیست دیالوگ ورود، وگرنه بارگذاری مستقیم پنل */
     public void begin() {
         uiOnUiThread(new Runnable() { @Override public void run() {
+            cb.atPhase("⟳ شروع اتصال به Aternos…", 0xFFF0B45B);
             if (!hasSession() || sessionKnownDead) {
                 sessionKnownDead = false;
                 showLogin();
@@ -223,7 +227,16 @@ public class AternosPanel {
                             closeLogin();
                             loadEngine();
                         } else {
-                            Toast.makeText(act, "هنوز وارد نشده‌ای — اول در صفحهٔ زیر نام‌کاربری/رمز را بزن", Toast.LENGTH_SHORT).show();
+                            log("⚠ دکمهٔ «وارد شدم» زده شد ولی هنوز کوکی نشست نیامده — تشخیص صفحه:");
+                            try {
+                                wv.evaluateJavascript("(function(){try{return location.href+' | '+(document.title||'')}catch(e){return ''}})()",
+                                        new android.webkit.ValueCallback<String>() {
+                                            @Override public void onReceiveValue(String v) {
+                                                log("🔎 وضعیت صفحهٔ ورود: " + (v == null ? "?" : v));
+                                            }
+                                        });
+                            } catch (Throwable ignored) {}
+                            Toast.makeText(act, "کوکی نشست هنوز نیامده — پایشگر فعال است؛ لحظه‌ای بعد خودکار برمی‌گردد", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -297,6 +310,25 @@ public class AternosPanel {
                 loginOverlay = overlay;
                 loginWeb = wv;
 
+                // پایشگر کوکی: سایت‌های SPA بعد از ورود onPageFinished نمی‌دهند —
+                // هر ثانیه خودمان کوکی را چک می‌کنیم تا ورود هرگز از دست برود
+                final Runnable poll = new Runnable() { @Override public void run() {
+                    if (loginOverlay == null) return;
+                    if (sessionAppeared()) {
+                        sessionKnownDead = false;
+                        deadSessionValue = null;
+                        try { CookieManager.getInstance().flush(); } catch (Throwable ignored) {}
+                        if (loginInfo != null) loginInfo.setText("✅ ورود شناسایی شد — در حال بازگشت به پنل…");
+                        log("✅ ورود شناسایی شد (پایشگر کوکی)");
+                        closeLogin();
+                        loadEngine();
+                        return;
+                    }
+                    ui.postDelayed(this, 1000);
+                }};
+                loginPoll = poll;
+                ui.postDelayed(poll, 1000);
+
                 // پنجرهٔ اکتیویتی با باز شدن کیبورد کوچک می‌شود تا فیلد ورودی دیده شود
                 try {
                     act.getWindow().setSoftInputMode(
@@ -314,6 +346,7 @@ public class AternosPanel {
     /** بستن صفحهٔ ورود تمام‌صفحه */
     private void closeLogin() {
         uiOnUiThread(new Runnable() { @Override public void run() {
+            if (loginPoll != null) { ui.removeCallbacks(loginPoll); loginPoll = null; }
             try {
                 if (loginOverlay != null) {
                     ViewGroup par = (ViewGroup) loginOverlay.getParent();
@@ -427,6 +460,8 @@ public class AternosPanel {
                     lp.gravity = Gravity.TOP | Gravity.START;
                     content.addView(engine, lp);
                 }
+                cb.atPhase("⟳ در حال اتصال به پنل Aternos…", 0xFFF0B45B);
+                log("کوکی نشست: " + (sessionValue() != null ? "موجود" : "ناموجود"));
                 if (serverId != null && serverId.length() > 0) {
                     applyServerCookie(serverId);
                     pageLoading = true;
@@ -436,6 +471,21 @@ public class AternosPanel {
                     engine.loadUrl(URL_SERVERS);
                 }
                 log("⟳ اتصال به پنل Aternos…");
+                // نگهبان: اگر ۱۵ ثانیه‌ای ready نشد → یک تازه‌سازی خودکار + گزارش دقیق
+                watchdogFired = false;
+                ui.postDelayed(new Runnable() { @Override public void run() {
+                    if (engine == null || ready || loginOverlay != null) return;
+                    String u = engine.getUrl() == null ? "?" : String.valueOf(engine.getUrl());
+                    if (!watchdogFired) {
+                        watchdogFired = true;
+                        log("⏱ اتصال در ۱۵ ثانیه کامل نشد (صفحه: " + u + ") — تازه‌سازی خودکار…");
+                        reloadServerPage();
+                        ui.postDelayed(this, 15000);
+                    } else {
+                        log("❌ اتصال کامل نشد — «📋 کپی گزارش کامل» را بزن و متنش را بفرست");
+                        cb.atPhase("وضعیت: اتصال کامل نشد — 📋 گزارش را کپی کن و بفرست", 0xFFE46B6B);
+                    }
+                }}, 15000);
             } catch (Throwable t) {
                 log("❌ موتور: " + t);
             }
@@ -532,6 +582,17 @@ public class AternosPanel {
             pageLoading = true;
             engine.loadUrl(serverId.length() > 0 ? URL_SERVER : URL_SERVERS);
         }});
+    }
+
+    /** وضعیت کامل موتور برای گزارشگیری */
+    public String debugState() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ready=").append(ready).append('\n');
+        sb.append("serverId=").append(serverId.length() > 0 ? serverId : "-").append('\n');
+        sb.append("sessionCookie=").append(sessionValue() != null ? "present" : "absent").append('\n');
+        sb.append("engineUrl=").append(engine != null && engine.getUrl() != null ? engine.getUrl() : "-").append('\n');
+        sb.append("loginOverlay=").append(loginOverlay != null ? "open" : "closed");
+        return sb.toString();
     }
 
     public void destroy() {

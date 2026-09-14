@@ -576,6 +576,9 @@ UiKit.chipRow(this, new TextView[]{
                 @Override public void atConsole(String line) {
                     if (atConsoleTv != null) appendLog(atConsoleTv, line);
                 }
+                @Override public void atPhase(String text, int color) {
+                    atSetStatus(text, color);
+                }
             });
         }
 
@@ -649,6 +652,23 @@ UiKit.chipRow(this, new TextView[]{
                 + "۲) بعد از اتصال، دکمه‌های استارت/توقف روی سرور واقعی اجرا می‌شوند\n"
                 + "هر پاسخ Aternos همین‌جا می‌آید.");
         card.addView(atLogTv, UiKit.wrapParams(atLogTv, 2, 230));
+        UiKit.chipRow(this, new TextView[]{
+                UiKit.chip(this, "📋 کپی گزارش کامل (برای پشتیبانی)", new Runnable() {
+                    @Override public void run() {
+                        try {
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("AttaPanel 2.1.3 — گزارش Aternos\n");
+                            sb.append("state:\n").append(aternos.debugState()).append("\n\n");
+                            sb.append("log:\n").append(atLogTv.getText().toString());
+                            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                            cm.setPrimaryClip(ClipData.newPlainText("atta-report", sb.toString()));
+                            toast("گزارش کپی شد — در چت برایم بفرست");
+                        } catch (Throwable t) {
+                            toast("کپی نشد: " + t);
+                        }
+                    }
+                })
+        }, 1, card);
 
         card.addView(UiKit.space(this, 4));
 
