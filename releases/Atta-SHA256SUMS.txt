@@ -1,1 +1,1 @@
-c8f63f68929e06c8575d2b4ffed1ef381ad47404db07a05c78455804792b664c  releases/Atta-Console-v1.0.0.apk
+3b60a94a0b5095342594f4fa4f383fee07ce64e1faff914eea4dad0635c415b2  releases/Atta-Console-v1.1.0.apk

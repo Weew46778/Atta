@@ -18,6 +18,12 @@ export function defaultState() {
     },
     servers: [],
     supportLog: [],
+    // اتصال‌های واقعی: پنل پتروداکتیل میزبان‌ها و عامل وی‌پی‌اس
+    real: {
+      ptero: null,            // {panelUrl, apiKey, servers:[...]}
+      vps: null,              // {agentUrl, token, info}
+      activeReal: null,       // {kind:'ptero', id} یا {kind:'vps'} — هدف دستورهای اورلای
+    },
   };
 }
 
@@ -34,6 +40,7 @@ export function loadState(storage) {
       settings: { ...base.settings, ...(parsed.settings || {}) },
       servers: Array.isArray(parsed.servers) ? parsed.servers : [],
       supportLog: Array.isArray(parsed.supportLog) ? parsed.supportLog : [],
+      real: { ...base.real, ...(parsed.real || {}) },
     };
   } catch { return base; }
 }

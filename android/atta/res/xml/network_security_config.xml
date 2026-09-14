@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+  <!-- پنل‌های میزبان با https هستند؛ عامل وی‌پی‌اس ممکن است بدون تی‌ال‌اس اجرا شود.
+       توکن عامل را طولانی انتخاب کنید و پورت را در فایروال فقط برای آی‌پی خودتان باز کنید. -->
+  <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

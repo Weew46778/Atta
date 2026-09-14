@@ -7,6 +7,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.view.View;
 import android.view.WindowInsets;
 import android.webkit.JavascriptInterface;
@@ -18,18 +21,28 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 /**
  * آتا — پوستهٔ اندروید کنسول سرور ماینکرافت.
- * رابط وب از دارایی‌های آفلاین داخل خود APK سرو می‌شود؛ ناوبری خارجی فقط برای
- * لانچرهای بازی (ماینکرافت بدراک، پوجاو/بوت و فروشگاه نصب) آزاد است.
+ * رابط وب آفلاین سرو می‌شود؛ پل محلی ۱۲۷٫۰٫۰٫۱:۴۸۲۷۳ دستورهای اورلای بومی را
+ * به وب‌ویو می‌رساند تا به سرور واقعی (پنل میزبان یا عامل وی‌پی‌اس) فرستاده شوند.
  */
 public final class MainActivity extends Activity {
     private WebView web;
+    private CommandBridge bridge;
+    private final Handler ui = new Handler(Looper.getMainLooper());
     private static final String ORIGIN = "https://atta.console.local/";
     private static final int REQ_AUDIO = 4401;
+    static final int BRIDGE_PORT = 48273;
     private PermissionRequest pendingMedia;
 
     @Override public void onCreate(Bundle saved) {
@@ -75,20 +88,14 @@ public final class MainActivity extends Activity {
                 Uri uri = request.getUrl();
                 String scheme = uri.getScheme() == null ? "" : uri.getScheme();
                 String url = uri.toString();
-                // بازکردن لانچرهای بازی و فروشگاه نصب — هدف اصلی اپ
-                if (scheme.equals("minecraft") || scheme.equals("ms-xbl") || scheme.equals("market")
-                        || url.contains("net.kdt.pojavlaunch") || url.contains("com.mojang.minecraftpe")) {
+                if (scheme.equals("minecraft") || scheme.equals("ms-xbl") || scheme.equals("market") || scheme.equals("https")
+                        && (url.contains("aternos.org") || url.contains("net.kdt.pojavlaunch") || url.contains("com.mojang.minecraftpe"))) {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, "این لانچر روی گوشی نصب نیست؛ اول آن را نصب کن.", Toast.LENGTH_LONG).show();
-                        try {
-                            Intent store = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=minecraft"));
-                            store.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(store);
-                        } catch (Exception ignored) { }
+                        Toast.makeText(MainActivity.this, "باز نشد؛ اول لانچر را نصب کن.", Toast.LENGTH_LONG).show();
                     }
                     return true;
                 }
@@ -96,6 +103,11 @@ public final class MainActivity extends Activity {
             }
             @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
+                // اتصال‌های واقعی به پنل میزبان و عامل وی‌پی‌اس باید از خود وب‌ویو بروند (CORS و کوکی میزبان)
+                if (url.startsWith("https://") || url.startsWith("http://")) {
+                    String host = request.getUrl().getHost() == null ? "" : request.getUrl().getHost();
+                    if (!url.startsWith(ORIGIN)) return null; // اجازهٔ شبکهٔ واقعی برای پنل‌ها و عامل
+                }
                 if (!url.startsWith(ORIGIN)) return blocked();
                 String path = request.getUrl().getPath();
                 if (path == null || path.equals("/") || path.equals("/atta/") || path.equals("/atta")) path = "/atta/index.html";
@@ -114,6 +126,8 @@ public final class MainActivity extends Activity {
         });
         setContentView(web);
         web.loadUrl(ORIGIN + "atta/index.html");
+        bridge = new CommandBridge();
+        bridge.start();
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -132,14 +146,33 @@ public final class MainActivity extends Activity {
         return new WebResourceResponse("text/plain", "UTF-8", 404, "Not Found", null, new ByteArrayInputStream(new byte[0]));
     }
 
-    /** پل جاوااسکریپت: راه‌اندازی خارجی و تمام‌صفحه برای حالت بازی */
+    /** پل جاوااسکریپت: اورلای بومی، لانچر بازی‌ها، تمام‌صفحه و نتیجهٔ پل دستورها */
     public final class Bridge {
+        @JavascriptInterface public void startOverlay() {
+            runOnUiThread(new Runnable() { @Override public void run() {
+                if (!Settings.canDrawOverlays(MainActivity.this)) {
+                    Toast.makeText(MainActivity.this, "اجازهٔ «نمایش روی برنامه‌ها» را برای آتا روشن کن، سپس دوباره بزن.", Toast.LENGTH_LONG).show();
+                    try {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                        startActivity(intent);
+                    } catch (Exception ignored) { }
+                    return;
+                }
+                startService(new Intent(MainActivity.this, OverlayService.class));
+                Toast.makeText(MainActivity.this, "اورلای آتا فعال شد؛ داخل بازی از لبهٔ چپ بکش.", Toast.LENGTH_LONG).show();
+            }});
+        }
+        @JavascriptInterface public void stopOverlay() {
+            stopService(new Intent(MainActivity.this, OverlayService.class));
+        }
+        @JavascriptInterface public boolean canOverlay() {
+            return Settings.canDrawOverlays(MainActivity.this);
+        }
         @JavascriptInterface public void launchExternal(final String uriString) {
             if (uriString == null) return;
             runOnUiThread(new Runnable() { @Override public void run() {
                 try {
-                    Uri uri = Uri.parse(uriString);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uriString));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } catch (Exception e) {
@@ -171,9 +204,74 @@ public final class MainActivity extends Activity {
                 else decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             }});
         }
+        @JavascriptInterface public void bridgeResult(final String message) {
+            runOnUiThread(new Runnable() { @Override public void run() {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+            }});
+        }
     }
 
-    @Override protected void onPause() { super.onPause(); if (web != null) { web.onPause(); } }
-    @Override protected void onResume() { super.onResume(); if (web != null) { web.onResume(); } }
-    @Override protected void onDestroy() { if (web != null) { web.removeJavascriptInterface("AndroidBridge"); web.destroy(); } super.onDestroy(); }
+    /** سرور پل محلی — فقط روی ۱۲۷٫۰٫۰٫۱؛ اورلای بومی دستور را اینجا می‌گذارد. */
+    private final class CommandBridge extends Thread {
+        private ServerSocket socket;
+        CommandBridge() { super("atta-command-bridge"); }
+        @Override public void run() {
+            try {
+                socket = new ServerSocket(BRIDGE_PORT, 16, InetAddress.getByName("127.0.0.1"));
+                while (!isInterrupted()) {
+                    final Socket client = socket.accept();
+                    new Thread(new Runnable() { @Override public void run() { handle(client); } }).start();
+                }
+            } catch (Exception ignored) { }
+        }
+        private void handle(Socket client) {
+            try {
+                client.setSoTimeout(3000);
+                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
+                String line = in.readLine();
+                if (line == null) { client.close(); return; }
+                int contentLength = 0;
+                String header;
+                while ((header = in.readLine()) != null && !header.isEmpty()) {
+                    String h = header.toLowerCase();
+                    if (h.startsWith("content-length:")) contentLength = Integer.parseInt(header.substring(15).trim());
+                }
+                char[] buf = new char[Math.min(contentLength, 100000)];
+                int read = 0;
+                while (read < buf.length) { int r = in.read(buf, read, buf.length - read); if (r < 0) break; read += r; }
+                final String body = new String(buf, 0, read);
+                String status = "200 OK";
+                String responseBody = "{\"ok\":true}";
+                if (line.startsWith("POST /command")) {
+                    ui.post(new Runnable() { @Override public void run() {
+                        if (web != null) {
+                            String safe = body.replace("\\", "\\\\").replace("'", "\\'").replace("\n", " ");
+                            web.evaluateJavascript("(function(){try{window.__attaBridge&&window.__attaBridge.receive('" + safe + "');}catch(e){}})();", null);
+                        }
+                    }});
+                } else if (line.startsWith("GET /ping")) {
+                    responseBody = "{\"pong\":true}";
+                } else {
+                    status = "404 Not Found";
+                    responseBody = "{\"ok\":false}";
+                }
+                byte[] bytes = responseBody.getBytes(StandardCharsets.UTF_8);
+                OutputStream out = client.getOutputStream();
+                out.write(("HTTP/1.1 " + status + "\r\nContent-Type: application/json\r\nContent-Length: " + bytes.length
+                        + "\r\nConnection: close\r\n\r\n").getBytes(StandardCharsets.UTF_8));
+                out.write(bytes);
+                out.flush();
+                client.close();
+            } catch (Exception ignored) { }
+        }
+        void shutdown() { try { if (socket != null) socket.close(); } catch (Exception ignored) { } interrupt(); }
+    }
+
+    @Override protected void onPause() { super.onPause(); /* وب‌ویو زنده می‌ماند تا اورلای و اتصال واقعی کار کنند */ }
+    @Override protected void onResume() { super.onResume(); if (web != null) web.onResume(); }
+    @Override protected void onDestroy() {
+        if (bridge != null) bridge.shutdown();
+        if (web != null) { web.removeJavascriptInterface("AndroidBridge"); web.destroy(); }
+        super.onDestroy();
+    }
 }

@@ -11,7 +11,7 @@ test('خانه و فهرست میزبان‌ها با حداقل ۱۰ میزبا
   await page.goto(ATTA);
   await clearState(page);
   await page.reload();
-  await expect(page.locator('.home-grid .tile')).toHaveCount(5);
+  await expect(page.locator('.home-grid .tile')).toHaveCount(6);
   await page.click('[data-action="go"][data-to="hosts"]');
   const cards = page.locator('.host-card');
   expect(await cards.count()).toBeGreaterThanOrEqual(10);

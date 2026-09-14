@@ -11,7 +11,7 @@ D8_JAR="${D8_JAR:-$PWD/.tools/minapk/package/tools/d8.jar}"
 APKSIGNER_JAR="${APKSIGNER_JAR:-$PWD/.tools/minapk/package/tools/apksigner.jar}"
 KEYSTORE="${KEYSTORE:-$PWD/.tools/atta-local.p12}"
 KEY_ALIAS="${KEY_ALIAS:-atta}"
-OUT="${OUT:-releases/Atta-Console-v1.0.0.apk}"
+OUT="${OUT:-releases/Atta-Console-v1.1.0.apk}"
 : "${KEYSTORE_PASSWORD:?Set KEYSTORE_PASSWORD to sign the local APK}"
 export KEYSTORE_PASSWORD
 for tool in "$JAVA" "$JAVAC_JAR" "$ANDROID_JAR" "$AAPT2" "$D8_JAR" "$APKSIGNER_JAR" "$KEYSTORE"; do
@@ -22,10 +22,11 @@ node --check dist/sw.js
 rm -rf android/build-atta
 mkdir -p android/build-atta/{classes,dex,assets/www} releases
 cp -R dist/. android/build-atta/assets/www/
-"$JAVA" -cp "$JAVAC_JAR" com.sun.tools.javac.Main -encoding UTF-8 -source 8 -target 8 -bootclasspath "$ANDROID_JAR" -d android/build-atta/classes android/atta/java/ir/atta/console/MainActivity.java
+"$JAVA" -cp "$JAVAC_JAR" com.sun.tools.javac.Main -encoding UTF-8 -source 8 -target 8 -bootclasspath "$ANDROID_JAR" -d android/build-atta/classes android/atta/java/ir/atta/console/MainActivity.java android/atta/java/ir/atta/console/OverlayService.java
 "$JAVA" -cp "$D8_JAR" com.android.tools.r8.D8 --lib "$ANDROID_JAR" --min-api 26 --output android/build-atta/dex $(find android/build-atta/classes -name '*.class')
 "$AAPT2" compile --dir android/app/src/main/res -o android/build-atta/resources.zip
-"$AAPT2" link -o android/build-atta/unsigned.apk --manifest android/atta/AndroidManifest.xml -I "$ANDROID_JAR" -A android/build-atta/assets --min-sdk-version 26 --target-sdk-version 35 android/build-atta/resources.zip
+"$AAPT2" compile --dir android/atta/res -o android/build-atta/atta-resources.zip
+"$AAPT2" link -o android/build-atta/unsigned.apk --manifest android/atta/AndroidManifest.xml -I "$ANDROID_JAR" -A android/build-atta/assets --min-sdk-version 26 --target-sdk-version 35 android/build-atta/resources.zip android/build-atta/atta-resources.zip
 python3 - <<'PY'
 # Android 11+ requires resources.arsc to be STORED and four-byte aligned.
 import zipfile, struct

@@ -249,6 +249,16 @@ small { color: var(--muted); font-weight: 400; }
 .ov-form input { flex: 1; min-width: 60px; background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .25); color: #fff; padding: .5rem .6rem; font-size: .85rem; border-radius: 10px; }
 .ov-form .ov-btn { flex-direction: row; min-height: 44px; padding: .4rem .8rem; }
 
+/* ————— اتصال واقعی ————— */
+.real-grid { flex: 1; min-height: 0; overflow: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; align-content: start; }
+.real-form { display: flex; flex-direction: column; gap: .5rem; margin: .5rem 0; }
+.real-status { font-size: .82rem; color: var(--accent); min-height: 1.2em; margin: .3rem 0; }
+.real-section { display: flex; flex-direction: column; gap: .5rem; margin-bottom: .6rem; }
+.real-section h3 { font-size: .95rem; color: var(--accent); }
+.real-badge { background: rgba(52, 211, 153, .18); color: var(--accent); border: 1px solid rgba(52, 211, 153, .5); border-radius: 999px; padding: .05em .55em; font-size: .68em; vertical-align: middle; }
+.server-card.real { border-color: rgba(52, 211, 153, .4); }
+@media (max-width: 900px) { .real-grid { grid-template-columns: 1fr; } }
+
 /* ————— پشتیبانی ————— */
 .support-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.2fr 1fr; gap: .8rem; }
 .support-topics { overflow: auto; display: flex; flex-direction: column; gap: .45rem; }

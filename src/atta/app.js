@@ -12,6 +12,9 @@ import {
 import { createVoice, createRecognizer, VOICE_CLIPS, NARRATOR } from './voice.js';
 import { createOverlay } from './overlay.js';
 import { createGameWorld, applyEvents, drawWorld } from './game.js';
+import { createPterodactylClient, PTERO_KEY_HELP } from './real/pterodactyl.js';
+import { createVpsAgentClient, agentInstallOneLiner } from './real/vps-agent.js';
+import { normalizePanelUrl } from './real/transport.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -32,6 +35,8 @@ let overlay = null;
 let gameRaf = 0, hintTimer = 0;
 let voice = null, recognizer = null, listeningLoop = false;
 let deployTimers = [];
+let pteroClient = null, vpsClient = null;   // کلاینت‌های اتصال واقعی
+let realConsoleHandle = null, realPollTimer = 0;
 
 const PAGE_META = {
   home: { title: 'خانه', clip: 'home', help: 'این خانهٔ آتاست. سرور بساز، سرورهایت را مدیریت کن یا وارد بازی شو.' },
@@ -40,6 +45,7 @@ const PAGE_META = {
   servers: { title: 'سرورهای من', clip: 'servers', help: 'فهرست سرورهای تو. برای پنل مدیریت روی هر سرور بزن.' },
   panel: { title: 'پنل مدیریت', clip: 'panel', help: 'پنل کامل مدیریت سرور: کنسول، بازیکن‌ها، تنظیمات و بکاپ.' },
   connect: { title: 'ورود به بازی', clip: 'connect', help: 'اطلاعات اتصال منتقل شد؛ ماینکرافت را باز کن و وصل شو.' },
+  real: { title: 'اتصال واقعی', clip: null, help: 'اینجا به میزبان واقعی وصل می‌شوی: کلید پنل پتروداکتیل یا عامل وی‌پی‌اس را وارد کن تا سرور واقعی‌ات را مدیریت کنم.' },
   game: { title: 'حالت بازی', clip: 'overlay', help: 'از لبهٔ چپ بکش تا اورلای باز شود؛ بقیهٔ صفحه برای بازی آزاد است.' },
   support: { title: 'پشتیبانی', clip: 'support', help: 'مرکز کمک آتا: سؤال‌های پرتکرار و گفتگو با پشتیبان.' },
   settings: { title: 'تنظیمات', clip: 'settings', help: 'تنظیم گفتار، کنترل صوتی و کلمهٔ بیداری.' },
@@ -74,10 +80,16 @@ function say(text) {
 
 function go(next, opts = {}) {
   stopGameLoops();
+  stopRealWatch();
   page = next;
   if (typeof location !== 'undefined') history.replaceState(null, '', `#${next}`);
   if (opts.keep !== true) stopListeningOnce();
   render();
+}
+
+function stopRealWatch() {
+  if (realConsoleHandle) { try { realConsoleHandle.close(); } catch { /* noop */ } realConsoleHandle = null; }
+  if (realPollTimer) { clearInterval(realPollTimer); realPollTimer = 0; }
 }
 
 // ———————————————————————————————— رندر صفحه‌ها ————————————————————————————————
@@ -103,13 +115,19 @@ function shell(content) {
 function render() {
   const view = {
     home: homePage, hosts: hostsPage, wizard: wizardPage, servers: serversPage,
-    panel: panelPage, connect: connectPage, game: () => '', support: supportPage, settings: settingsPage,
+    panel: panelPage, connect: connectPage, real: realPage, game: () => '', support: supportPage, settings: settingsPage,
   }[page];
   $('#app').innerHTML = shell(view ? view() : '');
   if (page === 'game') { startGamePage(); }
+  if (page === 'real') { refreshRealLive(); }
+  if (page === 'panel' && String(currentServerId).startsWith('real:')) {
+    if (panelTab === 'console') startRealConsoleWatch();
+    if (panelTab === 'backups') loadRealBackups();
+  }
   const meta = PAGE_META[page];
-  if (meta && state.settings.autoplay && state.settings.narration) speakClip(meta.clip);
-  else if (meta) caption(meta.help);
+  if (meta && state.settings.autoplay && state.settings.narration) {
+    if (meta.clip) speakClip(meta.clip); else say(meta.help);
+  } else if (meta) caption(meta.help);
 }
 
 function handleAction(action, data, el) {
@@ -164,7 +182,56 @@ function handleAction(action, data, el) {
       if (t && world) { world.chat = [...world.chat.slice(-5), { who: 'پشتیبان آتا', text: t.a }]; renderChat(); say(t.a); }
       break;
     }
+    // ————— اتصال واقعی —————
+    case 'real-open': currentServerId = `real:ptero:${data.id}`; panelTab = 'overview'; go('panel'); break;
+    case 'real-open-vps': currentServerId = 'real:vps'; panelTab = 'overview'; go('panel'); break;
+    case 'real-select': setActiveReal('ptero', data.id); break;
+    case 'real-select-vps': setActiveReal('vps'); break;
+    case 'real-power': realPower(data.signal); break;
+    case 'real-cmd': realCmdDirect(data.cmd); break;
+    case 'real-backup': realBackupNow(); break;
+    case 'ptero-disconnect': state.real.ptero = null; state.real.activeReal = null; pteroClient = null; save(); render(); toast('اتصال پنل قطع شد.'); break;
+    case 'vps-disconnect': state.real.vps = null; if (state.real.activeReal?.kind === 'vps') state.real.activeReal = null; vpsClient = null; save(); render(); toast('اتصال عامل قطع شد.'); break;
+    case 'vps-create': vpsCreateReal(); break;
+    case 'native-overlay': startNativeOverlay(); break;
+    case 'launch-web': if (el?.tagName === 'BUTTON') window.open(data.url, '_blank', 'noopener'); break;
   }
+}
+
+async function realCmdDirect(cmd) {
+  const target = state.real.activeReal;
+  const send = async () => {
+    try {
+      if (String(currentServerId).startsWith('real:ptero:')) await ptero()?.sendCommand(currentServerId.slice('real:ptero:'.length), cmd);
+      else if (String(currentServerId).startsWith('real:vps')) await vps()?.sendCommand(cmd);
+      else if (target?.kind === 'ptero') await ptero()?.sendCommand(target.id, cmd);
+      else if (target?.kind === 'vps') await vps()?.sendCommand(cmd);
+      else throw new Error('اول یک سرور واقعی را هدف اورلای کن');
+      toast(`به سرور واقعی ارسال شد ✅ ${cmd}`);
+      say('دستور به سرور واقعی ارسال شد.');
+    } catch (e) { toast(`نشد: ${e.message}`); }
+  };
+  await send();
+}
+
+async function realBackupNow() {
+  if (!String(currentServerId).startsWith('real:ptero:') || !ptero()) { toast('بکاپ واقعی فقط برای سرورهای پنل میزبان است.'); return; }
+  try {
+    toast('در حال ساخت بکاپ واقعی در پنل میزبان…');
+    await ptero().createBackup(currentServerId.slice('real:ptero:'.length));
+    say('بکاپ واقعی در پنل میزبان ساخته شد.');
+    setTimeout(loadRealBackups, 2500);
+  } catch (e) { toast(`بکاپ نشد: ${e.message}`); }
+}
+
+function startNativeOverlay() {
+  if (typeof AndroidBridge === 'undefined' || !AndroidBridge.startOverlay) {
+    toast('اورلای واقعی روی بازی فقط در اپ اندروید فعال است؛ اینجا شبیه‌ساز را بزن.');
+    return;
+  }
+  if (!state.real.activeReal) toast('نکته: برای تأثیر واقعی، اول از فهرست سرورها «هدف اورلای» را انتخاب کن.');
+  AndroidBridge.startOverlay();
+  say('اورلای اپراتور باز شد. داخل بازی، از لبهٔ چپ بکش.');
 }
 
 function copyText(value, label = '') {
@@ -184,9 +251,10 @@ function homePage() {
     </div>
   </section>
   <nav class="home-grid">
-    <button class="tile big accent" data-action="go" data-to="hosts">🏗️<div><strong>ساخت سرور جدید</strong><small>با ۱۱ میزبان، قدم‌به‌قدم و خودکار</small></div></button>
-    <button class="tile big" data-action="go" data-to="servers">🗂️<div><strong>سرورهای من</strong><small>${faNum(serversCount)} سرور · پنل کامل مدیریت</small></div></button>
-    <button class="tile" data-action="go" data-to="game">🎮<div><strong>حالت بازی و اورلای</strong><small>تک‌نفره یا متصل به سرور</small></div></button>
+    <button class="tile big accent" data-action="go" data-to="real">🔌<div><strong>اتصال به میزبان واقعی</strong><small>پنل پتروداکتیل یا وی‌پی‌اس — مدیریت و اورلای واقعی</small></div></button>
+    <button class="tile big" data-action="go" data-to="hosts">🏗️<div><strong>ساخت سرور جدید</strong><small>با ۱۱ میزبان، قدم‌به‌قدم</small></div></button>
+    <button class="tile" data-action="go" data-to="servers">🗂️<div><strong>سرورهای من</strong><small>${faNum(serversCount)} سرور · پنل کامل مدیریت</small></div></button>
+    <button class="tile" data-action="go" data-to="game">🎮<div><strong>حالت بازی و اورلای</strong><small>اورلای اپراتور داخل بازی</small></div></button>
     <button class="tile" data-action="go" data-to="support">🆘<div><strong>پشتیبانی</strong><small>راهنما و کمک فوری</small></div></button>
     <button class="tile" data-action="go" data-to="settings">⚙️<div><strong>تنظیمات و صدا</strong><small>گفتار ${NARRATOR.name} و کنترل صوتی</small></div></button>
   </nav>`;
@@ -353,11 +421,55 @@ function finishDeploy(server) {
 }
 
 // ———————————————————————————————— سرورهای من ————————————————————————————————
+function realServersSection() {
+  const ptero = state.real.ptero;
+  const vps = state.real.vps;
+  if (!ptero && !vps) return '';
+  return `
+  <div class="real-section">
+    <h3>🔌 سرورهای واقعی (متصل به میزبان)</h3>
+    ${ptero?.servers?.length ? ptero.servers.map(s => `
+      <div class="server-card real">
+        <span class="status-dot ${s.isOnline === 'online' ? 'online' : s.isOnline === 'offline' ? '' : 'starting'}"></span>
+        <div class="sc-main">
+          <strong>${esc(s.name)} <b class="real-badge">واقعی</b></strong>
+          <small>${esc(ptero.panelUrl.replace(/^https?:\/\//, ''))} · گره: ${esc(s.node || '—')}</small>
+          <small class="addr" dir="ltr">${esc(s.address || '—')}</small>
+        </div>
+        <div class="sc-side">
+          <span class="sc-status ${s.isOnline === 'online' ? 'online' : ''}">${s.isOnline === 'online' ? 'آنلاین' : s.isOnline === 'offline' ? 'خاموش' : s.isOnline || 'نامشخص'}</span>
+          <span class="row-btns">
+            <button class="mini" data-action="real-open" data-id="${s.id}">پنل</button>
+            <button class="mini ${state.real.activeReal?.kind === 'ptero' && state.real.activeReal?.id === s.id ? 'on' : ''}" data-action="real-select" data-id="${s.id}">هدف اورلای</button>
+          </span>
+        </div>
+      </div>`).join('') : ''}
+    ${vps?.info ? `
+      <div class="server-card real">
+        <span class="status-dot ${vps.info.running ? 'online' : ''}"></span>
+        <div class="sc-main">
+          <strong>سرور وی‌پی‌اس <b class="real-badge">واقعی</b></strong>
+          <small>${esc(vps.agentUrl)} · ${esc(vps.info.edition || 'بدون نسخه')} ${esc(vps.info.version || '')}</small>
+          <small class="addr" dir="ltr">پورت: ${faNum(vps.info.port || 19132)}</small>
+        </div>
+        <div class="sc-side">
+          <span class="sc-status ${vps.info.running ? 'online' : ''}">${vps.info.running ? 'روشن' : 'خاموش'}</span>
+          <span class="row-btns">
+            <button class="mini" data-action="real-open-vps">پنل</button>
+            <button class="mini ${state.real.activeReal?.kind === 'vps' ? 'on' : ''}" data-action="real-select-vps">هدف اورلای</button>
+          </span>
+        </div>
+      </div>` : ''}
+  </div>`;
+}
+
 function serversPage() {
   const online = state.servers.filter(s => s.status === 'online').length;
+  const hasReal = state.real.ptero || state.real.vps;
   return `
-  <div class="page-head"><h2>سرورهای من <b class="count">${faNum(state.servers.length)}</b></h2><p>${faNum(online)} سرور آنلاین · برای پنل کامل روی هر سرور بزن.</p></div>
-  ${state.servers.length === 0 ? `
+  <div class="page-head"><h2>سرورهای من <b class="count">${faNum(state.servers.length)}</b></h2><p>${hasReal ? 'سرورهای واقعی بالای فهرست‌اند؛ ' : ''}برای پنل کامل روی هر سرور بزن.</p></div>
+  ${realServersSection()}
+  ${state.servers.length === 0 && !hasReal ? `
     <div class="empty">
       <span class="empty-art">🏗️</span><h3>هنوز سروری نداری</h3>
       <p>با یکی از ۱۱ میزبان، در کمتر از یک دقیقه سرور خودت را بساز.</p>
@@ -384,6 +496,7 @@ function serversPage() {
 function currentServer() { return state.servers.find(s => s.id === currentServerId) || state.servers[0] || null; }
 
 function panelPage() {
+  if (String(currentServerId).startsWith('real:')) return realPanelPage();
   const s = currentServer();
   if (!s) return `<div class="empty"><span class="empty-art">🗂️</span><h3>سروری نیست</h3><button class="f-btn primary" data-action="go" data-to="hosts">ساخت سرور</button></div>`;
   const tabs = [
@@ -482,6 +595,303 @@ function propField(s, p) {
     <label class="prop"><span>${p.label}${p.hint ? `<i>${p.hint}</i>` : ''}</span>
       <input data-prop="${p.key}" type="${p.type === 'number' ? 'number' : 'text'}" dir="ltr" value="${esc(val)}">
     </label>`;
+}
+
+// ———————————————————————————————— اتصال واقعی ————————————————————————————————
+function ptero() {
+  const c = state.real.ptero;
+  if (!c) return null;
+  pteroClient = pteroClient || createPterodactylClient({ panelUrl: c.panelUrl, apiKey: c.apiKey });
+  return pteroClient;
+}
+function vps() {
+  const c = state.real.vps;
+  if (!c) return null;
+  vpsClient = vpsClient || createVpsAgentClient({ agentUrl: c.agentUrl, token: c.token });
+  return vpsClient;
+}
+
+function realPage() {
+  const p = state.real.ptero;
+  const v = state.real.vps;
+  const android = typeof AndroidBridge !== 'undefined';
+  return `
+  <div class="page-head"><h2>اتصال به میزبان واقعی 🔌</h2><p>اینجا واقعاً وصل می‌شوی: پنل میزبان یا وی‌پی‌اس خودت. دستورهای اورلای مستقیم به سرور واقعی می‌روند.</p></div>
+  <div class="real-grid">
+    <div class="conn-card">
+      <h3>۱) پنل میزبان (پتروداکتیل)</h3>
+      <p class="muted">PebbleHost، FalixNodes، GodLike، Bisect و بیشتر میزبان‌ها پنل پتروداکتیل دارند. ${PTERO_KEY_HELP}</p>
+      <form data-form="ptero-connect" class="real-form">
+        <input name="panelUrl" dir="ltr" placeholder="https://panel.pebblehost.com" value="${esc(p?.panelUrl || '')}">
+        <input name="apiKey" dir="ltr" type="password" placeholder="ptlc_xxxxxxxxxxxxxxxx" value="${esc(p?.apiKey || '')}">
+        <button class="f-btn primary small">🔌 اتصال و دریافت سرورهای واقعی</button>
+      </form>
+      <div id="ptero-status" class="real-status">${p ? `متصل به ${esc(p.panelUrl)} — ${faNum(p.servers?.length || 0)} سرور پیدا شد` : ''}</div>
+      ${p ? '<button class="f-btn small ghost danger-ghost" data-action="ptero-disconnect">قطع اتصال پنل</button>' : ''}
+    </div>
+    <div class="conn-card">
+      <h3>۲) وی‌پی‌اس خودت (اترنوس یا هر وی‌پی‌اس)</h3>
+      <p class="muted">«عامل آتا» را یک‌بار روی وی‌پی‌اس اجرا کن؛ از آن پس اپ سرور واقعی را می‌سازد و کامل مدیریت می‌کند.</p>
+      <form data-form="vps-connect" class="real-form">
+        <input name="agentUrl" dir="ltr" placeholder="http://5.160.10.10:8790" value="${esc(v?.agentUrl || '')}">
+        <input name="token" dir="ltr" type="password" placeholder="توکن عامل (همان --token)" value="${esc(v?.token || '')}">
+        <button class="f-btn primary small">🔌 اتصال به عامل</button>
+      </form>
+      <div id="vps-status" class="real-status">${v ? (v.info ? `متصل — سرور ${v.info.running ? 'روشن' : 'خاموش'} (${esc(v.info.edition || '؟')} ${esc(v.info.version || '')})` : 'متصل') : ''}</div>
+      <details class="support-item"><summary>نصب عامل روی وی‌پی‌اس (یک خط)</summary>
+        <p class="muted">در ترمینال وی‌پی‌اس اجرا کن؛ توکن طولانی انتخاب کن و در فایروال پورت را فقط برای آی‌پی خودت باز کن.</p>
+        <div class="addr-box" dir="ltr"><b style="font-size:.72rem">${esc(agentInstallOneLiner())}</b></div>
+        <button class="mini" data-action="copy" data-value="${esc(agentInstallOneLiner())}" data-label="دستور نصب">📋 کپی دستور نصب</button>
+      </details>
+      ${v ? `<div class="row-btns">
+        <button class="f-btn small ghost" data-action="vps-create">🏗️ ساخت سرور واقعی روی وی‌پی‌اس</button>
+        <button class="f-btn small ghost danger-ghost" data-action="vps-disconnect">قطع</button>
+      </div>` : ''}
+    </div>
+    <div class="conn-card">
+      <h3>۳) اورلای واقعی روی بازی</h3>
+      <p class="muted">بعد از اتصال، دکمهٔ زیر اورلای اپراتور را «روی خود ماینکرافت» باز می‌کند؛ هر لمس، دستور را به سرور واقعیِ انتخاب‌شده می‌فرستد. اول از تنظیمات اندروید اجازهٔ «نمایش روی برنامه‌ها» بده.</p>
+      <div class="row-btns">
+        <button class="f-btn small primary" data-action="native-overlay">🪟 بازکردن اورلای روی بازی</button>
+        <button class="f-btn small ghost" data-action="go" data-to="game">🕹️ تمرین در شبیه‌ساز</button>
+      </div>
+      <div class="real-status">${android ? '' : 'نکته: این بخش در نسخهٔ اندروید فعال است؛ در وب، شبیه‌ساز را ببین.'}</div>
+      <details class="support-item"><summary>چرا اترنوس رایگان (Aternos) خودکار نیست؟</summary>
+        <p class="muted">اترنوس هیچ API رسمی ندارد و طبق قوانینش، استفاده از ابزار غیررسمی باعث حذف سرور و مسدودشدن حساب می‌شود. برای همین آتا به‌جای ریسک، تو را مستقیم به پنل خودش می‌برد.</p>
+        <button class="f-btn small ghost" data-action="launch-web" data-url="https://aternos.org/server/">بازکردن پنل اترنوس</button>
+      </details>
+    </div>
+  </div>`;
+}
+
+async function pteroConnect(data) {
+  const panelUrl = normalizePanelUrl(data.panelUrl);
+  const apiKey = (data.apiKey || '').trim();
+  if (!panelUrl) { toast('نشانی پنل را درست بنویس؛ مثلاً https://panel.pebblehost.com'); return; }
+  if (!apiKey) { toast('کلید API را از پنل میزبانت بساز و اینجا بگذار.'); return; }
+  const el = $('#ptero-status');
+  if (el) el.textContent = 'در حال اتصال واقعی به پنل…';
+  const client = createPterodactylClient({ panelUrl, apiKey });
+  try {
+    const servers = await client.listServers();
+    pteroClient = client;
+    state.real.ptero = { panelUrl, apiKey, servers };
+    save();
+    toast(servers.length ? `${faNum(servers.length)} سرور واقعی از پنل گرفتم ✅` : 'اتصال موفق بود ولی سروری در این حساب نیست.');
+    say(servers.length ? `اتصال واقعی برقرار شد و ${servers.length} سرور پیدا شد.` : 'اتصال برقرار شد ولی سروری پیدا نشد.');
+    refreshRealLive();
+    render();
+  } catch (e) {
+    if (el) el.textContent = `خطا: ${e.message}`;
+    toast(`اتصال نشد: ${e.message}`);
+  }
+}
+
+async function refreshRealLive() {
+  // وضعیت زندهٔ سرورهای واقعی
+  if (state.real.ptero?.servers?.length && ptero()) {
+    for (const s of state.real.ptero.servers) {
+      ptero().resources(s.id).then(r => { s.isOnline = r.state; save(); if (page === 'real' || page === 'servers') { const el = document.querySelector(`[data-id="${s.id}"] .sc-status`); if (el) el.textContent = r.state === 'online' ? 'آنلاین' : r.state === 'offline' ? 'خاموش' : r.state; } }).catch(() => { s.isOnline = 'نامشخص'; });
+    }
+  }
+  if (state.real.vps && vps()) {
+    try {
+      const info = await vps().status();
+      state.real.vps.info = info; save();
+      if (page === 'real') { const el = $('#vps-status'); if (el) el.textContent = `متصل — سرور ${info.running ? 'روشن' : 'خاموش'} (${info.edition || '؟'} ${info.version || ''})`; }
+      if (page === 'panel' && String(currentServerId).startsWith('real:vps')) render();
+    } catch (e) {
+      if (page === 'real') { const el = $('#vps-status'); if (el) el.textContent = `خطا: ${e.message}`; }
+    }
+  }
+}
+
+async function vpsConnect(data) {
+  const agentUrl = (data.agentUrl || '').trim();
+  const token = (data.token || '').trim();
+  if (!agentUrl || !token) { toast('نشانی عامل و توکن را وارد کن.'); return; }
+  const el = $('#vps-status');
+  if (el) el.textContent = 'در حال اتصال به عامل روی وی‌پی‌اس…';
+  const client = createVpsAgentClient({ agentUrl, token });
+  try {
+    const info = await client.status();
+    vpsClient = client;
+    state.real.vps = { agentUrl, token, info };
+    save();
+    toast('به عامل وی‌پی‌اس وصل شدم ✅');
+    say('اتصال به وی پی اس برقرار شد. حالا می‌توانی سرور واقعی بسازی یا مدیریت کنی.');
+    render();
+  } catch (e) {
+    if (el) el.textContent = `خطا: ${e.message}`;
+    toast(`اتصال نشد: ${e.message}`);
+  }
+}
+
+async function vpsCreateReal() {
+  if (!vps()) { toast('اول به عامل وصل شو.'); return; }
+  const edition = 'bedrock'; // بدراک پیش‌فرض است؛ جاوا هم پشتیبانی می‌شود
+  try {
+    toast('در حال ساخت واقعی سرور روی وی‌پی‌اس (دانلود هسته)…');
+    const res = await vps().createServer({ name: 'Atta Server', edition, version: '1.21.111' });
+    toast(`سرور واقعی ساخته شد ✅ ${res.message || ''}`);
+    say('سرور واقعی روی وی پی اس ساخته شد و آمادهٔ روشن‌شدن است.');
+    const info = await vps().status();
+    state.real.vps.info = info; save(); render();
+  } catch (e) { toast(`ساخت نشد: ${e.message}`); }
+}
+
+// هدف اورلای: سرور واقعی‌ای که دستورهای یک‌لمسی به آن می‌روند
+function setActiveReal(kind, id = null) {
+  state.real.activeReal = kind === 'none' ? null : (kind === 'ptero' ? { kind, id } : { kind: 'vps' });
+  save(); render();
+  const on = state.real.activeReal;
+  toast(on ? 'هدف اورلای تنظیم شد؛ از این پس دکمه‌ها روی همین سرور واقعی اعمال می‌شوند.' : 'هدف اورلای برداشته شد.');
+  if (on) say('هدف اورلای تنظیم شد. داخل بازی، یک لمس کافی است.');
+}
+
+// ارسال واقعی دستور به سرور واقعی — قلب «تأثیر با یک کلیک»
+async function sendRealCommand(cmd) {
+  const target = state.real.activeReal;
+  if (!target) return { sent: false, reason: 'no-target' };
+  try {
+    if (target.kind === 'ptero') {
+      if (!ptero()) return { sent: false, reason: 'no-connection' };
+      await ptero().sendCommand(target.id, cmd);
+    } else if (target.kind === 'vps') {
+      if (!vps()) return { sent: false, reason: 'no-connection' };
+      await vps().sendCommand(cmd);
+    } else return { sent: false, reason: 'no-target' };
+    return { sent: true };
+  } catch (e) { return { sent: false, reason: e.message }; }
+}
+
+async function realPower(signal) {
+  const target = state.real.activeReal;
+  if (!target) { toast('اول از فهرست سرورها، «هدف اورلای» را انتخاب کن.'); return; }
+  try {
+    if (target.kind === 'ptero') await ptero().power(target.id, signal);
+    else await vps().power(signal);
+    const fa = { start: 'سرور واقعی روشن شد ▶', stop: 'سرور واقعی خاموش شد ⏹', restart: 'ری‌استارت واقعی آغاز شد 🔄', kill: 'سرور متوقف شد' }[signal];
+    toast(fa); say(fa);
+    setTimeout(refreshRealLive, 1500);
+  } catch (e) { toast(`انجام نشد: ${e.message}`); }
+}
+
+// ———————————————————————————————— پنل سرور واقعی ————————————————————————————————
+function realPanelPage() {
+  const isPtero = String(currentServerId).startsWith('real:ptero:');
+  const srv = isPtero ? state.real.ptero?.servers?.find(s => s.id === currentServerId.slice('real:ptero:'.length)) : null;
+  const info = !isPtero ? state.real.vps?.info : null;
+  const name = isPtero ? (srv?.name || 'سرور واقعی') : 'سرور وی‌پی‌اس';
+  const addr = isPtero ? (srv?.address || '—') : `${state.real.vps?.agentUrl || ''} پورت ${info?.port || ''}`;
+  const online = isPtero ? srv?.isOnline === 'online' : !!info?.running;
+  const tabs = [
+    ['overview', 'نمای کلی', '📊'], ['console', 'کنسول زنده', '💻'],
+    isPtero ? ['backups', 'بکاپ واقعی', '💾'] : ['commands', 'دستورها', '⚡'],
+    ['overlay', 'اورلای', '🪟'],
+  ];
+  return `
+  <div class="panel-head">
+    <div>
+      <h2>${esc(name)} <b class="real-badge">واقعی</b> <span class="status-dot ${online ? 'online' : ''}"></span></h2>
+      <small>${isPtero ? esc(state.real.ptero?.panelUrl || '') : esc(state.real.vps?.agentUrl || '')} · <bdi dir="ltr">${esc(addr)}</bdi></small>
+    </div>
+    <div class="panel-quick">
+      <button class="f-btn small primary" data-action="real-power" data-signal="start">▶ روشن</button>
+      <button class="f-btn small danger" data-action="real-power" data-signal="stop">⏹ خاموش</button>
+      <button class="f-btn small ghost" data-action="real-power" data-signal="restart">🔄</button>
+    </div>
+  </div>
+  <div class="panel-tabs" role="tablist">
+    ${tabs.map(([id, label, icon]) => `<button class="ptab ${panelTab === id ? 'active' : ''}" data-action="panel-tab" data-tab="${id}" role="tab">${icon} ${label}</button>`).join('')}
+  </div>
+  <div class="panel-body">${realPanelBody(isPtero, srv, info)}</div>`;
+}
+
+function realPanelBody(isPtero, srv, info) {
+  if (panelTab === 'overview') {
+    if (!isPtero && info) return `
+      <div class="ov-cards">
+        <div class="stat"><span>وضعیت</span><b class="${info.running ? 'online' : ''}">${info.running ? '🟢 روشن' : '⚫ خاموش'}</b></div>
+        <div class="stat"><span>نسخه</span><b>${esc(info.edition || '—')} ${esc(info.version || '')}</b></div>
+        <div class="stat"><span>پورت</span><b>${faNum(info.port || 19132)}</b></div>
+        <div class="stat"><span>آپ‌تایم</span><b>${faNum(info.uptimeSec || 0)} ثانیه</b></div>
+      </div>
+      <div class="wiz-nav center"><button class="f-btn primary" data-action="native-overlay">🪟 بازکردن اورلای روی بازی</button></div>`;
+    return `
+      <div class="ov-cards">
+        <div class="stat"><span>وضعیت</span><b class="${srv?.isOnline === 'online' ? 'online' : ''}">${srv?.isOnline || '…'}</b></div>
+        <div class="stat"><span>نشانی</span><b dir="ltr" style="font-size:.85rem">${esc(srv?.address || '—')}</b></div>
+        <div class="stat"><span>گره</span><b>${esc(srv?.node || '—')}</b></div>
+      </div>
+      <div class="wiz-nav center">
+        <button class="f-btn primary" data-action="real-select" data-id="${srv?.id}">🎯 هدف اورلای کردن این سرور</button>
+        <button class="f-btn ghost" data-action="panel-tab" data-tab="console">💻 کنسول زنده</button>
+      </div>`;
+  }
+  if (panelTab === 'console') return `
+    <div class="console" id="console-view"><div class="c-line atta">در حال اتصال به کنسول زندهٔ سرور واقعی…</div></div>
+    <form class="console-input" data-form="real-console-cmd">
+      <input name="cmd" dir="ltr" placeholder="دستور واقعی… مثلاً time set day" autocomplete="off">
+      <button class="f-btn small primary">اجرا روی سرور واقعی</button>
+    </form>`;
+  if (panelTab === 'backups') return `
+    <div class="wiz-nav center"><button class="f-btn primary" data-action="real-backup">💾 ساخت بکاپ واقعی در پنل میزبان</button></div>
+    <div class="backup-list" id="real-backup-list"><p class="muted">در حال گرفتن فهرست بکاپ‌های واقعی…</p></div>`;
+  if (panelTab === 'commands') return `
+    <div class="ov-grid">${QUICK_ACTIONS.map(a => `<button class="f-btn small" data-action="real-cmd" data-cmd="${esc(a.cmd)}">${a.icon} ${esc(a.label)}</button>`).join('')}</div>
+    <form class="console-input" data-form="real-console-cmd">
+      <input name="cmd" dir="ltr" placeholder="دستور دلخواه…" autocomplete="off">
+      <button class="f-btn small primary">اجرا</button>
+    </form>`;
+  if (panelTab === 'overlay') return `
+    <div class="wiz-nav center">
+      <button class="f-btn primary" data-action="real-select" data-id="${isPtero ? srv?.id : ''}">🎯 این سرور هدف اورلای شود</button>
+      <button class="f-btn primary" data-action="native-overlay">🪟 بازکردن اورلای روی بازی</button>
+      <button class="f-btn ghost" data-action="go" data-to="game">🕹️ شبیه‌ساز داخل اپ</button>
+    </div>
+    <p class="muted">وقتی اورلای روی بازی باز است، هر دکمهٔ آن همین دستورهای آماده را به سرور واقعیِ هدف می‌فرستد؛ بدون خروج از بازی.</p>`;
+  return '';
+}
+
+function startRealConsoleWatch() {
+  stopRealWatch();
+  const view = $('#console-view');
+  if (!view) return;
+  const append = (text, kind = 'sys') => {
+    const div = document.createElement('div');
+    div.className = `c-line ${kind}`;
+    div.textContent = text;
+    view.appendChild(div);
+    while (view.children.length > 150) view.removeChild(view.firstChild);
+    view.scrollTop = view.scrollHeight;
+  };
+  if (String(currentServerId).startsWith('real:ptero:')) {
+    const id = currentServerId.slice('real:ptero:'.length);
+    if (!ptero()) return;
+    view.innerHTML = '';
+    realConsoleHandle = ptero().openConsole(id, {
+      onLine: (l) => append(l, 'chat'),
+      onState: (s) => { if (s === 'connected') append('— اتصال زندهٔ وب‌سوکت برقرار شد —', 'atta'); },
+    });
+  } else if (String(currentServerId).startsWith('real:vps')) {
+    if (!vps()) return;
+    const poll = async () => {
+      try { const r = await vps().consoleTail(40); view.innerHTML = ''; r.forEach(l => append(l, 'chat')); } catch { /* noop */ }
+    };
+    poll();
+    realPollTimer = setInterval(poll, 4000);
+  }
+}
+
+async function loadRealBackups() {
+  const list = $('#real-backup-list');
+  const id = currentServerId.slice('real:ptero:'.length);
+  if (!ptero() || !list) return;
+  try {
+    const bks = await ptero().backups(id);
+    list.innerHTML = bks.length ? bks.map(b => `<div class="backup-row"><span>📦 ${esc(b.name || b.uuid)} · ${faNum(Math.round((b.bytes || 0) / 1048576))} مگ · ${esc((b.at || '').slice(0, 10))}</span>${b.completed ? '<span class="sc-status online">موفق</span>' : '<span class="sc-status">در حال ساخت</span>'}</div>`).join('') : '<p class="muted">هنوز بکاپی در پنل میزبان نیست؛ با دکمهٔ بالا بساز.</p>';
+  } catch { list.innerHTML = '<p class="muted">فهرست بکاپ‌ها گرفته نشد.</p>'; }
 }
 
 // ———————————————————————————————— ورود به بازی ————————————————————————————————
@@ -626,6 +1036,19 @@ function renderFxHud() {
 
 function runCommand(cmd) {
   const s = currentServer();
+  // اگر سرور واقعی هدف اورلای باشد، دستور اول به سرور واقعی می‌رود — تأثیر واقعی با یک کلیک
+  if (state.real.activeReal) {
+    sendRealCommand(cmd).then(r => {
+      if (r.sent) {
+        world.chat = [...world.chat.slice(-5), { who: 'آتا', text: `دستور به سرور واقعی ارسال شد ✅ ${cmd}` }];
+        renderChat();
+        toast(`به سرور واقعی ارسال شد ✅`);
+      } else {
+        world.chat = [...world.chat.slice(-5), { who: 'خطا', text: `به سرور واقعی نرسید (${r.reason}); روی شبیه‌ساز اعمال شد.` }];
+        renderChat();
+      }
+    });
+  }
   const res = executeCommand(s || { props: {}, ops: [], whitelist: [], banned: [] }, world, cmd, state.profile.operator);
   if (s) {
     s.consoleLog = [...(s.consoleLog || []).slice(-80), { at: Date.now(), kind: res.ok ? 'ok' : 'err', text: `[${state.profile.operator}] ${cmd} → ${res.message}` }];
@@ -841,6 +1264,15 @@ document.addEventListener('submit', (e) => {
     state.profile.operator = (data.operator || '').trim() || 'اپراتور';
     save(); toast(`نام اپراتور: ${state.profile.operator}`); render();
   }
+  if (kind === 'ptero-connect') pteroConnect(data);
+  if (kind === 'vps-connect') vpsConnect(data);
+  if (kind === 'real-console-cmd' && data.cmd?.trim()) {
+    realCmdDirect(data.cmd);
+    const input = form.querySelector('input[name="cmd"]');
+    if (input) input.value = '';
+    const view = $('#console-view');
+    if (view) { const d = document.createElement('div'); d.className = 'c-line ok'; d.textContent = `[${state.profile.operator}] ${data.cmd}`; view.appendChild(d); view.scrollTop = view.scrollHeight; }
+  }
 });
 
 // ———————————————————————————————— عملیات سرور ————————————————————————————————
@@ -949,6 +1381,7 @@ function handleVoiceText(text) {
     { id: 'support', phrases: ['پشتیبانی', 'کمک'] },
     { id: 'settings', phrases: ['تنظیمات'] },
     { id: 'game', phrases: ['حالت بازی', 'بازی', 'ورود به بازی'] },
+    { id: 'real', phrases: ['اتصال واقعی', 'اتصال', 'میزبان واقعی'] },
   ];
   if (page === 'game' && overlay) {
     if (said.includes(normalizeFa('ببند')) && (overlay.isOpen() || overlay.getActiveTab())) { overlay.close(); say('پنل بسته شد.'); return; }
@@ -999,5 +1432,40 @@ window.__atta = {
   closeOverlay: () => overlay?.close(),
   overlayOpen: () => overlay?.isOpen(),
   activeTab: () => overlay?.getActiveTab(),
+  sendRealCommand, realPower, setActiveReal,
   setAutoClose: undefined,
+};
+
+// پل اورلای بومی اندروید: دستورهای لمس‌شده روی خود بازی از اینجا وارد اپ می‌شوند
+async function bridgeExec(cmd) {
+  if (!cmd) return { sent: false, reason: 'empty' };
+  if (cmd.startsWith('@power:')) { await realPower(cmd.slice(7)); return { sent: true }; }
+  if (cmd === '@backup') {
+    const t = state.real.activeReal;
+    try {
+      if (t?.kind === 'ptero') await ptero().createBackup(t.id);
+      else if (t?.kind === 'vps') await vps().backup();
+      else return { sent: false, reason: 'no-target' };
+      return { sent: true };
+    } catch (e) { return { sent: false, reason: e.message }; }
+  }
+  // چند دستور با «;» پشت‌سرهم
+  let last = { sent: false, reason: 'empty' };
+  for (const part of String(cmd).split(';')) {
+    if (part.trim()) last = await sendRealCommand(part.trim());
+  }
+  return last;
+}
+
+window.__attaBridge = {
+  receive(payload) {
+    let d = payload;
+    if (typeof payload === 'string') { try { d = JSON.parse(payload); } catch { return; } }
+    if (!d || !d.cmd) return;
+    bridgeExec(d.cmd).then(r => {
+      if (typeof AndroidBridge !== 'undefined' && AndroidBridge.bridgeResult) {
+        AndroidBridge.bridgeResult(r.sent ? `✓ «${d.label || d.cmd}» به سرور واقعی رسید` : `✗ به سرور واقعی نرسید: ${r.reason}`);
+      }
+    });
+  },
 };
