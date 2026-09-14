@@ -48,6 +48,13 @@ import java.util.Set;
  */
 public class AternosPanel {
 
+    /** دریافت خطوط کنسول در صفحهٔ کنسول (جدا از Ui اصلی) */
+    public interface ConsoleSink { void line(String l); }
+
+    private ConsoleSink consoleSink;
+
+    public void setConsoleSink(ConsoleSink s) { this.consoleSink = s; }
+
     public interface Ui {
         void atLog(String line);                                   // خط جدید در کادر لاگ
         void atStatus(Map<String, Object> lastStatus, String dom); // وضعیت سرور
@@ -804,41 +811,49 @@ public class AternosPanel {
             ".catch(function(e){AttaBridge.post('action',act+' ❌ '+e)});" +
             "}catch(e){AttaBridge.post('err','act:'+e)}})();";
 
+    /** خط کنسول: هم به Ui اصلی و هم به صفحهٔ کنسول (اگر باز است) */
+    private void consoleOut(String line) {
+        try { cb.atConsole(line); } catch (Throwable ignored) {}
+        try {
+            if (consoleSink != null) consoleSink.line(line);
+        } catch (Throwable ignored) {}
+    }
+
     /** پردازش پیام‌های وبسوکت hermes (کنسول/وضعیت/TPS/RAM پنل Aternos) */
     private void handleWss(String data) {
         if (data == null) return;
-        if ("open".equals(data)) { cb.atConsole("🟢 کنسول متصل شد — استریم خطوط فعال شد"); return; }
-        if ("closed".equals(data)) { cb.atConsole("🔴 اتصال کنسول قطع شد — دوباره «اتصال کنسول» را بزن"); return; }
-        if ("error".equals(data)) { cb.atConsole("⚠ خطای وبسوکت کنسول — یک بار دیگر «اتصال کنسول» را بزن"); return; }
-        if ("no-socket".equals(data)) { cb.atConsole("⚠ اتصال کنسول برقرار نیست — اول «اتصال کنسول» را بزن"); return; }
+        if ("open".equals(data)) { consoleOut("🟢 کنسول متصل شد — استریم خطوط فعال شد"); return; }
+        if ("closed".equals(data)) { consoleOut("🔴 اتصال کنسول قطع شد — دوباره «اتصال کنسول» را بزن"); return; }
+        if ("error".equals(data)) { consoleOut("⚠ خطای وبسوکت کنسول — یک بار دیگر «اتصال کنسول» را بزن"); return; }
+        if ("no-socket".equals(data)) { consoleOut("⚠ اتصال کنسول برقرار نیست — اول «اتصال کنسول» را بزن"); return; }
         if ("sent".equals(data)) return; // خود دستور در ورودی کاربر نشان داده می‌شود
         Object o = MiniJson.parse(data);
         Map<String, Object> m = MiniJson.object(o);
-        if (m == null) { cb.atConsole("ℹ " + trunc(data)); return; }
+        if (m == null) { consoleOut("ℹ " + trunc(data)); return; }
         String t = MiniJson.str(m, "type", "");
         if ("line".equals(t)) {
-            cb.atConsole(MiniJson.str(m, "data", ""));
+            consoleOut(MiniJson.str(m, "data", ""));
         } else if ("status".equals(t)) {
             // message یک رشتهٔ JSON است — دوباره parse می‌شود
             Map<String, Object> st = MiniJson.object(MiniJson.parse(MiniJson.str(m, "message", "")));
             if (st != null && !st.isEmpty()) cb.atStatus(st, "از استریم زندهٔ پنل");
         } else if ("heap".equals(t)) {
             Map<String, Object> d = MiniJson.object(m.get("data"));
-            if (d != null) cb.atConsole("🧠 رم سرور: " + MiniJson.num(d, "usage", 0) + " MB");
+            if (d != null) consoleOut("🧠 رم سرور: " + MiniJson.num(d, "usage", 0) + " MB");
         } else if ("tick".equals(t)) {
             Map<String, Object> d = MiniJson.object(m.get("data"));
             if (d != null) {
                 double avg = MiniJson.num(d, "averageTickTime", 0);
                 double tps = avg > 0 ? Math.min(20.0, 1000.0 / avg) : 0;
-                cb.atConsole("⏱ TPS: " + String.format(java.util.Locale.US, "%.1f", tps));
+                consoleOut("⏱ TPS: " + String.format(java.util.Locale.US, "%.1f", tps));
             }
         } else if ("reload".equals(t)) {
-            cb.atConsole("ℹ پنل Aternos درخواست تازه‌سازی داد — صفحه را دوباره می‌گیریم");
+            consoleOut("ℹ پنل Aternos درخواست تازه‌سازی داد — صفحه را دوباره می‌گیریم");
             reloadServerPage();
         } else if ("connected".equals(t)) {
-            cb.atConsole("✔ استریم کنسول فعال شد — دستور بفرست (مثلاً list)");
+            consoleOut("✔ استریم کنسول فعال شد — دستور بفرست (مثلاً list)");
         } else {
-            cb.atConsole("ℹ " + trunc(data));
+            consoleOut("ℹ " + trunc(data));
         }
     }
 
