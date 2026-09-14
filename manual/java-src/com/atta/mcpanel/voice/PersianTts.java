@@ -24,7 +24,21 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public final class PersianTts {
 
-    public interface Listener { void onSpeakFailure(); }
+    public interface Listener {
+        void onSpeakFailure();
+        /** نتیجهٔ موتور صدا: "dilara" | "fallback" | "none" */
+        void onEngine(String engine, String detail);
+    }
+
+    public static final String ENGINE_NEURAL = "dilara";
+    public static final String ENGINE_FALLBACK = "fallback";
+    public static final String ENGINE_NONE = "none";
+    private static volatile String lastEngine = "";
+    private static volatile String lastError = "";
+
+    /** آخرین موتوری که صدا ساخت */
+    public static String lastEngine() { return lastEngine; }
+    public static String lastError() { return lastError; }
 
     private static final LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<String>();
     private static Thread worker;
@@ -36,6 +50,20 @@ public final class PersianTts {
     private static volatile Listener listener;
     private static int failCount = 0;
     private static boolean toastShown = false;
+    private static volatile Boolean fallbackAllowed = null; // null = خوانده نشده
+
+    /** آیا صدای پشتیبان (کیفیت پایین) مجاز است؟ پیش‌فرض: نه */
+    public static boolean fallbackAllowed(Context ctx) {
+        if (fallbackAllowed == null) {
+            fallbackAllowed = "1".equals(new com.atta.mcpanel.core.AppPrefs(ctx).getString("homan_fallback", "0"));
+        }
+        return fallbackAllowed;
+    }
+
+    public static void setFallbackAllowed(Context ctx, boolean on) {
+        fallbackAllowed = on;
+        new com.atta.mcpanel.core.AppPrefs(ctx).setString("homan_fallback", on ? "1" : "0");
+    }
 
     private PersianTts() {}
 
@@ -99,15 +127,18 @@ public final class PersianTts {
             if (f == null) f = synthToFile(text);
             if (f == null) {
                 failCount++;
-                if (failCount >= 2 && !toastShown && listener != null) {
+                if (failCount >= 2 && !toastShown) {
                     toastShown = true;
-                    ui.post(new Runnable() { @Override public void run() {
-                        Listener l = listener;
-                        if (l != null) l.onSpeakFailure();
+                    notifyEngine(ENGINE_NONE, lastError);
+                    final Listener l = listener;
+                    if (l != null) ui.post(new Runnable() { @Override public void run() {
+                        Listener ll = listener;
+                        if (ll != null) ll.onSpeakFailure();
                     }});
                 }
                 return;
             }
+            failCount = 0;
             final Object lock = new Object();
             MediaPlayer mp = new MediaPlayer();
             mp.setDataSource(f.getAbsolutePath());
@@ -133,6 +164,20 @@ public final class PersianTts {
         } catch (Throwable ignored) {}
     }
 
+    private static boolean fallbackAllowedValue() {
+        Boolean f = fallbackAllowed;
+        return f != null && f;
+    }
+
+    private static void notifyEngine(final String engine, final String detail) {
+        final Listener l = listener;
+        if (l == null) return;
+        ui.post(new Runnable() { @Override public void run() {
+            Listener ll = listener;
+            if (ll != null) ll.onEngine(engine, detail);
+        }});
+    }
+
     private static File cached(String text) {
         try {
             File f = new File(cacheDir, hash(text) + ".mp3");
@@ -143,12 +188,25 @@ public final class PersianTts {
 
     private static File synthToFile(String text) {
         try {
-            byte[] mp3;
-            try {
-                mp3 = EdgeTts.synth(text, EdgeTts.VOICE_FA_FEMALE);
-                failCount = 0;
-            } catch (Throwable t1) {
-                mp3 = googleTts(text); // پشتیبان
+            byte[] mp3 = null;
+            String err = "";
+            // دو تلاش برای صدای نورال (سوکت تازه هر بار)
+            for (int i = 0; i < 2 && mp3 == null; i++) {
+                try {
+                    mp3 = EdgeTts.synth(text, EdgeTts.VOICE_FA_FEMALE);
+                    lastEngine = ENGINE_NEURAL;
+                    lastError = "";
+                    failCount = 0;
+                } catch (Throwable t1) {
+                    err = String.valueOf(t1.getMessage() != null ? t1.getMessage() : t1);
+                    lastError = err;
+                }
+            }
+            if (mp3 == null) {
+                notifyEngine(ENGINE_NONE, err);
+                if (!fallbackAllowedValue()) return null;
+                mp3 = googleTts(text);
+                if (mp3 != null) lastEngine = ENGINE_FALLBACK;
             }
             if (mp3 == null || mp3.length < 512) return null;
             File f = new File(cacheDir, hash(text) + ".mp3");

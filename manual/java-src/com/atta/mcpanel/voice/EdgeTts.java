@@ -63,15 +63,18 @@ public final class EdgeTts {
                     + "Sec-WebSocket-Version: 13\r\n"
                     + "Origin: chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold\r\n"
                     + "User-Agent: " + UA + "\r\n"
+                    + "Accept-Encoding: gzip, deflate, br, zstd\r\n"
+                    + "Accept-Language: en-US,en;q=0.9\r\n"
                     + "Pragma: no-cache\r\n"
                     + "Cache-Control: no-cache\r\n"
+                    + "Cookie: muid=" + muid() + ";\r\n"
                     + "\r\n";
             out.write(hs.getBytes("UTF-8"));
             out.flush();
 
             String respHead = readHttpHeader(in);
             if (!respHead.contains(" 101 ")) {
-                throw new IOException("edge-tts handshake failed: "
+                throw new IOException("edge-tts handshake: "
                         + respHead.split("\r\n")[0]);
             }
 
@@ -176,6 +179,14 @@ public final class EdgeTts {
     private static String escape(String s) {
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
                 .replace("\"", "&quot;").replace("'", "&apos;");
+    }
+
+    /** muid تصادفی — مثل edge-tts (۳۲ نویسهٔ هگز بزرگ) */
+    private static String muid() {
+        SecureRandom r = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 32; i++) sb.append("0123456789ABCDEF".charAt(r.nextInt(16)));
+        return sb.toString();
     }
 
     private static String b64Key() {

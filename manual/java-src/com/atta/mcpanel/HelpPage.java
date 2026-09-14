@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.atta.mcpanel.overlay.UiKit;
 import com.atta.mcpanel.ui.Pages;
 import com.atta.mcpanel.voice.Homan;
 import com.atta.mcpanel.voice.PersianTts;
@@ -34,6 +35,40 @@ public class HelpPage extends Activity {
         col.addView(Pages.action(this, "🔇 قطع گفتار", 0, new Runnable() {
             @Override public void run() { PersianTts.shutUp(); }
         }));
+        col.addView(Pages.action(this, "🔊 تست صدا", 1, new Runnable() {
+            @Override public void run() {
+                PersianTts.shutUp();
+                Homan.say(HelpPage.this, "سلام. این صدای هومن است. اگر این جمله را واضح و طبیعی می‌شنوی، صدا درست کار می‌کند.");
+            }
+        }));
+        col.addView(Pages.action(this, "📊 وضعیت موتور صدا", 0, new Runnable() {
+            @Override public void run() {
+                String e = PersianTts.lastEngine();
+                String msg;
+                if (PersianTts.ENGINE_NEURAL.equals(e)) msg = "موتور: دلارا (نورال) ✓ — صدای اصلی";
+                else if (PersianTts.ENGINE_FALLBACK.equals(e)) msg = "موتور: پشتیبان (کیفیت پایین)";
+                else if (PersianTts.ENGINE_NONE.equals(e)) msg = "موتور: هیچ — صدای اصلی در دسترس نبود\n" + PersianTts.lastError();
+                else msg = "هنوز صدایی ساخته نشده — اول «تست صدا» را بزن";
+                android.widget.Toast.makeText(HelpPage.this, msg, android.widget.Toast.LENGTH_LONG).show();
+            }
+        }));
+
+        // اجازهٔ صدای پشتیبان (پیش‌فرض خاموش)
+        LinearLayout fbRow = UiKit.hrow(this);
+        TextView fbLabel = new TextView(this);
+        fbLabel.setText("اجازهٔ صدای پشتیبان (کیفیت پایین‌تر)");
+        fbLabel.setTextSize(14.5f);
+        fbLabel.setTextColor(0xFFD5DCE8);
+        fbRow.addView(fbLabel, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        android.widget.Switch fbSw = new android.widget.Switch(this);
+        fbSw.setChecked(PersianTts.fallbackAllowed(this));
+        fbSw.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(android.widget.CompoundButton b, boolean checked) {
+                PersianTts.setFallbackAllowed(HelpPage.this, checked);
+            }
+        });
+        fbRow.addView(fbSw);
+        col.addView(fbRow, UiKit.wrapParams(fbRow, 4, 50));
 
         String[] items = {
                 "🌐 سرور Aternos — با حساب خودت وارد شو؛ استارت، توقف، ری‌استارت و وضعیت سرور از داخل اپ روی خود Aternos اجرا می‌شود. دکمهٔ Google داخل اپ کار نمی‌کند؛ با نام‌کاربری و رمز Aternos وارد شو.",

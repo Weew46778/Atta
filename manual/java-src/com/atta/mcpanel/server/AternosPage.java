@@ -31,6 +31,7 @@ public class AternosPage extends Activity {
         PersianTts.init(this);
         PersianTts.setListener(new PersianTts.Listener() {
             @Override public void onSpeakFailure() { }
+            @Override public void onEngine(String engine, String detail) { }
         });
 
         LinearLayout col = Pages.root(this);
