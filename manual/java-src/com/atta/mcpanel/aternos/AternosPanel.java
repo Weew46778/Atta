@@ -76,6 +76,8 @@ public class AternosPanel {
     private boolean sessionKnownDead = false;   // نشست منقضی شده — دفعهٔ بعد مستقیم فرم ورود باز شود
     private String deadSessionValue = null;      // «مقدار» کوکی مرده — فقط مقدار جدید یعنی لاگین واقعی
     private Runnable loginPoll;                  // پایشگر کوکی ورود (SPA-ها onPageFinished نمی‌دهند)
+    private Runnable injectTimer;                // تزریق زمان‌بندی‌شدهٔ اسکریپت‌ها (مستقل از onPageFinished)
+    private int injectTries = 0;
     private boolean watchdogFired = false;
     private String serverId = "";
     private String lastServerName = "";
@@ -470,6 +472,7 @@ public class AternosPanel {
                     pageLoading = true;
                     engine.loadUrl(URL_SERVERS);
                 }
+                scheduleInjections(serverId != null && serverId.length() > 0 ? "ready" : "servers");
                 log("⟳ اتصال به پنل Aternos…");
                 // نگهبان: اگر ۱۵ ثانیه‌ای ready نشد → یک تازه‌سازی خودکار + گزارش دقیق
                 watchdogFired = false;
@@ -576,6 +579,45 @@ public class AternosPanel {
                 && System.currentTimeMillis() - lastPageLoad < 120000L;
     }
 
+    /** تزریق زمان‌بندی‌شده: onPageFinished روی بعضی دستگاه‌ها اسکریپت را بی‌صدا می‌اندازد —
+     *  ما مستقل از آن، تا ۶ بار با فاصله تزریق می‌کنیم تا پاسخ بیاید. */
+    private void scheduleInjections(final String what) {
+        stopInjector();
+        injectTries = 0;
+        final long[] delays = {1500, 2500, 4000, 6000, 9000, 13000};
+        final Runnable r = new Runnable() { @Override public void run() {
+            if (engine == null || loginOverlay != null) return;
+            try {
+                String u = engine.getUrl() == null ? "" : engine.getUrl();
+                boolean onServers = u.contains("/servers");
+                String js;
+                String label;
+                if ("servers".equals(what)) {
+                    js = onServers ? JS_SERVERS : JS_READY;
+                    label = onServers ? "فهرست سرورها" : "صفحهٔ سرور (صفحه عوض شده)";
+                } else {
+                    js = onServers ? JS_SERVERS : JS_READY;
+                    label = onServers ? "فهرست سرورها (صفحه عوض شده)" : "صفحهٔ سرور";
+                }
+                injectTries++;
+                log("💉 تزریق " + label + " (تلاش " + injectTries + ")");
+                engine.evaluateJavascript(js, null);
+            } catch (Throwable t) {
+                log("❌ تزریق: " + t);
+            }
+            if (injectTries < delays.length) ui.postDelayed(this, delays[injectTries]);
+        }};
+        injectTimer = r;
+        ui.postDelayed(r, delays[0]);
+    }
+
+    private void stopInjector() {
+        if (injectTimer != null) {
+            ui.removeCallbacks(injectTimer);
+            injectTimer = null;
+        }
+    }
+
     public void reloadServerPage() {
         uiOnUiThread(new Runnable() { @Override public void run() {
             if (engine == null) return;
@@ -596,6 +638,7 @@ public class AternosPanel {
     }
 
     public void destroy() {
+        stopInjector();
         try {
             if (engine != null) {
                 engine.loadUrl("about:blank");
@@ -656,6 +699,7 @@ public class AternosPanel {
                 log("🖥 سرور: " + (s2[1].length() > 0 ? s2[1] : ("#" + s2[0])) + (s2[0].equals(chosen) ? "  ← انتخاب شد" : ""));
             }
             if (sv.size() > 1) log("ℹ چند سرور داری؛ برای عوض‌کردن، در سایت Aternos سرور دلخواه را باز کن و دوباره «اتصال» بزن");
+            stopInjector();
             loadEngine();
         } else if ("status".equals(type)) {
             // قالب: lastStatus@@DOM@@XHR — سه منبع وضعیت
@@ -709,6 +753,7 @@ public class AternosPanel {
                 applyServerCookie(sid);
                 log("🖥 شناسهٔ سرور خوانده شد: " + sid);
             }
+            stopInjector();
             if (!ready) {
                 ready = true;
                 log(tokenOk
@@ -747,26 +792,16 @@ public class AternosPanel {
     // اسکریپت‌های تزریقی
     // ------------------------------------------------------------------
 
-    /** فهرست سرورها از صفحهٔ /servers/ — با تلاش مجدد و گزارش تشخیصی */
+    /** فهرست سرورها از صفحهٔ /servers/ — با تلاش مجدد داخلی + پاک‌سازی تایمر قبلی */
     private static final String JS_SERVERS =
-            "(function(){try{" +
-            "function grab(){" +
-            "var out=[],seen={};var els=document.querySelectorAll('[data-id]');" +
-            "for(var i=0;i<els.length;i++){var el=els[i];var id=el.getAttribute('data-id');" +
-            "if(!id||seen[id])continue;seen[id]=1;" +
-            "var n=el.querySelector('.server-name, .server-description, .server-body, .server-title');" +
-            "var nm=n?String(n.textContent).replace(/\\s+/g,' ').trim().slice(0,60):'';" +
-            "out.push({id:id,name:nm});}" +
-            "if(out.length){AttaBridge.post('servers',JSON.stringify(out));return true;}" +
-            "var ti=(document.title||'');" +
-            "if(ti.indexOf('Just a moment')>=0){AttaBridge.post('diag','صفحهٔ محافظ کلودفلر — چند ثانیه دیگر خودش رد می‌شود');return false;}" +
-            "if(location.pathname==='/server/'||location.pathname==='/server'){AttaBridge.post('diag','مستقیم روی صفحهٔ سرور افتادیم (اکانت تک‌سرور)');return true;}" +
-            "var bt=(document.body?String(document.body.innerText):'').replace(/\\s+/g,' ').trim().slice(0,200);" +
-            "AttaBridge.post('diag','سروری در صفحهٔ فهرست پیدا نشد | عنوان: '+ti.slice(0,50)+' | متن: '+bt);return false;" +
-            "}" +
-            "if(grab())return;" +
-            "var n=0;var iv=setInterval(function(){n++;if(grab()||n>6){clearInterval(iv);}},1200);" +
-            "}catch(e){AttaBridge.post('err','servers:'+e)}})();";
+            "(function(){ try{ try{if(window.ATTA_SRV_IV){clearInterval(window.ATTA_SRV_IV);window.ATTA_SRV_IV=null;}}catch(e){} function grab(){ var out=[],seen={}; var els=document.querySelec" +
+            "torAll('[data-id]'); for(var i=0;i<els.length;i++){ var el=els[i];var id=el.getAttribute('data-id'); if(!id||seen[id])continue;seen[id]=1; var n=el.querySelector('.server-name, .se" +
+            "rver-description, .server-body, .server-title'); var nm=n?String(n.textContent).replace(/\\s+/g,' ').trim().slice(0,60):''; out.push({id:id,name:nm}); } if(out.length){AttaBridge.p" +
+            "ost('servers',JSON.stringify(out));return true;} var ti=(document.title||''); if(ti.indexOf('Just a moment')>=0){AttaBridge.post('diag','محافظ کلودفلر — چند ثانیه دیگر خودش رد می‌ش" +
+            "ود');return false;} if(location.pathname==='/server/'||location.pathname==='/server'){AttaBridge.post('diag','مستقیم روی صفحهٔ سرور افتادیم (اکانت تک‌سرور)');return true;} var bt=(" +
+            "document.body?String(document.body.innerText):'').replace(/\\s+/g,' ').trim().slice(0,200); AttaBridge.post('diag','سروری در صفحهٔ فهرست پیدا نشد | عنوان: '+ti.slice(0,50)+' | متن:" +
+            " '+bt); return false; } if(grab())return; var n=0; window.ATTA_SRV_IV=setInterval(function(){n++;if(grab()||n>6){clearInterval(window.ATTA_SRV_IV);window.ATTA_SRV_IV=null;}},1200);" +
+            " }catch(e){AttaBridge.post('err','servers:'+e)} })();";
 
     /** پس از بارگذاری صفحهٔ سرور: توکن + وضعیت سه‌منبعی (lastStatus + DOM + جریان XHR خود پنل) */
     private static final String JS_READY =
@@ -835,6 +870,9 @@ public class AternosPanel {
                 double tps = avg > 0 ? Math.min(20.0, 1000.0 / avg) : 0;
                 cb.atConsole("⏱ TPS: " + String.format(java.util.Locale.US, "%.1f", tps));
             }
+        } else if ("reload".equals(t)) {
+            cb.atConsole("ℹ پنل Aternos درخواست تازه‌سازی داد — صفحه را دوباره می‌گیریم");
+            reloadServerPage();
         } else if ("connected".equals(t)) {
             cb.atConsole("✔ استریم کنسول فعال شد — دستور بفرست (مثلاً list)");
         } else {
