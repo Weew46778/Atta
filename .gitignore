@@ -2,6 +2,7 @@ node_modules/
 dist/
 .tools/
 android/build/
+android/build-atta/
 *.keystore
 *.jks
 test-results/
