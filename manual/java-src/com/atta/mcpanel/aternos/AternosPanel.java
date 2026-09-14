@@ -73,6 +73,7 @@ public class AternosPanel {
     private TextView loginInfo;
     private boolean ready = false;
     private boolean sessionKnownDead = false;   // نشست منقضی شده — دفعهٔ بعد مستقیم فرم ورود باز شود
+    private String deadSessionValue = null;      // «مقدار» کوکی مرده — فقط مقدار جدید یعنی لاگین واقعی
     private String serverId = "";
     private String lastServerName = "";
     private int pollTick = 0;
@@ -93,14 +94,23 @@ public class AternosPanel {
     // نشست
     // ------------------------------------------------------------------
 
-    /** آیا کوکی نشست Aternos موجود است؟ */
-    public boolean hasSession() {
+    /** مقدار فعلی کوکی نشست (بدون مقدار = null) */
+    private String sessionValue() {
         try {
             String c = CookieManager.getInstance().getCookie(BASE);
-            return c != null && c.matches("(?s).*ATERNOS_SESSION=[^;\\s]+.*");
+            if (c == null) return null;
+            java.util.regex.Matcher m = java.util.regex.Pattern
+                    .compile("(?:^|;\\s*)ATERNOS_SESSION=([^;\\s]+)").matcher(c);
+            return m.find() ? m.group(1) : null;
         } catch (Throwable t) {
-            return false;
+            return null;
         }
+    }
+
+    /** آیا نشستِ زنده داریم؟ (کوکیِ موجود + متفاوت از مقدارِ مرده) */
+    public boolean hasSession() {
+        String v = sessionValue();
+        return v != null && v.length() > 0 && !v.equals(deadSessionValue);
     }
 
     public boolean isReady() { return ready; }
@@ -148,8 +158,27 @@ public class AternosPanel {
                     @Override public void onPageFinished(WebView v, String url) {
                         // ترفند شناخته‌شده: فوکوس پایین صفحه تا اولین لمسِ فیلد ورودی کیبورد بیاورد
                         v.requestFocus(View.FOCUS_DOWN);
+                        log("🔑 صفحهٔ ورود: " + (url == null ? "?" : url.replace("https://aternos.org", "")));
+                        // تشخیص وضعیت صفحه (کلودفلر یا آمادهٔ ورود)
+                        try {
+                            v.evaluateJavascript("(function(){try{return document.title||''}catch(e){return ''}})()",
+                                    new android.webkit.ValueCallback<String>() {
+                                        @Override public void onReceiveValue(String value) {
+                                            try {
+                                                String t = value == null ? "" : value.replace("\"", "");
+                                                if (t.contains("moment") || t.contains("Attention")) {
+                                                    loginInfo.setText("⏳ محافظ کلودفلر فعال است — چند ثانیه صبر کن؛ اگر رد نشد با تغییر IP/VPN امتحان کن");
+                                                } else if (!sessionAppeared()) {
+                                                    loginInfo.setText("صفحه آماده است — نام‌کاربری و رمز Aternos را وارد کن و دکمهٔ ورود سایت را بزن");
+                                                }
+                                            } catch (Throwable ignored) {}
+                                        }
+                                    });
+                        } catch (Throwable ignored) {}
                         if (sessionAppeared()) {
                             sessionKnownDead = false;
+                            deadSessionValue = null;
+                            deadSessionValue = null;
                             try { CookieManager.getInstance().flush(); } catch (Throwable ignored) {}
                             if (loginInfo != null) loginInfo.setText("✅ وارد شدی — در حال بازگشت به پنل…");
                             log("✅ ورود انجام شد — نشست ذخیره شد");
@@ -306,20 +335,18 @@ public class AternosPanel {
     }
 
     private boolean sessionAppeared() {
-        try {
-            String c = CookieManager.getInstance().getCookie(BASE);
-            return c != null && c.matches("(?s).*ATERNOS_SESSION=[^;\\s]+.*");
-        } catch (Throwable t) {
-            return false;
-        }
+        // فقط وقتی «مقدار جدید» ظاهر شود لاگین حساب می‌شود — کوکی مرده هرگز
+        return hasSession();
     }
 
     /** پاک‌کردن کوکی‌های نشست Aternos (نشست مرده را کامل برمی‌دارد) */
     private void clearSessionCookies() {
         try {
             CookieManager cm = CookieManager.getInstance();
-            cm.setCookie(BASE, "ATERNOS_SESSION=; Max-Age=0; path=/");
-            cm.setCookie(BASE, "ATERNOS_SERVER=; Max-Age=0; path=/");
+            // هر دو فرم انقضا + حذف کوکی‌های نشست — بعضی نسخه‌های اندروید Max-Age را نادیده می‌گیرند
+            cm.setCookie(BASE, "ATERNOS_SESSION=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/");
+            cm.setCookie(BASE, "ATERNOS_SERVER=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/");
+            try { cm.removeSessionCookie(); } catch (Throwable ignored) {}
             cm.flush();
         } catch (Throwable ignored) {}
     }
@@ -329,6 +356,7 @@ public class AternosPanel {
         uiOnUiThread(new Runnable() { @Override public void run() {
             ready = false;
             sessionKnownDead = false;
+            deadSessionValue = null;
             clearSessionCookies();
             if (engine != null) { try { engine.loadUrl("about:blank"); } catch (Throwable ignored) {} }
             log("🔒 از Aternos خارج شدی");
@@ -373,9 +401,11 @@ public class AternosPanel {
                             if (url == null) return;
                             if (url.contains("/go/") || url.equals(BASE + "/") || url.equals(BASE)) {
                                 // ریدایرکت به صفحهٔ ورود = نشست منقضی شده
-                                if (ready || hasSession()) {
+                                if (ready || sessionValue() != null) {
                                     ready = false;
                                     sessionKnownDead = true;
+                                    String dv = sessionValue();
+                                    if (dv != null && dv.length() > 0) deadSessionValue = dv;
                                     clearSessionCookies();
                                     log("⚠ نشست Aternos منقضی شده — کوکی پاک شد و صفحهٔ ورود باز می‌شود");
                                     cb.atGone("expired");
