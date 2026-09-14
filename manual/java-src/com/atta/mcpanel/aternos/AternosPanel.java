@@ -72,6 +72,7 @@ public class AternosPanel {
     private WebView loginWeb;
     private TextView loginInfo;
     private boolean ready = false;
+    private boolean sessionKnownDead = false;   // نشست منقضی شده — دفعهٔ بعد مستقیم فرم ورود باز شود
     private String serverId = "";
     private String lastServerName = "";
     private int pollTick = 0;
@@ -110,7 +111,11 @@ public class AternosPanel {
     /** شروع: اگر نشست نیست دیالوگ ورود، وگرنه بارگذاری مستقیم پنل */
     public void begin() {
         uiOnUiThread(new Runnable() { @Override public void run() {
-            if (!hasSession()) { showLogin(); return; }
+            if (!hasSession() || sessionKnownDead) {
+                sessionKnownDead = false;
+                showLogin();
+                return;
+            }
             loadEngine();
         }});
     }
@@ -132,7 +137,7 @@ public class AternosPanel {
                 ws.setJavaScriptEnabled(true);
                 ws.setDomStorageEnabled(true);
                 ws.setDatabaseEnabled(true);
-                ws.setUserAgentString(ws.getUserAgentString().replace("; wv", ""));
+                ws.setUserAgentString(ws.getUserAgentString().replace("; wv", "").replace("Version/4.0 ", ""));
                 ws.setLoadWithOverviewMode(true);
                 ws.setUseWideViewPort(true);
                 wv.setFocusable(true);
@@ -144,6 +149,7 @@ public class AternosPanel {
                         // ترفند شناخته‌شده: فوکوس پایین صفحه تا اولین لمسِ فیلد ورودی کیبورد بیاورد
                         v.requestFocus(View.FOCUS_DOWN);
                         if (sessionAppeared()) {
+                            sessionKnownDead = false;
                             try { CookieManager.getInstance().flush(); } catch (Throwable ignored) {}
                             if (loginInfo != null) loginInfo.setText("✅ وارد شدی — در حال بازگشت به پنل…");
                             log("✅ ورود انجام شد — نشست ذخیره شد");
@@ -182,6 +188,7 @@ public class AternosPanel {
                 TextView bDone = UiKit.chip(act, "✅ وارد شدم", UiKit.KIND_ACCENT, new Runnable() {
                     @Override public void run() {
                         if (sessionAppeared()) {
+                            sessionKnownDead = false;
                             try { CookieManager.getInstance().flush(); } catch (Throwable ignored) {}
                             log("✅ نشست Aternos ذخیره شد");
                             closeLogin();
@@ -307,16 +314,22 @@ public class AternosPanel {
         }
     }
 
+    /** پاک‌کردن کوکی‌های نشست Aternos (نشست مرده را کامل برمی‌دارد) */
+    private void clearSessionCookies() {
+        try {
+            CookieManager cm = CookieManager.getInstance();
+            cm.setCookie(BASE, "ATERNOS_SESSION=; Max-Age=0; path=/");
+            cm.setCookie(BASE, "ATERNOS_SERVER=; Max-Age=0; path=/");
+            cm.flush();
+        } catch (Throwable ignored) {}
+    }
+
     /** خروج/قطع اتصال */
     public void logout() {
         uiOnUiThread(new Runnable() { @Override public void run() {
             ready = false;
-            try {
-                CookieManager cm = CookieManager.getInstance();
-                cm.setCookie(BASE, "ATERNOS_SESSION=; Max-Age=0; path=/");
-                cm.setCookie(BASE, "ATERNOS_SERVER=; Max-Age=0; path=/");
-                cm.flush();
-            } catch (Throwable ignored) {}
+            sessionKnownDead = false;
+            clearSessionCookies();
             if (engine != null) { try { engine.loadUrl("about:blank"); } catch (Throwable ignored) {} }
             log("🔒 از Aternos خارج شدی");
             cb.atGone("logout");
@@ -335,7 +348,7 @@ public class AternosPanel {
                     WebSettings ws = engine.getSettings();
                     ws.setJavaScriptEnabled(true);
                     ws.setDomStorageEnabled(true);
-                    ws.setUserAgentString(ws.getUserAgentString().replace("; wv", ""));
+                    ws.setUserAgentString(ws.getUserAgentString().replace("; wv", "").replace("Version/4.0 ", ""));
                     engine.setBackgroundColor(Color.TRANSPARENT);
                     engine.setFocusable(false);
                     engine.setFocusableInTouchMode(false);
@@ -362,8 +375,11 @@ public class AternosPanel {
                                 // ریدایرکت به صفحهٔ ورود = نشست منقضی شده
                                 if (ready || hasSession()) {
                                     ready = false;
-                                    log("⚠ نشست Aternos منقضی شده — دوباره «ورود / اتصال» را بزن");
+                                    sessionKnownDead = true;
+                                    clearSessionCookies();
+                                    log("⚠ نشست Aternos منقضی شده — کوکی پاک شد و صفحهٔ ورود باز می‌شود");
                                     cb.atGone("expired");
+                                    showLogin();
                                 }
                                 return;
                             }
