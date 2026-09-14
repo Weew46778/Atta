@@ -17,7 +17,6 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -253,51 +252,14 @@ public class AternosPanel {
                 loginInfo.setTextColor(0xFF93A0B4);
                 loginInfo.setLineSpacing(UiKit.dp(act, 2), 1f);
                 loginInfo.setPadding(UiKit.dp(act, 10), UiKit.dp(act, 5), UiKit.dp(act, 10), UiKit.dp(act, 3));
-                loginInfo.setText("⚠ دکمهٔ ورود با Google/Microsoft داخل اپ کار نمی‌کند — سیاست خود گوگل است (مرورگر داخلی اپ‌ها را نمی‌پذیرد).\n"
-                        + "✅ با همان فرم «نام‌کاربری + رمز Aternos» وارد شو. اگر رمز نداری، در همین صفحه لینک «Forgot your password?» را بزن تا با ایمیلت یک رمز بسازی (فقط یک بار).\n"
-                        + "بعد از ورود، خودکار برمی‌گردد.");
+                loginInfo.setText("با نام‌کاربری و رمز Aternos وارد شو (دکمهٔ Google داخل اپ کار نمی‌کند)");
 
                 LinearLayout box = UiKit.vcol(act, 0);
                 box.setBackgroundColor(0xFF0B0F16);
                 box.addView(bar, new LinearLayout.LayoutParams(-1, -2));
                 box.addView(loginInfo, new LinearLayout.LayoutParams(-1, -2));
 
-                // گزینهٔ پیشرفته: چسباندن کوکی ATERNOS_SESSION (مثلاً از کروم دسکتاپ)
-                LinearLayout adv = UiKit.hrow(act);
-                adv.setPadding(UiKit.dp(act, 8), 0, UiKit.dp(act, 8), UiKit.dp(act, 4));
-                final EditText ck = new EditText(act);
-                ck.setHint("کوکی ATERNOS_SESSION (پیشرفته)");
-                ck.setTextSize(11.5f);
-                ck.setTextColor(0xFFE8ECF3);
-                ck.setHintTextColor(0xFF93A0B4);
-                ck.setSingleLine(true);
-                GradientDrawable cg = UiKit.roundedSolid(0xFF0D1420, UiKit.dp(act, 10));
-                cg.setStroke(1, 0x30FFFFFF);
-                ck.setBackground(cg);
-                ck.setPadding(UiKit.dp(act, 8), 0, UiKit.dp(act, 8), 0);
-                adv.addView(ck, new LinearLayout.LayoutParams(0, UiKit.dp(act, 40), 1f));
-                TextView bApply = UiKit.chip(act, "اعمال کوکی", UiKit.KIND_ACCENT, new Runnable() {
-                    @Override public void run() {
-                        String v = ck.getText().toString().trim();
-                        // اگر کل رشتهٔ کوکی را چسبانده، فقط مقدار را بردار
-                        int eq = v.lastIndexOf('=');
-                        if (eq >= 0 && v.length() - eq - 1 > 10) v = v.substring(eq + 1);
-                        if (v.length() < 10) {
-                            Toast.makeText(act, "کوکی معتبر نیست", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        try {
-                            CookieManager cmm = CookieManager.getInstance();
-                            cmm.setCookie(BASE, "ATERNOS_SESSION=" + v + "; path=/");
-                            cmm.flush();
-                        } catch (Throwable ignored) {}
-                        log("✅ کوکی نشست اعمال شد — اتصال…");
-                        closeLogin();
-                        loadEngine();
-                    }
-                });
-                adv.addView(bApply, new LinearLayout.LayoutParams(-2, UiKit.dp(act, 40)));
-                box.addView(adv, new LinearLayout.LayoutParams(-1, -2));
+
 
                 box.addView(wv, new LinearLayout.LayoutParams(-1, 0, 1f));
 
